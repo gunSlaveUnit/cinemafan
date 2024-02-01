@@ -38,8 +38,11 @@ var movies = []Movie {
 func main() {
 	fmt.Println(movies)
 
+	router := http.NewServeMux()
+
 	server := &http.Server {
 		Addr: ":8000",
+		Handler: router,
 	}
 
 	server.ListenAndServe()
