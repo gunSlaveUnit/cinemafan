@@ -41,6 +41,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func items(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    
     body := map[string]interface{} {
         "data": movies,
     }
