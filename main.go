@@ -49,6 +49,7 @@ func main() {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/", home)
+	router.HandleFunc("/movies", movies)
 
 	server := &http.Server {
 		Addr: ":8000",
