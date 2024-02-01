@@ -39,6 +39,10 @@ func home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "CINEMAFAN")
 }
 
+func movies(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "MOVIES")
+}
+
 func main() {
 	fmt.Println(movies)
 
