@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "net/http"
+    "encoding/json"
 )
 
 type Entity struct {
@@ -39,8 +40,9 @@ func home(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "CINEMAFAN")
 }
 
-func movies(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprint(w, "MOVIES")
+func items(w http.ResponseWriter, r *http.Request) {
+    response, _ := json.Marshal(movies)
+    w.Write(response)
 }
 
 func main() {
@@ -49,7 +51,7 @@ func main() {
     router := http.NewServeMux()
 
     router.HandleFunc("/", home)
-    router.HandleFunc("/movies", movies)
+    router.HandleFunc("/movies", items)
 
     server := &http.Server {
         Addr: ":8000",
