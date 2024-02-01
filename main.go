@@ -35,6 +35,10 @@ var movies = []Movie {
 	},
 }
 
+func home(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "CINEMAFAN")
+}
+
 func main() {
 	fmt.Println(movies)
 
