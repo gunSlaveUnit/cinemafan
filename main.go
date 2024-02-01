@@ -51,8 +51,6 @@ func items(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    fmt.Println(movies)
-
     router := http.NewServeMux()
 
     router.HandleFunc("/", home)
