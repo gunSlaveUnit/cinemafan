@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 type Entity struct {
 	ID int
@@ -34,4 +37,10 @@ var movies = []Movie {
 
 func main() {
 	fmt.Println(movies)
+
+	server := &http.Server {
+		Addr: ":8000",
+	}
+
+	server.ListenAndServe()
 }
