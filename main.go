@@ -41,7 +41,12 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func items(w http.ResponseWriter, r *http.Request) {
-    response, _ := json.Marshal(movies)
+    body := make(map[string]interface{})
+    
+    body["data"] = movies
+
+    response, _ := json.Marshal(body)
+    
     w.Write(response)
 }
 
