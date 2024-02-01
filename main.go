@@ -1,60 +1,60 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+    "fmt"
+    "net/http"
 )
 
 type Entity struct {
-	ID int
+    ID int
 }
 
 type Movie struct {
-	Entity
-	Title string
+    Entity
+    Title string
 }
 
 var movies = []Movie {
-	{
-		Entity: Entity {
-			ID: 1,
-		},
-		Title: "Iron man",
-	},
-	{
-		Entity: Entity {
-			ID: 2,
-		},
-		Title: "Cyberpunk: Edgerunners",
-	},
-	{
-		Entity: Entity {
-			ID: 3,
-		},
-		Title: "The Raid: Redemption",
-	},
+    {
+        Entity: Entity {
+            ID: 1,
+        },
+        Title: "Iron man",
+    },
+    {
+        Entity: Entity {
+            ID: 2,
+        },
+        Title: "Cyberpunk: Edgerunners",
+    },
+    {
+        Entity: Entity {
+            ID: 3,
+        },
+        Title: "The Raid: Redemption",
+    },
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "CINEMAFAN")
+    fmt.Fprint(w, "CINEMAFAN")
 }
 
 func movies(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "MOVIES")
+    fmt.Fprint(w, "MOVIES")
 }
 
 func main() {
-	fmt.Println(movies)
+    fmt.Println(movies)
 
-	router := http.NewServeMux()
+    router := http.NewServeMux()
 
-	router.HandleFunc("/", home)
-	router.HandleFunc("/movies", movies)
+    router.HandleFunc("/", home)
+    router.HandleFunc("/movies", movies)
 
-	server := &http.Server {
-		Addr: ":8000",
-		Handler: router,
-	}
+    server := &http.Server {
+        Addr: ":8000",
+        Handler: router,
+    }
 
-	server.ListenAndServe()
+    server.ListenAndServe()
 }
