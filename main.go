@@ -11,13 +11,27 @@ type Movie struct {
 	Title string
 }
 
-func main() {
-	movie := Movie {
+var movies = []Movie {
+	{
 		Entity: Entity {
 			ID: 1,
 		},
 		Title: "Iron man",
-	}
+	},
+	{
+		Entity: Entity {
+			ID: 2,
+		},
+		Title: "Cyberpunk: Edgerunners",
+	},
+	{
+		Entity: Entity {
+			ID: 3,
+		},
+		Title: "The Raid: Redemption",
+	},
+}
 
-	fmt.Println(movie)
+func main() {
+	fmt.Println(movies)
 }
