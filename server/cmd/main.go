@@ -1,7 +1,6 @@
 package main
 
 import (
-    "fmt"
     "net/http"
     "encoding/json"
 )
@@ -36,8 +35,24 @@ var movies = []Movie {
     },
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprint(w, "CINEMAFAN")
+func apiInfo(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    
+    body := map[string]interface{} {
+        "title": "Cinemafan API",
+        "purpose": "",
+        "api": []map[string]string {
+            {
+                "version": "1",
+                "status": "development",
+                "description": "",
+            },
+        },
+    }
+
+    response, _ := json.Marshal(body)
+    
+    w.Write(response)
 }
 
 func items(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +70,7 @@ func items(w http.ResponseWriter, r *http.Request) {
 func main() {
     router := http.NewServeMux()
 
-    router.HandleFunc("/api/v1", home)
+    router.HandleFunc("/", apiInfo)
     router.HandleFunc("/api/v1/movies", items)
 
     server := &http.Server {
