@@ -55,8 +55,8 @@ func items(w http.ResponseWriter, r *http.Request) {
 func main() {
     router := http.NewServeMux()
 
-    router.HandleFunc("/", home)
-    router.HandleFunc("/movies", items)
+    router.HandleFunc("/api/v1", home)
+    router.HandleFunc("/api/v1/movies", items)
 
     server := &http.Server {
         Addr: ":8000",
