@@ -4,20 +4,18 @@ import IMovie from "./IMovie"
 import MovieCard from "./MovieCard"
 
 const Movies = () => {
-  const [movies, setmovies] = React.useState<IMovie[]>([
-    {
-      id: 1,
-      title: "Boo",
-    },
-    {
-      id: 2,
-      title: "Foo",
-    },
-    {
-      id: 3,
-      title: "Bar",
-    },
-  ]);
+  const [movies, setMovies] = React.useState<IMovie[]>([]);
+
+  React.useEffect(() => {
+    const fetchMovies = async () => {
+      const response = await fetch('http://localhost:8000/api/v1/movies')
+      const json = await response.json()
+      const data = json['data']
+      setMovies(data)
+    }
+
+    fetchMovies()
+  }, [])
 
   return (
     <div>
