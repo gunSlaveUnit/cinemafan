@@ -1,1 +1,3 @@
 cinemafan
+
+go build -o .\build\cinemafan.exe .\cmd\main.go
