@@ -6,12 +6,17 @@ import {
 } from 'react-router-dom';
 
 import Home from './Home'
+import Movies from './Movies'
 
 const router = createBrowserRouter(
   [
     {
       path: "/",
       element: <Home />,
+    },
+    {
+      path: "/movies",
+      element: <Movies />,
     },
   ]
 )
