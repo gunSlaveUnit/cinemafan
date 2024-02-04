@@ -1,4 +1,6 @@
-interface IMovie {
+import IEntity from "./IEntity"
+
+interface IMovie extends IEntity {
   title: string
 }
 
