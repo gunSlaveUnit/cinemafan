@@ -6,12 +6,13 @@ import (
 )
 
 type Entity struct {
-    ID int
+    ID int `json:"id"`
 }
 
 type Movie struct {
     Entity
-    Title string
+    
+    Title string `json:"title"`
 }
 
 var movies = []Movie {
