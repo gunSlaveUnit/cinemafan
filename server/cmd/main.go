@@ -29,14 +29,17 @@ func apiInfo(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-    router := http.NewServeMux()
+    apiMux := http.NewServeMux()
 
-    router.HandleFunc("/", apiInfo)
-    router.HandleFunc("/api/v1/movies", handlers.Items)
+    moviesMux := http.NewServeMux()
+    moviesMux.HandleFunc("/movies", handlers.Items)
+
+    apiMux.HandleFunc("/", apiInfo)
+    apiMux.Handle("/api/v1/movies", http.StripPrefix("/api/v1", moviesMux))
 
     server := &http.Server {
         Addr: ":8000",
-        Handler: router,
+        Handler: apiMux,
     }
 
     server.ListenAndServe()
