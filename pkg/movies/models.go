@@ -1,9 +1,9 @@
 package movies
 
-import "github.com/gunslaveunit/cinemafan/common"
+import "github.com/gunslaveunit/cinemafan/pkg/common"
 
 type Movie struct {
-    Entity
+    common.Entity
     
     Title string `json:"title"`
 }

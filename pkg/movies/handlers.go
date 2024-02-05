@@ -1,27 +1,28 @@
-package handlers
+package movies
 
 import (
     "net/http"
     "encoding/json"
 
-    "github.com/gunslaveunit/cinemafan"
+
+	"github.com/gunslaveunit/cinemafan/pkg/common"
 )
 
-var movies = []models.Movie {
+var movies = []Movie {
     {
-        Entity: models.Entity {
+        Entity: common.Entity {
             ID: 1,
         },
         Title: "Iron man",
     },
     {
-        Entity: models.Entity {
+        Entity: common.Entity {
             ID: 2,
         },
         Title: "Cyberpunk: Edgerunners",
     },
     {
-        Entity: models.Entity {
+        Entity: common.Entity {
             ID: 3,
         },
         Title: "The Raid: Redemption",
