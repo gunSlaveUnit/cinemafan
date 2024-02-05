@@ -3,33 +3,25 @@ package handlers
 import (
     "net/http"
     "encoding/json"
+
+    "github.com/gunslaveunit/cinemafan"
 )
 
-type Entity struct {
-    ID int `json:"id"`
-}
-
-type Movie struct {
-    Entity
-    
-    Title string `json:"title"`
-}
-
-var movies = []Movie {
+var movies = []models.Movie {
     {
-        Entity: Entity {
+        Entity: models.Entity {
             ID: 1,
         },
         Title: "Iron man",
     },
     {
-        Entity: Entity {
+        Entity: models.Entity {
             ID: 2,
         },
         Title: "Cyberpunk: Edgerunners",
     },
     {
-        Entity: Entity {
+        Entity: models.Entity {
             ID: 3,
         },
         Title: "The Raid: Redemption",
