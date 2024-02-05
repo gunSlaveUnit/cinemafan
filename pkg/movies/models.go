@@ -1,4 +1,6 @@
-package models
+package movies
+
+import "github.com/gunslaveunit/cinemafan/common"
 
 type Movie struct {
     Entity
