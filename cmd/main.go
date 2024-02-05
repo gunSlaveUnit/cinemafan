@@ -4,7 +4,7 @@ import (
     "net/http"
     "encoding/json"
 
-    "github.com/gunslaveunit/cinemafan/pkg/handlers"
+    "github.com/gunslaveunit/cinemafan/pkg/movies"
 )
 
 func apiInfo(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +32,7 @@ func main() {
     apiMux := http.NewServeMux()
 
     moviesMux := http.NewServeMux()
-    moviesMux.HandleFunc("/movies", handlers.Items)
+    moviesMux.HandleFunc("/movies", movies.Items)
 
     apiMux.HandleFunc("/", apiInfo)
     apiMux.Handle("/api/v1/movies", http.StripPrefix("/api/v1", moviesMux))
