@@ -5,5 +5,6 @@ import "github.com/gunslaveunit/cinemafan/pkg/shared"
 type Movie struct {
     shared.Entity
     
-    Title string `json:"title"`
+    OriginalTitle string `json:"originalTitle"`
+    TranslatedTitle string `json:"translatedTitle"`
 }
