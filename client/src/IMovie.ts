@@ -1,7 +1,8 @@
 import IEntity from "./IEntity"
 
 interface IMovie extends IEntity {
-  title: string
+  originalTitle: string
+  translatedTitle: string
 }
 
 export default IMovie;
