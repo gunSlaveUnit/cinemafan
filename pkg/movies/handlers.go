@@ -13,19 +13,22 @@ var movies = []Movie {
         Entity: shared.Entity {
             ID: 1,
         },
-        Title: "Iron man",
+        OriginalTitle: "Iron man",
+        TranslatedTitle: "Iron man",
     },
     {
         Entity: shared.Entity {
             ID: 2,
         },
-        Title: "Cyberpunk: Edgerunners",
+        OriginalTitle: "Cyberpunk: Edgerunners",
+        TranslatedTitle: "Cyberpunk: Edgerunners",
     },
     {
         Entity: shared.Entity {
             ID: 3,
         },
-        Title: "The Raid: Redemption",
+        OriginalTitle: "The Raid: Redemption",
+        TranslatedTitle: "The Raid: Redemption",
     },
 }
 
