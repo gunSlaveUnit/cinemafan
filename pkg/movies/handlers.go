@@ -5,24 +5,24 @@ import (
     "encoding/json"
 
 
-	"github.com/gunslaveunit/cinemafan/pkg/common"
+	"github.com/gunslaveunit/cinemafan/pkg/shared"
 )
 
 var movies = []Movie {
     {
-        Entity: common.Entity {
+        Entity: shared.Entity {
             ID: 1,
         },
         Title: "Iron man",
     },
     {
-        Entity: common.Entity {
+        Entity: shared.Entity {
             ID: 2,
         },
         Title: "Cyberpunk: Edgerunners",
     },
     {
-        Entity: common.Entity {
+        Entity: shared.Entity {
             ID: 3,
         },
         Title: "The Raid: Redemption",
