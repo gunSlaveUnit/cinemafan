@@ -4,7 +4,6 @@ import (
     "net/http"
     "encoding/json"
 
-
 	"github.com/gunslaveunit/cinemafan/pkg/shared"
 )
 
