@@ -1,4 +1,3 @@
-import os
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
@@ -7,6 +6,8 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+
+from root.settings import DB_CONFIG
 
 
 def build_url(data: dict) -> str:
@@ -50,16 +51,7 @@ def build_url(data: dict) -> str:
     )
 
 
-DB_URL = build_url(
-    {
-        "engine": os.getenv("DB_ENGINE"),
-        "name": os.getenv("DB_NAME"),
-        "user": os.getenv("DB_USER"),
-        "password": os.getenv("DB_PASSWORD"),
-        "host": os.getenv("DB_HOST"),
-        "port": os.getenv("DB_PORT"),
-    }
-)
+DB_URL = build_url(DB_CONFIG)
 
 engine: AsyncEngine = create_async_engine(DB_URL)
 session_maker: async_sessionmaker = async_sessionmaker(
