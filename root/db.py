@@ -1,5 +1,10 @@
 import os
 
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    create_async_engine,
+)
+
 
 def build_url(data: dict) -> str:
     """
@@ -52,3 +57,5 @@ DB_URL = build_url(
         "port": os.getenv("DB_PORT"),
     }
 )
+
+engine: AsyncEngine = create_async_engine(DB_URL)
