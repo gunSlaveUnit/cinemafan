@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATES_DIR = BASE_DIR / "templates"
 
 DB_CONFIG = {
     "engine": os.getenv("DB_ENGINE"),
