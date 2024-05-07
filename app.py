@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 
+from movies.routes import router as movies_router
 from root.templates import templates
 
 app = FastAPI(
@@ -13,3 +14,5 @@ async def index(request: Request):
         request=request,
         name="index.html",
     )
+
+app.include_router(movies_router)
