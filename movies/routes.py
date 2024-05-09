@@ -38,8 +38,11 @@ async def create(
 
 
 @templates_router.get("")
-async def movies(request: Request):
-    content = await items()
+async def movies(
+        request: Request,
+        db: AsyncSession = Depends(session)
+):
+    content = await items(db)
 
     return templates.TemplateResponse(
         request=request,
