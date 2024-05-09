@@ -60,3 +60,20 @@ async def movies(
             "movies": content["data"],
         }
     )
+
+
+@templates_router.get("/{item_id}")
+async def movie(
+        request: Request,
+        item_id: int,
+        db: AsyncSession = Depends(session)
+):
+    content = await item(item_id, db)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/movie.html",
+        context={
+            "movie": content,
+        }
+    )
