@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.models import Movie
@@ -11,16 +12,14 @@ templates_router = APIRouter(prefix="/movies", tags=["Movies", "Templates"])
 
 
 @api_router.get("")
-async def items():
+async def items(db: AsyncSession = Depends(session)):
+    scalars = await db.stream_scalars(select(Movie))
+
+    data = [_ async for _ in scalars]
+
     return {
-        "data": [
-            {
-                "title": "Test movie 1",
-            },
-            {
-                "title": "Test movie 2",
-            }
-        ]
+        "data": data,
+        "length": len(data),
     }
 
 
