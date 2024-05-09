@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from movies.api import router as movies_api_router
 from movies.templates import router as movies_templates_router
 from root.db import init
-from root.routes import router as index_router
+from root.templates import router as index_router
 
 
 @asynccontextmanager

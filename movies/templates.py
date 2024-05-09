@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies import api
 from root.db import session
-from root.templates import templates
+from root.settings import templates
 
 router = APIRouter(prefix="/movies", tags=["Movies", "Templates"])
 
