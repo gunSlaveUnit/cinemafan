@@ -10,7 +10,7 @@ from root.routes import router as index_router
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator:
+async def lifespan(_: FastAPI) -> AsyncGenerator:
     await init()
 
     yield
