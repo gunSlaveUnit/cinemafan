@@ -2,11 +2,14 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from fastapi.templating import Jinja2Templates
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / "templates"
+
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 DB_CONFIG = {
     "engine": os.getenv("DB_ENGINE"),

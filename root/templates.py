@@ -1,5 +1,13 @@
-from fastapi.templating import Jinja2Templates
+from fastapi import APIRouter, Request
 
-from root.settings import TEMPLATES_DIR
+from root.settings import templates
 
-templates = Jinja2Templates(directory=TEMPLATES_DIR)
+router = APIRouter()
+
+
+@router.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="root/index.html",
+    )
