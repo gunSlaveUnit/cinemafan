@@ -28,13 +28,22 @@ async def create(
         data: MovieCreateSchema,
         db: AsyncSession = Depends(session),
 ):
-    item = Movie(**data.model_dump())
+    e = Movie(**data.model_dump())
 
-    db.add(item)
+    db.add(e)
     await db.commit()
     await db.flush()
 
-    return item
+    return e
+
+
+@api_router.get("/{item_id}")
+async def item(
+        item_id: int,
+        db: AsyncSession = Depends(session),
+):
+    e = await db.scalar(select(Movie).where(Movie.id == item_id))
+    return e
 
 
 @templates_router.get("")
