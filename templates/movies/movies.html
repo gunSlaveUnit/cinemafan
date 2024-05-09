@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>movies</p>
-
     {% for movie in movies %}
         <p>{{ movie.title }}</p>
     {% endfor %}
