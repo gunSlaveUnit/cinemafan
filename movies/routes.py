@@ -1,5 +1,9 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from movies.models import Movie
+from movies.schemas import MovieCreateSchema
+from root.db import session
 from root.templates import templates
 
 api_router = APIRouter(prefix="/api/movies", tags=["Movies", "API"])
@@ -18,6 +22,20 @@ async def items():
             }
         ]
     }
+
+
+@api_router.post("")
+async def create(
+        data: MovieCreateSchema,
+        db: AsyncSession = Depends(session),
+):
+    item = Movie(**data.model_dump())
+
+    db.add(item)
+    await db.commit()
+    await db.flush()
+
+    return item
 
 
 @templates_router.get("")
