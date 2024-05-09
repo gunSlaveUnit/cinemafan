@@ -2,6 +2,8 @@
 
 {% block content %}
     {% for movie in movies %}
-        <p>{{ movie.title }}</p>
+        <a href="/movies/{{ movie.id }}">
+            <h1>{{ movie.title }}</h1>
+        </a>
     {% endfor %}
 {% endblock %}
