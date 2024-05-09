@@ -9,5 +9,5 @@ router = APIRouter()
 async def index(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="index.html",
+        name="root/index.html",
     )
