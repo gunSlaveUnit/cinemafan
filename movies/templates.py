@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.endpoints import movies
+from movies.models import Episode
 from root.db import session
 from root.settings import templates
 
@@ -31,11 +32,14 @@ async def item(
         db: AsyncSession = Depends(session)
 ):
     response = await movies.item(item_id, db)
+    movie_id = response.id
+    episodes = [_ async for _ in Episode.by_movie_id(movie_id, db)]
 
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
         context={
             "movie": response,
+            "episodes": episodes,
         }
     )
