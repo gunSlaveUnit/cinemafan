@@ -19,7 +19,7 @@ def crud(router, model, create_schema):
             data: create_schema,
             db: AsyncSession = Depends(session),
     ):
-        return model.create(data.model_dump(), db)
+        return await model.create(data.model_dump(), db)
 
     @router.get("/{item_id}")
     async def item(
