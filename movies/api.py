@@ -1,34 +1,23 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter
 
-from movies.models import Movie
-from movies.schemas import MovieCreateSchema
-from root.db import session
+from movies.models import Movie, Episode, Quality, Record
+from movies.schemas import MovieCreateSchema, EpisodeCreateSchema, QualityCreateSchema, RecordCreateSchema
+from root.crud import crud
 
-router = APIRouter(prefix="/movies", tags=["Movies"])
+movies_api_router = APIRouter()
 
+movies_router = APIRouter(prefix="/movies", tags=["Movies"])
+crud(movies_router, Movie, MovieCreateSchema)
+movies_api_router.include_router(movies_router)
 
-@router.get("")
-async def items(db: AsyncSession = Depends(session)):
-    data = [_ async for _ in Movie.every(db)]
+episodes_router = APIRouter(prefix="/episodes", tags=["Episodes"])
+crud(episodes_router, Episode, EpisodeCreateSchema)
+movies_api_router.include_router(episodes_router)
 
-    return {
-        "data": data,
-        "length": len(data),
-    }
+qualities_router = APIRouter(prefix="/qualities", tags=["Qualities"])
+crud(qualities_router, Quality, QualityCreateSchema)
+movies_api_router.include_router(qualities_router)
 
-
-@router.post("")
-async def create(
-        data: MovieCreateSchema,
-        db: AsyncSession = Depends(session),
-):
-    return Movie.create(data.model_dump(), db)
-
-
-@router.get("/{item_id}")
-async def item(
-        item_id: int,
-        db: AsyncSession = Depends(session),
-):
-    return Movie.by_id(item_id, db)
+records_router = APIRouter(prefix="/records", tags=["Records"])
+crud(records_router, Record, RecordCreateSchema)
+movies_api_router.include_router(records_router)

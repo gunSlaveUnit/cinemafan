@@ -3,7 +3,7 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI, APIRouter
 
-from movies.api import router as movies_api_router
+from movies.api import movies_api_router
 from movies.templates import router as movies_templates_router
 from root.db import init
 from root.templates import router as index_router
