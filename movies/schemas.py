@@ -21,3 +21,7 @@ class EpisodeCreateSchema(BaseModel):
 
 class EpisodeDBSchema(EpisodeCreateSchema, EntityDBSchema):
     pass
+
+
+class QualityCreateSchema(BaseModel):
+    resolution: int
