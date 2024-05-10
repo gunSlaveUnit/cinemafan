@@ -1,4 +1,5 @@
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String, ForeignKey, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shared.models import Entity
@@ -18,6 +19,16 @@ class Episode(Entity):
     parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"), nullable=True)
     season: Mapped[int]
     title: Mapped[str] = mapped_column(String(255))
+
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
 
 
 class Quality(Entity):
