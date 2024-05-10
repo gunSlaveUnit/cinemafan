@@ -29,3 +29,9 @@ class QualityCreateSchema(BaseModel):
 
 class QualityDBSchema(QualityCreateSchema, EntityDBSchema):
     pass
+
+
+class RecordCreateSchema(BaseModel):
+    episode_id: int
+    quality_id: int
+    filename: str
