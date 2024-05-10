@@ -2,4 +2,8 @@
 
 {% block content %}
   <p>{{ movie.title }}</p>
+
+  {% for episode in episodes %}
+    <p>{{ episode.title }}</p>
+  {% endfor %}
 {% endblock %}
