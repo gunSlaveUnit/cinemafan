@@ -9,3 +9,11 @@ class MovieCreateSchema(BaseModel):
 
 class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
     pass
+
+
+class EpisodeCreateSchema(BaseModel):
+    movie_id: int
+    number: int
+    parent_id: int | None = None
+    season: int
+    title: str
