@@ -5,7 +5,7 @@ from movies import api
 from root.db import session
 from root.settings import templates
 
-router = APIRouter(prefix="/movies", tags=["Movies", "Templates"])
+router = APIRouter(prefix="/movies", tags=["Movies"])
 
 
 @router.get("")
