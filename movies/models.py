@@ -43,3 +43,13 @@ class Record(Entity):
     episode_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"))
     quality_id: Mapped[int] = mapped_column(ForeignKey("qualities.id"))
     filename: Mapped[str] = mapped_column(String(255))
+
+    @classmethod
+    async def by_episode_id(
+            cls,
+            episode_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.episode_id == episode_id))
+        async for scalar in scalars:
+            yield scalar
