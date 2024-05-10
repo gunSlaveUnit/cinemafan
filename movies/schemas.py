@@ -17,3 +17,7 @@ class EpisodeCreateSchema(BaseModel):
     parent_id: int | None = None
     season: int
     title: str
+
+
+class EpisodeDBSchema(EpisodeCreateSchema, EntityDBSchema):
+    pass
