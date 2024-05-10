@@ -24,3 +24,11 @@ class Quality(Entity):
     __tablename__ = "qualities"
 
     resolution: Mapped[int]
+
+
+class Record(Entity):
+    __tablename__ = "records"
+
+    episode_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"))
+    quality_id: Mapped[int] = mapped_column(ForeignKey("qualities.id"))
+    filename: Mapped[str] = mapped_column(String(255))
