@@ -18,7 +18,7 @@ async def items(
 
     return templates.TemplateResponse(
         request=request,
-        name="movies/movies.html",
+        name="movies/index.html",
         context={
             "movies": response["data"],
         }
