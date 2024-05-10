@@ -1,11 +1,11 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 
-from movies.api import router as movies_router
+from movies.routes import router as movies_router
 from root.db import init
-from root.templates import router as index_router
+from root.routes import router as root_router
 
 
 @asynccontextmanager
@@ -21,5 +21,5 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.include_router(index_router)
+app.include_router(root_router)
 app.include_router(movies_router)
