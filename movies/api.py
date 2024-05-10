@@ -6,7 +6,7 @@ from movies.models import Movie
 from movies.schemas import MovieCreateSchema
 from root.db import session
 
-router = APIRouter(prefix="/api/movies", tags=["Movies", "API"])
+router = APIRouter(prefix="/movies", tags=["Movies"])
 
 
 @router.get("")
