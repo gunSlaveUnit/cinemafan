@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 
 from root.settings import templates
 
-router = APIRouter(tags=["Root", "Templates"])
+router = APIRouter(tags=["Root"])
 
 
 @router.get("/")
