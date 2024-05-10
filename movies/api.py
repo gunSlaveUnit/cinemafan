@@ -11,9 +11,7 @@ router = APIRouter(prefix="/movies", tags=["Movies"])
 
 @router.get("")
 async def items(db: AsyncSession = Depends(session)):
-    scalars = await db.stream_scalars(select(Movie))
-
-    data = [_ async for _ in scalars]
+    data = [_ async for _ in Movie.every(db)]
 
     return {
         "data": data,
@@ -26,13 +24,7 @@ async def create(
         data: MovieCreateSchema,
         db: AsyncSession = Depends(session),
 ):
-    e = Movie(**data.model_dump())
-
-    db.add(e)
-    await db.commit()
-    await db.flush()
-
-    return e
+    return Movie.create(data.model_dump(), db)
 
 
 @router.get("/{item_id}")
@@ -40,5 +32,4 @@ async def item(
         item_id: int,
         db: AsyncSession = Depends(session),
 ):
-    e = await db.scalar(select(Movie).where(Movie.id == item_id))
-    return e
+    return Movie.by_id(item_id, db)
