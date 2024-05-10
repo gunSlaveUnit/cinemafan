@@ -26,3 +26,11 @@ class Entity(Base):
         scalars = await session.stream_scalars(select(cls))
         async for scalar in scalars:
             yield scalar
+
+    @classmethod
+    async def by_id(
+            cls,
+            item_id: int,
+            session: AsyncSession,
+    ):
+        return await session.scalar(select(cls).where(cls.id == item_id))
