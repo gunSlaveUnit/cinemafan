@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from movies import api
+from movies.api import movies
+from movies.models import Episode
 from root.db import session
 from root.settings import templates
 
-router = APIRouter(prefix="/movies", tags=["Movies", "Templates"])
+router = APIRouter(prefix="/movies", tags=["Movies"])
 
 
 @router.get("")
@@ -13,13 +14,13 @@ async def items(
         request: Request,
         db: AsyncSession = Depends(session)
 ):
-    content = await api.items(db)
+    response = await movies.items(db)
 
     return templates.TemplateResponse(
         request=request,
-        name="movies/movies.html",
+        name="movies/index.html",
         context={
-            "movies": content["data"],
+            "movies": response["data"],
         }
     )
 
@@ -30,12 +31,15 @@ async def item(
         item_id: int,
         db: AsyncSession = Depends(session)
 ):
-    content = await api.item(item_id, db)
+    response = await movies.item(item_id, db)
+    movie_id = response.id
+    episodes = [_ async for _ in Episode.by_movie_id(movie_id, db)]
 
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
         context={
-            "movie": content,
+            "movie": response,
+            "episodes": episodes,
         }
     )

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <p>{{ episode.title }}</p>
+
+  {% for record in records %}
+    <video src="/media/{{ record.filename }}" controls></video>
+  {% endfor %}
+{% endblock %}

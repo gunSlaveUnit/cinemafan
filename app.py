@@ -2,11 +2,12 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
+from starlette.staticfiles import StaticFiles
 
-from movies.api import router as movies_api_router
-from movies.templates import router as movies_templates_router
+from movies.routes import router as movies_router
 from root.db import init
-from root.templates import router as index_router
+from root.routes import router as root_router
+from root.settings import MEDIA_DIR
 
 
 @asynccontextmanager
@@ -18,9 +19,11 @@ async def lifespan(_: FastAPI) -> AsyncGenerator:
 
 app = FastAPI(
     title="cinemafan",
+    version="0.1.2",
     lifespan=lifespan,
 )
 
-app.include_router(index_router)
-app.include_router(movies_api_router)
-app.include_router(movies_templates_router)
+app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")
+
+app.include_router(root_router)
+app.include_router(movies_router)

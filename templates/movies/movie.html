@@ -2,4 +2,10 @@
 
 {% block content %}
   <p>{{ movie.title }}</p>
+
+  {% for episode in episodes %}
+    <div>
+      <a href="/episodes/{{ episode.id }}">{{ episode.title }}</a>
+    </div>
+  {% endfor %}
 {% endblock %}
