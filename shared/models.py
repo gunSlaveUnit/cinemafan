@@ -34,3 +34,17 @@ class Entity(Base):
             session: AsyncSession,
     ):
         return await session.scalar(select(cls).where(cls.id == item_id))
+
+    @classmethod
+    async def create(
+            cls,
+            data: dict,
+            session: AsyncSession,
+    ):
+        item = cls(**data)
+
+        session.add(item)
+        await session.commit()
+        await session.flush()
+
+        return item
