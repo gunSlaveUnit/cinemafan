@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.models import Quality
 from movies.schemas import QualityCreateSchema
-from root.db import session
+from infrastructure.db import session
 
 router = APIRouter(prefix="/qualities", tags=["Qualities"])
 

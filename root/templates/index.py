@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 
-from root.settings import templates
+from infrastructure.settings import templates
 
 router = APIRouter(tags=["Root"])
 
