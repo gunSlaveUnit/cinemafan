@@ -4,6 +4,8 @@
   <p>{{ movie.title }}</p>
 
   {% for episode in episodes %}
-    <p>{{ episode.title }}</p>
+    <div>
+      <a href="/episodes/{{ episode.id }}">{{ episode.title }}</a>
+    </div>
   {% endfor %}
 {% endblock %}
