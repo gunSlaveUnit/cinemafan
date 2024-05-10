@@ -15,7 +15,7 @@ class Episode(Entity):
 
     movie_id: Mapped[int]
     number: Mapped[int]
-    parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"))
+    parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"), nullable=True)
     season: Mapped[int]
     title: Mapped[str] = mapped_column(String(255))
 
