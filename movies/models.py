@@ -13,8 +13,14 @@ class Movie(Entity):
 class Episode(Entity):
     __tablename__ = "episodes"
 
-    movie_id: Mapped[int] = mapped_column()
-    number: Mapped[int] = mapped_column()
+    movie_id: Mapped[int]
+    number: Mapped[int]
     parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"))
-    season: Mapped[int] = mapped_column()
+    season: Mapped[int]
     title: Mapped[str] = mapped_column(String(255))
+
+
+class Quality(Entity):
+    __tablename__ = "qualities"
+
+    resolution: Mapped[int]
