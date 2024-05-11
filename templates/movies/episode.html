@@ -3,7 +3,33 @@
 {% block content %}
   <p>{{ episode.title }}</p>
 
+  <select onchange="quality_changed()">
+    {% for quality in qualities %}
+      <option value="{{ quality.id }}">{{ quality.resolution }}</option>
+    {% endfor %}
+  </select>
+
   {% for record in records %}
-    <video src="/media/{{ record.filename }}" controls></video>
+    <video src="/media/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" controls></video>
   {% endfor %}
+
+  <script>
+    const hide_unsuitable_players = () => {
+      const quality_id = document.querySelector("select").value;
+      const players = document.querySelectorAll("video");
+
+      players.forEach(player => {
+        if (quality_id !== player.getAttribute("quality_id"))
+          player.setAttribute("hidden", "true")
+        else
+          player.removeAttribute("hidden")
+      });
+    }
+
+    const quality_changed = () => {
+      hide_unsuitable_players();
+    }
+
+    window.onload = hide_unsuitable_players();
+  </script>
 {% endblock %}
