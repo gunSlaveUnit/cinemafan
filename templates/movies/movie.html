@@ -5,7 +5,7 @@
 
   {% for episode in episodes %}
     <div>
-      <a href="/episodes/{{ episode.id }}">{{ episode.title }}</a>
+      <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }}</a>
     </div>
   {% endfor %}
 {% endblock %}
