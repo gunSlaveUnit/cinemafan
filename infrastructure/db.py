@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from root.models import Base
-from root.settings import DB_CONFIG
+from infrastructure.settings import DB_CONFIG
 
 
 def build_url(data: dict) -> str:

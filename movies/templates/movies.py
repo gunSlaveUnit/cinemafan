@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.api import movies
 from movies.models import Episode
-from root.db import session
-from root.settings import templates
+from infrastructure.db import session
+from infrastructure.settings import templates
 
 router = APIRouter(prefix="/movies", tags=["Movies"])
 

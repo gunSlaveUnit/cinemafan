@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.models import Movie
 from movies.schemas import MovieCreateSchema
-from root.db import session
+from infrastructure.db import session
 
 router = APIRouter(prefix="/movies", tags=["Movies"])
 
