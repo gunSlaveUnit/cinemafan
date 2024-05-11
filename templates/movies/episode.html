@@ -3,33 +3,35 @@
 {% block content %}
   <p>{{ episode.number }}. {{ episode.title }}</p>
 
-  <select onchange="quality_changed()">
+  <select onchange="quality_changed(this.value)">
     {% for quality in qualities %}
       <option value="{{ quality.id }}">{{ quality.resolution }}</option>
     {% endfor %}
   </select>
 
-  {% for record in records %}
-    <video src="/media/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" controls></video>
-  {% endfor %}
+  <video src="/media/{{ records[0].filename }}" controls>
+    {% for record in records %}
+      <source src="/media/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
+    {% endfor %}
+  </video>
 
   <script>
-    const hide_unsuitable_players = () => {
-      const quality_id = document.querySelector("select").value;
-      const players = document.querySelectorAll("video");
+    const set_suitable_source = (quality_id) => {
+      const player = document.querySelector("video");
+      const sources = player.querySelectorAll("source");
 
-      players.forEach(player => {
-        if (quality_id !== player.getAttribute("quality_id"))
-          player.setAttribute("hidden", "true")
-        else
-          player.removeAttribute("hidden")
-      });
+      sources.forEach(
+        source => {
+          if (quality_id === source.getAttribute("quality_id"))
+            player.setAttribute("src", source.getAttribute("src"))
+        }
+      );
     }
 
-    const quality_changed = () => {
-      hide_unsuitable_players();
+    const quality_changed = (quality_id) => {
+      set_suitable_source(quality_id);
     }
 
-    window.onload = hide_unsuitable_players();
+    window.onload = set_suitable_source;
   </script>
 {% endblock %}
