@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import String, ForeignKey, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
@@ -14,6 +16,7 @@ class Movie(Entity):
 class Episode(Entity):
     __tablename__ = "episodes"
 
+    release_date: Mapped[datetime.datetime]
     movie_id: Mapped[int]
     number: Mapped[int]
     parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"), nullable=True)
