@@ -39,6 +39,7 @@ class EpisodeDBSchema(EpisodeCreateSchema, EntityDBSchema):
 
 
 class QualityCreateSchema(BaseModel):
+    title: str
     resolution: int
 
 
