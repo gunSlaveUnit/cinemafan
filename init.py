@@ -93,6 +93,7 @@ async def create_episodes():
 async def init():
     await create_ages()
     await create_movies()
+    await create_episodes()
 
 
 asyncio.run(init())
