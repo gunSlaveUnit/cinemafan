@@ -3,6 +3,11 @@ from pydantic import BaseModel
 from shared.schemas import EntityDBSchema
 
 
+class AgeCreateSchema(BaseModel):
+    title: str
+    description: str
+
+
 class MovieCreateSchema(BaseModel):
     title: str
 
