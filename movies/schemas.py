@@ -8,6 +8,10 @@ class AgeCreateSchema(BaseModel):
     description: str
 
 
+class AgeDBSchema(AgeCreateSchema, EntityDBSchema):
+    pass
+
+
 class MovieCreateSchema(BaseModel):
     title: str
 
