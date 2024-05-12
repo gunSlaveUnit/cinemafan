@@ -47,6 +47,7 @@ class Episode(Entity):
 class Quality(Entity):
     __tablename__ = "qualities"
 
+    title: Mapped[str] = mapped_column(String(255))
     resolution: Mapped[int]
 
 
