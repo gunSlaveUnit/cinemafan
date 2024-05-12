@@ -1,3 +1,5 @@
+import datetime
+
 from pydantic import BaseModel
 
 from shared.schemas import EntityDBSchema
@@ -24,6 +26,7 @@ class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
 
 
 class EpisodeCreateSchema(BaseModel):
+    release_date: datetime.datetime
     movie_id: int
     number: int
     parent_id: int | None = None
