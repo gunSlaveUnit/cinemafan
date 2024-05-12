@@ -1,9 +1,9 @@
 import asyncio
 import datetime
 
-from movies.models import Age, Movie, Episode
+from movies.models import Age, Movie, Episode, Quality
 from infrastructure.db import session_maker
-from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSchema
+from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSchema, QualityCreateSchema
 
 
 async def create_ages():
@@ -14,6 +14,19 @@ async def create_ages():
             await Age.create(AgeCreateSchema(title="PG-13", description="Parents strongly cautioned").model_dump(), s)
             await Age.create(AgeCreateSchema(title="R", description="Restricted").model_dump(), s)
             await Age.create(AgeCreateSchema(title="NC-17", description="Adults only").model_dump(), s)
+        finally:
+            await s.close()
+
+
+async def create_qualities():
+    async with session_maker() as s:
+        try:
+            await Quality.create(QualityCreateSchema(resolution=360).model_dump(), s)
+            await Quality.create(QualityCreateSchema(resolution=480).model_dump(), s)
+            await Quality.create(QualityCreateSchema(resolution=720).model_dump(), s)
+            await Quality.create(QualityCreateSchema(resolution=1080).model_dump(), s)
+            await Quality.create(QualityCreateSchema(resolution=2160).model_dump(), s)
+            await Quality.create(QualityCreateSchema(resolution=4320).model_dump(), s)
         finally:
             await s.close()
 
@@ -92,6 +105,7 @@ async def create_episodes():
 
 async def init():
     await create_ages()
+    await create_qualities()
     await create_movies()
     await create_episodes()
 
