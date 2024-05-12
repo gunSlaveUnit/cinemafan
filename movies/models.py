@@ -1,16 +1,24 @@
 import datetime
 
-from sqlalchemy import String, ForeignKey, select
+from sqlalchemy import String, ForeignKey, select, Text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shared.models import Entity
 
 
+class Age(Entity):
+    __tablename__ = "ages"
+
+    title: Mapped[str] = mapped_column(String(255))
+    description: Mapped[str] = mapped_column(Text)
+
+
 class Movie(Entity):
     __tablename__ = "movies"
 
     title: Mapped[str] = mapped_column(String(255))
+    age_id: Mapped[int] = mapped_column(ForeignKey("ages.id"))
 
 
 class Episode(Entity):
