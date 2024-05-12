@@ -14,6 +14,9 @@ class AgeDBSchema(AgeCreateSchema, EntityDBSchema):
 
 class MovieCreateSchema(BaseModel):
     title: str
+    poster: str
+    description: str
+    age_id: int
 
 
 class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
