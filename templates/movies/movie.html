@@ -4,6 +4,8 @@
   <img src="/media/{{ movie.poster }}" alt="{{ movie.title }} poster" />
   <p>{{ movie.title }}</p>
 
+  <p>{{ movie.description }}</p>
+
   {% for episode in episodes %}
     <div>
       <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }}</a>
