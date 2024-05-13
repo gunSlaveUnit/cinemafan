@@ -48,11 +48,13 @@ async def item(
     episodes = [_ async for _ in Episode.by_movie_id(movie_id, db)]
     episodes_count = len(episodes)
     seasons_count = len(set(episode.season for episode in episodes))
+    age = await Age.by_id(response.age_id, db)
 
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
         context={
+            "age": age,
             "movie": response,
             "episodes": episodes,
             "episodes_count": episodes_count,
