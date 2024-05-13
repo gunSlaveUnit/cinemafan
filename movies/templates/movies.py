@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request, Depends
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.api import movies
