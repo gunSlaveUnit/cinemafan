@@ -47,6 +47,7 @@ async def item(
     movie_id = response.id
     episodes = [_ async for _ in Episode.by_movie_id(movie_id, db)]
     episodes_count = len(episodes)
+    seasons_count = len(set(episode.season for episode in episodes))
 
     return templates.TemplateResponse(
         request=request,
@@ -55,5 +56,6 @@ async def item(
             "movie": response,
             "episodes": episodes,
             "episodes_count": episodes_count,
+            "seasons_count": seasons_count,
         }
     )
