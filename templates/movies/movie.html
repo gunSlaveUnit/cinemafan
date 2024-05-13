@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <img src="/media/{{ movie.poster }}" alt="{{ movie.title }} poster" />
   <p>{{ movie.title }}</p>
 
   {% for episode in episodes %}
