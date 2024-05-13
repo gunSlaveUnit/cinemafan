@@ -4,6 +4,8 @@
   <img src="/media/{{ movie.poster }}" alt="{{ movie.title }} poster" />
   <p>{{ movie.title }}</p>
 
+  {{ i.seasons_count }} season{% if i.seasons_count > 1 %}s{% endif %}
+
   <p>{{ movie.description }}</p>
 
   {% for episode in episodes %}
