@@ -46,10 +46,9 @@ class SeasonDBSchema(SeasonCreateSchema, EntityDBSchema):
 
 class EpisodeCreateSchema(BaseModel):
     release_date: datetime.datetime
-    movie_id: int
     number: int
     parent_id: int | None = None
-    season: int
+    season_id: int
     title: str
 
 
