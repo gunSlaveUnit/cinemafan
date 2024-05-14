@@ -171,6 +171,7 @@ async def create_records():
 async def init():
     await create_ages()
     await create_qualities()
+    await create_categories()
     await create_seasons()
     await create_movies()
     await create_episodes()
