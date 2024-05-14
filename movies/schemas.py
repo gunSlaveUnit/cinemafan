@@ -36,7 +36,7 @@ class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
 
 class SeasonCreateSchema(BaseModel):
     number: int
-    title: str
+    title: str | None = None
     movie_id: int
 
 
