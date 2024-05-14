@@ -96,7 +96,6 @@ async def create_episodes():
             )
             await Episode.create(
                 EpisodeCreateSchema(
-                    movie_id=1,
                     number=2,
                     season_id=1,
                     title="Goblin Slayer",
@@ -106,7 +105,6 @@ async def create_episodes():
             )
             await Episode.create(
                 EpisodeCreateSchema(
-                    movie_id=1,
                     number=3,
                     season_id=1,
                     title="Unexpected Visitors",
@@ -116,7 +114,6 @@ async def create_episodes():
             )
             await Episode.create(
                 EpisodeCreateSchema(
-                    movie_id=1,
                     number=4,
                     season_id=1,
                     title="The Strong",
