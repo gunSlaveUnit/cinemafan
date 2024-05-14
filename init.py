@@ -87,7 +87,6 @@ async def create_episodes():
         try:
             await Episode.create(
                 EpisodeCreateSchema(
-                    movie_id=1,
                     number=1,
                     season_id=1,
                     title="The Fate of Particular Adventurers",
