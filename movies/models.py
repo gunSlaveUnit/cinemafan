@@ -48,12 +48,12 @@ class Episode(Entity):
     title: Mapped[str] = mapped_column(String(255))
 
     @classmethod
-    async def by_movie_id(
+    async def by_season_id(
             cls,
-            movie_id: int,
+            season_id: int,
             session: AsyncSession,
     ):
-        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        scalars = await session.stream_scalars(select(cls).where(cls.season_id == season_id))
         async for scalar in scalars:
             yield scalar
 
