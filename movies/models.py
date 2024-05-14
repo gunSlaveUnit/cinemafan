@@ -27,6 +27,7 @@ class Movie(Entity):
     poster: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
     age_id: Mapped[int] = mapped_column(ForeignKey("ages.id"))
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
 
 class Episode(Entity):
