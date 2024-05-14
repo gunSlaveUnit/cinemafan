@@ -34,6 +34,12 @@ class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
     pass
 
 
+class SeasonCreateSchema(BaseModel):
+    number: int
+    title: str
+    movie_id: int
+
+
 class EpisodeCreateSchema(BaseModel):
     release_date: datetime.datetime
     movie_id: int

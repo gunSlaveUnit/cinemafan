@@ -41,10 +41,10 @@ class Season(Entity):
 class Episode(Entity):
     __tablename__ = "episodes"
 
-    release_date: Mapped[datetime.datetime]
-    season_id: Mapped[int]
     number: Mapped[int]
     parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"), nullable=True)
+    release_date: Mapped[datetime.datetime]
+    season_id: Mapped[int]
     title: Mapped[str] = mapped_column(String(255))
 
     @classmethod
