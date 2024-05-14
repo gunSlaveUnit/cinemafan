@@ -1,10 +1,10 @@
 import asyncio
 import datetime
 
-from movies.models import Age, Movie, Episode, Quality, Record
+from movies.models import Age, Movie, Episode, Quality, Record, Category
 from infrastructure.db import session_maker
 from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSchema, QualityCreateSchema, \
-    RecordCreateSchema
+    RecordCreateSchema, CategoryCreateSchema
 
 
 async def create_ages():
@@ -15,6 +15,16 @@ async def create_ages():
             await Age.create(AgeCreateSchema(title="PG-13", description="Parents strongly cautioned").model_dump(), s)
             await Age.create(AgeCreateSchema(title="R", description="Restricted").model_dump(), s)
             await Age.create(AgeCreateSchema(title="NC-17", description="Adults only").model_dump(), s)
+        finally:
+            await s.close()
+
+
+async def create_categories():
+    async with session_maker() as s:
+        try:
+            await Category.create(CategoryCreateSchema(title="Full-length").model_dump(), s)
+            await Category.create(CategoryCreateSchema(title="Short-length").model_dump(), s)
+            await Category.create(CategoryCreateSchema(title="Series").model_dump(), s)
         finally:
             await s.close()
 
