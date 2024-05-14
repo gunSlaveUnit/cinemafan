@@ -14,6 +14,12 @@ class Age(Entity):
     description: Mapped[str] = mapped_column(Text)
 
 
+class Category(Entity):
+    __tablename__ = "categories"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Movie(Entity):
     __tablename__ = "movies"
 
