@@ -18,6 +18,10 @@ class CategoryCreateSchema(BaseModel):
     title: str
 
 
+class CategoryDBSchema(CategoryCreateSchema, EntityDBSchema):
+    pass
+
+
 class MovieCreateSchema(BaseModel):
     title: str
     poster: str
