@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for movie in movies %}
+  {% for i in info %}
     <div>
-       <a href="/movies/{{ movie.id }}">{{ movie.title }}</a>
+      <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.title }} poster" />
+
+      <a href="/movies/{{ i.movie.id }}">{{ i.movie.title }}</a>
+
+      {{ i.seasons_count }} season{% if i.seasons_count > 1 %}s{% endif %}
+
+      {{ i.episodes_count }} episode{% if i.episodes_count > 1 %}s{% endif %}
     </div>
   {% endfor %}
 {% endblock %}

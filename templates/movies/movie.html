@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <img src="/media/{{ movie.poster }}" alt="{{ movie.title }} poster" />
   <p>{{ movie.title }}</p>
+
+  {{ age.title }}
+
+  {{ seasons_count }} season{% if seasons_count > 1 %}s{% endif %}
+
+  {{ episodes_count }} episode{% if episodes_count > 1 %}s{% endif %}
+
+  <p>{{ movie.description }}</p>
 
   {% for episode in episodes %}
     <div>
