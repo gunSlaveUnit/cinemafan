@@ -30,14 +30,21 @@ class Movie(Entity):
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
 
+class Season(Entity):
+    __tablename__ = "seasons"
+
+    number: Mapped[int]
+    title: Mapped[str] = mapped_column(String(255), nullable=True)
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+
+
 class Episode(Entity):
     __tablename__ = "episodes"
 
     release_date: Mapped[datetime.datetime]
-    movie_id: Mapped[int]
+    season_id: Mapped[int]
     number: Mapped[int]
     parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"), nullable=True)
-    season: Mapped[int]
     title: Mapped[str] = mapped_column(String(255))
 
     @classmethod
