@@ -50,9 +50,15 @@ async def item(
 ):
     response = await movies.item(item_id, db)
     movie_id = response.id
-    episodes = [_ async for _ in Episode.by_season_id(movie_id, db)]
+
+    seasons = [_ async for _ in Season.by_movie_id(movie_id, db)]
+    seasons_count = len(seasons)
+
+    episodes = []
+    for season in seasons:
+        episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
     episodes_count = len(episodes)
-    seasons_count = len(set(episode.season for episode in episodes))
+
     age = await Age.by_id(response.age_id, db)
 
     return templates.TemplateResponse(
