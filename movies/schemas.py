@@ -14,23 +14,41 @@ class AgeDBSchema(AgeCreateSchema, EntityDBSchema):
     pass
 
 
+class CategoryCreateSchema(BaseModel):
+    title: str
+
+
+class CategoryDBSchema(CategoryCreateSchema, EntityDBSchema):
+    pass
+
+
 class MovieCreateSchema(BaseModel):
     title: str
     poster: str
     description: str
     age_id: int
+    category_id: int
 
 
 class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
     pass
 
 
+class SeasonCreateSchema(BaseModel):
+    number: int
+    title: str | None = None
+    movie_id: int
+
+
+class SeasonDBSchema(SeasonCreateSchema, EntityDBSchema):
+    pass
+
+
 class EpisodeCreateSchema(BaseModel):
     release_date: datetime.datetime
-    movie_id: int
     number: int
     parent_id: int | None = None
-    season: int
+    season_id: int
     title: str
 
 

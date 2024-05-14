@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.api import movies
-from movies.models import Episode, Age
+from movies.models import Episode, Age, Season
 from infrastructure.db import session
 from infrastructure.settings import templates
 
@@ -19,9 +19,14 @@ async def items(
 
     info = []
     for movie in data:
-        episodes = [_ async for _ in Episode.by_movie_id(movie.id, db)]
+        seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
+        seasons_count = len(seasons)
+
+        episodes = []
+        for season in seasons:
+            episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
         episodes_count = len(episodes)
-        seasons_count = len(set(episode.season for episode in episodes))
+
         info.append({
             "movie": movie,
             "episodes_count": episodes_count,
@@ -45,9 +50,15 @@ async def item(
 ):
     response = await movies.item(item_id, db)
     movie_id = response.id
-    episodes = [_ async for _ in Episode.by_movie_id(movie_id, db)]
+
+    seasons = [_ async for _ in Season.by_movie_id(movie_id, db)]
+    seasons_count = len(seasons)
+
+    episodes = []
+    for season in seasons:
+        episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
     episodes_count = len(episodes)
-    seasons_count = len(set(episode.season for episode in episodes))
+
     age = await Age.by_id(response.age_id, db)
 
     return templates.TemplateResponse(

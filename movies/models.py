@@ -14,6 +14,12 @@ class Age(Entity):
     description: Mapped[str] = mapped_column(Text)
 
 
+class Category(Entity):
+    __tablename__ = "categories"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Movie(Entity):
     __tablename__ = "movies"
 
@@ -21,17 +27,15 @@ class Movie(Entity):
     poster: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
     age_id: Mapped[int] = mapped_column(ForeignKey("ages.id"))
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
 
-class Episode(Entity):
-    __tablename__ = "episodes"
+class Season(Entity):
+    __tablename__ = "seasons"
 
-    release_date: Mapped[datetime.datetime]
-    movie_id: Mapped[int]
     number: Mapped[int]
-    parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"), nullable=True)
-    season: Mapped[int]
-    title: Mapped[str] = mapped_column(String(255))
+    title: Mapped[str] = mapped_column(String(255), nullable=True)
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
 
     @classmethod
     async def by_movie_id(
@@ -40,6 +44,26 @@ class Episode(Entity):
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
+
+
+class Episode(Entity):
+    __tablename__ = "episodes"
+
+    number: Mapped[int]
+    parent_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"), nullable=True)
+    release_date: Mapped[datetime.datetime]
+    season_id: Mapped[int]
+    title: Mapped[str] = mapped_column(String(255))
+
+    @classmethod
+    async def by_season_id(
+            cls,
+            season_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.season_id == season_id))
         async for scalar in scalars:
             yield scalar
 
