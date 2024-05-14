@@ -14,6 +14,10 @@ class AgeDBSchema(AgeCreateSchema, EntityDBSchema):
     pass
 
 
+class CategoryCreateSchema(BaseModel):
+    title: str
+
+
 class MovieCreateSchema(BaseModel):
     title: str
     poster: str
