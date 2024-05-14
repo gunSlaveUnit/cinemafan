@@ -60,6 +60,7 @@ async def create_movies():
                                 "as well as learn a lot of new things about her enemies. Only some secrets are better "
                                 "like yours...",
                     age_id=5,
+                    category_id=3,
                 ).model_dump(),
                 s,
             )
