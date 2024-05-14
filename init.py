@@ -1,10 +1,10 @@
 import asyncio
 import datetime
 
-from movies.models import Age, Movie, Episode, Quality, Record, Category
+from movies.models import Age, Movie, Episode, Quality, Record, Category, Season
 from infrastructure.db import session_maker
 from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSchema, QualityCreateSchema, \
-    RecordCreateSchema, CategoryCreateSchema
+    RecordCreateSchema, CategoryCreateSchema, SeasonCreateSchema
 
 
 async def create_ages():
@@ -68,6 +68,20 @@ async def create_movies():
             await s.close()
 
 
+async def create_seasons():
+    async with session_maker() as s:
+        try:
+            await Season.create(
+                SeasonCreateSchema(
+                    number=1,
+                    movie_id=1,
+                ).model_dump(),
+                s,
+            )
+        finally:
+            await s.close()
+
+
 async def create_episodes():
     async with session_maker() as s:
         try:
@@ -75,7 +89,7 @@ async def create_episodes():
                 EpisodeCreateSchema(
                     movie_id=1,
                     number=1,
-                    season=1,
+                    season_id=1,
                     title="The Fate of Particular Adventurers",
                     release_date=datetime.datetime(2018, 10, 7),
                 ).model_dump(),
@@ -85,7 +99,7 @@ async def create_episodes():
                 EpisodeCreateSchema(
                     movie_id=1,
                     number=2,
-                    season=1,
+                    season_id=1,
                     title="Goblin Slayer",
                     release_date=datetime.datetime(2018, 10, 14),
                 ).model_dump(),
@@ -95,7 +109,7 @@ async def create_episodes():
                 EpisodeCreateSchema(
                     movie_id=1,
                     number=3,
-                    season=1,
+                    season_id=1,
                     title="Unexpected Visitors",
                     release_date=datetime.datetime(2018, 10, 21),
                 ).model_dump(),
@@ -105,7 +119,7 @@ async def create_episodes():
                 EpisodeCreateSchema(
                     movie_id=1,
                     number=4,
-                    season=1,
+                    season_id=1,
                     title="The Strong",
                     release_date=datetime.datetime(2018, 10, 28),
                 ).model_dump(),
@@ -157,6 +171,7 @@ async def create_records():
 async def init():
     await create_ages()
     await create_qualities()
+    await create_seasons()
     await create_movies()
     await create_episodes()
     await create_records()
