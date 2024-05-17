@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <img src="/media/{{ movie.poster }}" alt="{{ movie.title }} poster" />
-  <p>{{ movie.title }}</p>
+  <img src="/media/{{ movie.poster }}" alt="{{ movie.translated_title }} poster" />
+  <p>{{ movie.translated_title }}</p>
+  <p>{{ movie.original_title }}</p>
 
   {{ age.title }}
 
@@ -12,7 +13,7 @@
 
   {% for screenshot in screenshots %}
     <div>
-      <img src="/media/{{ screenshot.filename }}" alt="{{ movie.title }} screenshot" />
+      <img src="/media/{{ screenshot.filename }}" alt="{{ movie.translated_title }} screenshot" />
       <p>{{ screenshot.title }}</p>
     </div>
   {% endfor %}
