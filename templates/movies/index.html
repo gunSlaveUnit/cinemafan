@@ -3,9 +3,13 @@
 {% block content %}
   {% for i in info %}
     <div>
-      <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.title }} poster" />
+      <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" />
 
-      <a href="/movies/{{ i.movie.id }}">{{ i.movie.title }}</a>
+      <p>
+        <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }}</a>
+      </p>
+
+      <p>{{ i.movie.original_title }}</p>
 
       {{ i.seasons_count }} season{% if i.seasons_count > 1 %}s{% endif %}
 
