@@ -90,3 +90,21 @@ class Record(Entity):
         scalars = await session.stream_scalars(select(cls).where(cls.episode_id == episode_id))
         async for scalar in scalars:
             yield scalar
+
+
+class Screenshot(Entity):
+    __tablename__ = "screenshots"
+
+    title: Mapped[str] = mapped_column(String(255))
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    filename: Mapped[str] = mapped_column(String(255))
+
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar

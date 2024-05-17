@@ -10,6 +10,13 @@
 
   {{ episodes_count }} episode{% if episodes_count > 1 %}s{% endif %}
 
+  {% for screenshot in screenshots %}
+    <div>
+      <img src="/media/{{ screenshot.filename }}" alt="{{ movie.title }} screenshot" />
+      <p>{{ screenshot.title }}</p>
+    </div>
+  {% endfor %}
+
   <p>{{ movie.description }}</p>
 
   {% for episode in episodes %}
