@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.api import movies
-from movies.models import Episode, Age, Season
+from movies.models import Episode, Age, Season, Screenshot
 from infrastructure.db import session
 from infrastructure.settings import templates
 
@@ -61,6 +61,8 @@ async def item(
 
     age = await Age.by_id(response.age_id, db)
 
+    screenshots = [_ async for _ in Screenshot.by_movie_id(movie_id, db)]
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
@@ -68,6 +70,7 @@ async def item(
             "age": age,
             "movie": response,
             "episodes": episodes,
+            "screenshots": screenshots,
             "episodes_count": episodes_count,
             "seasons_count": seasons_count,
         }
