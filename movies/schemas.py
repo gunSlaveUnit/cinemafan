@@ -72,3 +72,9 @@ class RecordCreateSchema(BaseModel):
 
 class RecordDBSchema(RecordCreateSchema, EntityDBSchema):
     pass
+
+
+class ScreenShotCreateSchema(BaseModel):
+    title: str
+    movie_id: int
+    filename: str
