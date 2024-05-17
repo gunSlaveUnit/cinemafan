@@ -42,7 +42,8 @@ async def create_movies_from_json(data):
             for movie_data in data['movies']:
                 await Movie.create(
                     MovieCreateSchema(
-                        title=movie_data['title'],
+                        original_title=movie_data['original_title'],
+                        translated_title=movie_data['translated_title'],
                         poster=movie_data['poster'],
                         description=movie_data['description'],
                         age_id=movie_data['age_id'],
