@@ -78,3 +78,7 @@ class ScreenShotCreateSchema(BaseModel):
     title: str
     movie_id: int
     filename: str
+
+
+class ScreenShotDBSchema(ScreenShotCreateSchema, EntityDBSchema):
+    pass
