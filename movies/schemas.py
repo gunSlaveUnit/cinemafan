@@ -74,11 +74,11 @@ class RecordDBSchema(RecordCreateSchema, EntityDBSchema):
     pass
 
 
-class ScreenShotCreateSchema(BaseModel):
+class ScreenshotCreateSchema(BaseModel):
     title: str
     movie_id: int
     filename: str
 
 
-class ScreenShotDBSchema(ScreenShotCreateSchema, EntityDBSchema):
+class ScreenshotDBSchema(ScreenshotCreateSchema, EntityDBSchema):
     pass
