@@ -114,5 +114,17 @@
       "quality_id": 4,
       "filename": "35504036-35d9-4024-a0fe-eda11cf684ab.mp4"
     }
+  ],
+  "screenshots": [
+    {
+      "title": "Some screenshot 1",
+      "movie_id": 1,
+      "filename": "4811783b-32ce-4387-aa51-1b5dd8f2108d.jpg"
+    },
+    {
+      "title": "Some screenshot 2",
+      "movie_id": 1,
+      "filename": "18c8fdda-7a62-4d01-a7cf-13663580b458.jpg"
+    }
   ]
 }
