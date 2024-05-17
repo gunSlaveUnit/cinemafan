@@ -40,6 +40,7 @@ async def create_movies_from_json(data):
     async with session_maker() as s:
         try:
             for movie_data in data['movies']:
+                print(movie_data['original_title'])
                 await Movie.create(
                     MovieCreateSchema(
                         original_title=movie_data['original_title'],
@@ -120,7 +121,7 @@ async def create_screenshots_from_json(data):
 
 
 async def init():
-    with open('data.json', 'r') as file:
+    with open('data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
 
     await create_ages_from_json(data)
