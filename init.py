@@ -40,7 +40,6 @@ async def create_movies_from_json(data):
     async with session_maker() as s:
         try:
             for movie_data in data['movies']:
-                print(movie_data['original_title'])
                 await Movie.create(
                     MovieCreateSchema(
                         original_title=movie_data['original_title'],
