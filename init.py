@@ -2,17 +2,18 @@ import asyncio
 import json
 import datetime
 
-from movies.models import Age, Movie, Episode, Quality, Record, Category, Season
+from movies.models import Age, Movie, Episode, Quality, Record, Category, Season, Screenshot
 from infrastructure.db import session_maker
 from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSchema, QualityCreateSchema, \
-    RecordCreateSchema, CategoryCreateSchema, SeasonCreateSchema
+    RecordCreateSchema, CategoryCreateSchema, SeasonCreateSchema, ScreenshotCreateSchema
 
 
 async def create_ages_from_json(data):
     async with session_maker() as s:
         try:
             for age_data in data['ages']:
-                await Age.create(AgeCreateSchema(title=age_data['title'], description=age_data['description']).model_dump(), s)
+                await Age.create(
+                    AgeCreateSchema(title=age_data['title'], description=age_data['description']).model_dump(), s)
         finally:
             await s.close()
 
@@ -110,7 +111,9 @@ async def create_screenshots_from_json(data):
                         filename=screenshot_data['filename'],
                         title=screenshot_data['title'],
                         movie_id=screenshot_data['movie_id'],
-                    ))
+                    ).model_dump(),
+                    s,
+                )
         finally:
             await s.close()
 
@@ -126,6 +129,7 @@ async def init():
     await create_seasons_from_json(data)
     await create_episodes_from_json(data)
     await create_records_from_json(data)
+    await create_screenshots_from_json(data)
 
 
 asyncio.run(init())
