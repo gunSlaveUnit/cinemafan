@@ -54,7 +54,8 @@
   ],
   "movies": [
     {
-      "title": "Goblin Slayer",
+      "original_title": "ゴブリンスレイヤー",
+      "translated_title": "Goblin Slayer",
       "poster": "cfd37e0a-e162-4a66-9af6-f62bced5082b.jpg",
       "description": "Any group of adventurers must have a healer; most often this role falls to priests. A young Priestess joins such a team and during her first outing she encounters a bunch of evil goblins who attack her comrades, leaving the girl in shock. The priestess's first adventure could have been her last, if not for a mysterious stranger from the Dungeon - a knight called Goblin Slayer. And, it must be said, he lives up to his nickname - the offspring die from his sword, like flies. The girl decides to keep an eye on him and give him the opportunity to destroy the green scourge. To do this, she will have to study stronger and more complex magic, as well as learn a lot of new things about her enemies. Only some secrets are better like yours...",
       "age_id": 5,
