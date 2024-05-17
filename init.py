@@ -101,6 +101,20 @@ async def create_records_from_json(data):
             await s.close()
 
 
+async def create_screenshots_from_json(data):
+    async with session_maker() as s:
+        try:
+            for screenshot_data in data['screenshots']:
+                await Screenshot.create(
+                    ScreenshotCreateSchema(
+                        filename=screenshot_data['filename'],
+                        title=screenshot_data['title'],
+                        movie_id=screenshot_data['movie_id'],
+                    ))
+        finally:
+            await s.close()
+
+
 async def init():
     with open('data.json', 'r') as file:
         data = json.load(file)
