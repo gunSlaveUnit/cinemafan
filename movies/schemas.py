@@ -23,7 +23,8 @@ class CategoryDBSchema(CategoryCreateSchema, EntityDBSchema):
 
 
 class MovieCreateSchema(BaseModel):
-    title: str
+    translated_title: str
+    original_title: str
     poster: str
     description: str
     age_id: int
