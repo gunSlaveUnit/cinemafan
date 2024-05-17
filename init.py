@@ -1,4 +1,5 @@
 import asyncio
+import json
 import datetime
 
 from movies.models import Age, Movie, Episode, Quality, Record, Category, Season
@@ -7,171 +8,110 @@ from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSche
     RecordCreateSchema, CategoryCreateSchema, SeasonCreateSchema
 
 
-async def create_ages():
+async def create_ages_from_json(data):
     async with session_maker() as s:
         try:
-            await Age.create(AgeCreateSchema(title="G", description="All ages").model_dump(), s)
-            await Age.create(AgeCreateSchema(title="PG", description="Parental guidance").model_dump(), s)
-            await Age.create(AgeCreateSchema(title="PG-13", description="Parents strongly cautioned").model_dump(), s)
-            await Age.create(AgeCreateSchema(title="R", description="Restricted").model_dump(), s)
-            await Age.create(AgeCreateSchema(title="NC-17", description="Adults only").model_dump(), s)
+            for age_data in data['ages']:
+                await Age.create(AgeCreateSchema(title=age_data['title'], description=age_data['description']).model_dump(), s)
         finally:
             await s.close()
 
 
-async def create_categories():
+async def create_categories_from_json(data):
     async with session_maker() as s:
         try:
-            await Category.create(CategoryCreateSchema(title="Full-length").model_dump(), s)
-            await Category.create(CategoryCreateSchema(title="Short-length").model_dump(), s)
-            await Category.create(CategoryCreateSchema(title="Series").model_dump(), s)
+            for category_data in data['categories']:
+                await Category.create(CategoryCreateSchema(title=category_data['title']).model_dump(), s)
         finally:
             await s.close()
 
 
-async def create_qualities():
+async def create_qualities_from_json(data):
     async with session_maker() as s:
         try:
-            await Quality.create(QualityCreateSchema(resolution=360).model_dump(), s)
-            await Quality.create(QualityCreateSchema(resolution=480).model_dump(), s)
-            await Quality.create(QualityCreateSchema(resolution=720).model_dump(), s)
-            await Quality.create(QualityCreateSchema(resolution=1080).model_dump(), s)
-            await Quality.create(QualityCreateSchema(resolution=2160).model_dump(), s)
-            await Quality.create(QualityCreateSchema(resolution=4320).model_dump(), s)
+            for quality_data in data['qualities']:
+                await Quality.create(QualityCreateSchema(resolution=quality_data['resolution']).model_dump(), s)
         finally:
             await s.close()
 
 
-async def create_movies():
+async def create_movies_from_json(data):
     async with session_maker() as s:
         try:
-            await Movie.create(
-                MovieCreateSchema(
-                    title="Goblin Slayer",
-                    poster="cfd37e0a-e162-4a66-9af6-f62bced5082b.jpg",
-                    description="Any group of adventurers must have a healer; most often this role falls to priests. "
-                                "A young Priestess joins such a team and during her first outing she encounters a "
-                                "bunch of evil goblins who attack her comrades, leaving the girl in shock. The "
-                                "priestess's first adventure could have been her last, if not for a mysterious "
-                                "stranger from the Dungeon - a knight called Goblin Slayer. And, it must be said, "
-                                "he lives up to his nickname - the offspring die from his sword, like flies. The girl "
-                                "decides to keep an eye on him and give him the opportunity to destroy the green "
-                                "scourge. To do this, she will have to study stronger and more complex magic, "
-                                "as well as learn a lot of new things about her enemies. Only some secrets are better "
-                                "like yours...",
-                    age_id=5,
-                    category_id=3,
-                ).model_dump(),
-                s,
-            )
+            for movie_data in data['movies']:
+                await Movie.create(
+                    MovieCreateSchema(
+                        title=movie_data['title'],
+                        poster=movie_data['poster'],
+                        description=movie_data['description'],
+                        age_id=movie_data['age_id'],
+                        category_id=movie_data['category_id']
+                    ).model_dump(),
+                    s,
+                )
         finally:
             await s.close()
 
 
-async def create_seasons():
+async def create_seasons_from_json(data):
     async with session_maker() as s:
         try:
-            await Season.create(
-                SeasonCreateSchema(
-                    number=1,
-                    movie_id=1,
-                ).model_dump(),
-                s,
-            )
+            for season_data in data['seasons']:
+                await Season.create(
+                    SeasonCreateSchema(
+                        number=season_data['number'],
+                        movie_id=season_data['movie_id']
+                    ).model_dump(),
+                    s,
+                )
         finally:
             await s.close()
 
 
-async def create_episodes():
+async def create_episodes_from_json(data):
     async with session_maker() as s:
         try:
-            await Episode.create(
-                EpisodeCreateSchema(
-                    number=1,
-                    season_id=1,
-                    title="The Fate of Particular Adventurers",
-                    release_date=datetime.datetime(2018, 10, 7),
-                ).model_dump(),
-                s,
-            )
-            await Episode.create(
-                EpisodeCreateSchema(
-                    number=2,
-                    season_id=1,
-                    title="Goblin Slayer",
-                    release_date=datetime.datetime(2018, 10, 14),
-                ).model_dump(),
-                s,
-            )
-            await Episode.create(
-                EpisodeCreateSchema(
-                    number=3,
-                    season_id=1,
-                    title="Unexpected Visitors",
-                    release_date=datetime.datetime(2018, 10, 21),
-                ).model_dump(),
-                s,
-            )
-            await Episode.create(
-                EpisodeCreateSchema(
-                    number=4,
-                    season_id=1,
-                    title="The Strong",
-                    release_date=datetime.datetime(2018, 10, 28),
-                ).model_dump(),
-                s,
-            )
+            for episode_data in data['episodes']:
+                await Episode.create(
+                    EpisodeCreateSchema(
+                        number=episode_data['number'],
+                        season_id=episode_data['season_id'],
+                        title=episode_data['title'],
+                        release_date=datetime.datetime.strptime(episode_data['release_date'], '%Y-%m-%d')
+                    ).model_dump(),
+                    s,
+                )
         finally:
             await s.close()
 
 
-async def create_records():
+async def create_records_from_json(data):
     async with session_maker() as s:
         try:
-            await Record.create(
-                RecordCreateSchema(
-                    episode_id=1,
-                    quality_id=1,
-                    filename="73a48dd8-7250-4c61-9539-ea256567a70c.mp4",
-                ).model_dump(),
-                s,
-            )
-            await Record.create(
-                RecordCreateSchema(
-                    episode_id=1,
-                    quality_id=2,
-                    filename="6e7182ee-ae60-4ba3-84e8-f509003b6266.mp4",
-                ).model_dump(),
-                s,
-            )
-            await Record.create(
-                RecordCreateSchema(
-                    episode_id=1,
-                    quality_id=3,
-                    filename="2816587b-1bac-4c24-bb6d-8a59efc372fd.mp4",
-                ).model_dump(),
-                s,
-            )
-            await Record.create(
-                RecordCreateSchema(
-                    episode_id=1,
-                    quality_id=4,
-                    filename="35504036-35d9-4024-a0fe-eda11cf684ab.mp4",
-                ).model_dump(),
-                s,
-            )
+            for record_data in data['records']:
+                await Record.create(
+                    RecordCreateSchema(
+                        episode_id=record_data['episode_id'],
+                        quality_id=record_data['quality_id'],
+                        filename=record_data['filename']
+                    ).model_dump(),
+                    s,
+                )
         finally:
             await s.close()
 
 
 async def init():
-    await create_ages()
-    await create_qualities()
-    await create_categories()
-    await create_seasons()
-    await create_movies()
-    await create_episodes()
-    await create_records()
+    with open('data.json', 'r') as file:
+        data = json.load(file)
+
+    await create_ages_from_json(data)
+    await create_categories_from_json(data)
+    await create_qualities_from_json(data)
+    await create_movies_from_json(data)
+    await create_seasons_from_json(data)
+    await create_episodes_from_json(data)
+    await create_records_from_json(data)
 
 
 asyncio.run(init())
