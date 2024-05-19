@@ -35,6 +35,10 @@ class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
     pass
 
 
+class TagCreateSchema(BaseModel):
+    title: str
+
+
 class SeasonCreateSchema(BaseModel):
     number: int
     title: str | None = None
