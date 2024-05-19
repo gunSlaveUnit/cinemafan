@@ -35,6 +35,10 @@ class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
     pass
 
 
+class GenreCreateSchema(BaseModel):
+    title: str
+
+
 class TagCreateSchema(BaseModel):
     title: str
 
