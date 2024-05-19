@@ -22,6 +22,8 @@ async def items(
         seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
         seasons_count = len(seasons)
 
+        age = await Age.by_id(movie.age_id, db)
+
         episodes = []
         for season in seasons:
             episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
@@ -37,6 +39,7 @@ async def items(
             "episodes_count": episodes_count,
             "seasons_count": seasons_count,
             "tags": tags,
+            "age": age,
         })
 
     return templates.TemplateResponse(
