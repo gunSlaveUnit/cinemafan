@@ -2,11 +2,12 @@ import asyncio
 import json
 import datetime
 
-from movies.models import Age, Movie, Episode, Quality, Record, Category, Season, Screenshot, Tag, Tagging, Genre
+from movies.models import Age, Movie, Episode, Quality, Record, Category, Season, Screenshot, Tag, Tagging, Genre, \
+    MovieGenre
 from infrastructure.db import session_maker
 from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSchema, QualityCreateSchema, \
     RecordCreateSchema, CategoryCreateSchema, SeasonCreateSchema, ScreenshotCreateSchema, TagCreateSchema, \
-    TaggingCreateSchema, GenreCreateSchema
+    TaggingCreateSchema, GenreCreateSchema, MovieGenreCreateSchema
 
 
 async def create_ages_from_json(data):
@@ -153,6 +154,21 @@ async def create_genres_from_json(data):
             await s.close()
 
 
+async def create_movies_genres_from_json(data):
+    async with session_maker() as s:
+        try:
+            for movie_genre_data in data['movie_genres']:
+                await MovieGenre.create(
+                    MovieGenreCreateSchema(
+                        movie_id=movie_genre_data['movie_id'],
+                        genre_id=movie_genre_data['genre_id']
+                    ).model_dump(),
+                    s
+                )
+        finally:
+            await s.close()
+
+
 async def init():
     with open('data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -168,6 +184,7 @@ async def init():
     await create_tags_from_json(data)
     await create_taggings_from_json(data)
     await create_genres_from_json(data)
+    await create_movies_genres_from_json(data)
 
 
 asyncio.run(init())
