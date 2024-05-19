@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.api import movies
-from movies.models import Episode, Age, Season, Screenshot
+from movies.models import Episode, Age, Season, Screenshot, Tagging, Tag
 from infrastructure.db import session
 from infrastructure.settings import templates
 
@@ -22,15 +22,24 @@ async def items(
         seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
         seasons_count = len(seasons)
 
+        age = await Age.by_id(movie.age_id, db)
+
         episodes = []
         for season in seasons:
             episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
         episodes_count = len(episodes)
 
+        taggings = [_ async for _ in Tagging.by_movie_id(movie.id, db)]
+        tags = []
+        for tagging in taggings:
+            tags.append(await Tag.by_id(tagging.tag_id, db))
+
         info.append({
             "movie": movie,
             "episodes_count": episodes_count,
             "seasons_count": seasons_count,
+            "tags": tags,
+            "age": age,
         })
 
     return templates.TemplateResponse(
@@ -63,6 +72,11 @@ async def item(
 
     screenshots = [_ async for _ in Screenshot.by_movie_id(movie_id, db)]
 
+    taggings = [_ async for _ in Tagging.by_movie_id(movie_id, db)]
+    tags = []
+    for tagging in taggings:
+        tags.append(await Tag.by_id(tagging.tag_id, db))
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
@@ -73,5 +87,6 @@ async def item(
             "screenshots": screenshots,
             "episodes_count": episodes_count,
             "seasons_count": seasons_count,
+            "tags": tags,
         }
     )

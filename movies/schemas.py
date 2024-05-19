@@ -23,7 +23,8 @@ class CategoryDBSchema(CategoryCreateSchema, EntityDBSchema):
 
 
 class MovieCreateSchema(BaseModel):
-    title: str
+    translated_title: str
+    original_title: str
     poster: str
     description: str
     age_id: int
@@ -31,6 +32,23 @@ class MovieCreateSchema(BaseModel):
 
 
 class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
+    pass
+
+
+class TagCreateSchema(BaseModel):
+    title: str
+
+
+class TagDBSchema(TagCreateSchema, EntityDBSchema):
+    pass
+
+
+class TaggingCreateSchema(BaseModel):
+    movie_id: int
+    tag_id: int
+
+
+class TaggingDBSchema(TaggingCreateSchema, EntityDBSchema):
     pass
 
 

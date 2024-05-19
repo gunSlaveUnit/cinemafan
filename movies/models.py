@@ -23,11 +23,35 @@ class Category(Entity):
 class Movie(Entity):
     __tablename__ = "movies"
 
-    title: Mapped[str] = mapped_column(String(255))
+    original_title: Mapped[str] = mapped_column(String(255))
+    translated_title: Mapped[str] = mapped_column(String(255))
     poster: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
     age_id: Mapped[int] = mapped_column(ForeignKey("ages.id"))
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+
+
+class Tag(Entity):
+    __tablename__ = "tags"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
+class Tagging(Entity):
+    __tablename__ = "taggings"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    tag_id: Mapped[int] = mapped_column(ForeignKey("tags.id"))
+
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
 
 
 class Season(Entity):
