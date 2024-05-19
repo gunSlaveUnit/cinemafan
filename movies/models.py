@@ -43,6 +43,16 @@ class Tagging(Entity):
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
     tag_id: Mapped[int] = mapped_column(ForeignKey("tags.id"))
 
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
+
 
 class Season(Entity):
     __tablename__ = "seasons"
