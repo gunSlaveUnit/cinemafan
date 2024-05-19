@@ -2,12 +2,16 @@
 
 {% block content %}
   <p>{{ episode.number }}. {{ episode.title }}</p>
-
-  <select onchange="quality_changed(this.value)">
-    {% for quality in qualities %}
-      <option value="{{ quality.id }}">{{ quality.resolution }}</option>
-    {% endfor %}
-  </select>
+  <div>
+    <label>
+      Quality
+      <select onchange="quality_changed(this.value)">
+        {% for quality in qualities %}
+          <option value="{{ quality.id }}">{{ quality.resolution }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
 
   <video src="/media/{{ records[0].filename }}" controls>
     {% for record in records %}
