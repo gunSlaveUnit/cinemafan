@@ -43,6 +43,11 @@ class TagDBSchema(TagCreateSchema, EntityDBSchema):
     pass
 
 
+class TaggingCreateSchema(BaseModel):
+    movie_id: int
+    tag_id: int
+
+
 class SeasonCreateSchema(BaseModel):
     number: int
     title: str | None = None
