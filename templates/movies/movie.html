@@ -2,10 +2,7 @@
 
 {% block content %}
   <img src="/media/{{ movie.poster }}" alt="{{ movie.translated_title }} poster" />
-  <p>{{ movie.translated_title }}</p>
-  <p>{{ movie.original_title }}</p>
-
-  {{ age.title }}
+  <div>{{ movie.translated_title }} | {{ movie.original_title }}</div>
 
   <div>
     {% for t in tags %}
@@ -16,6 +13,8 @@
   {{ seasons_count }} season{% if seasons_count > 1 %}s{% endif %}
 
   {{ episodes_count }} episode{% if episodes_count > 1 %}s{% endif %}
+
+  <div>{{ age.title }}</div>
 
   {% for screenshot in screenshots %}
     <div>
