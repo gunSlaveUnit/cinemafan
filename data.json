@@ -135,5 +135,15 @@
     {
       "title": "middle ages"
     }
+  ],
+  "taggings": [
+    {
+      "movie_id": 1,
+      "tag_id": 1
+    },
+    {
+      "movie_id": 1,
+      "tag_id": 2
+    }
   ]
 }
