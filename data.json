@@ -151,5 +151,49 @@
       "movie_id": 1,
       "tag_id": 2
     }
+  ],
+  "genres": [
+    {
+      "title": "Action"
+    },
+    {
+      "title": "Adventure"
+    },
+    {
+      "title": "Animated"
+    },
+    {
+      "title": "Comedy"
+    },
+    {
+      "title": "Drama"
+    },
+    {
+      "title": "Fantasy"
+    },
+    {
+      "title": "Historical"
+    },
+    {
+      "title": "Horror"
+    },
+    {
+      "title": "Musical"
+    },
+    {
+      "title": "Noir"
+    },
+    {
+      "title": "Romance"
+    },
+    {
+      "title": "Science fiction"
+    },
+    {
+      "title": "Thriller"
+    },
+    {
+      "title": "Western"
+    }
   ]
 }
