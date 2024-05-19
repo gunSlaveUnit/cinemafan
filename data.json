@@ -215,10 +215,6 @@
     },
     {
       "movie_id": 1,
-      "genre_id": 7
-    },
-    {
-      "movie_id": 1,
       "genre_id": 8
     }
   ]
