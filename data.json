@@ -195,5 +195,31 @@
     {
       "title": "Western"
     }
+  ],
+  "movie_genres": [
+    {
+      "movie_id": 1,
+      "genre_id": 1
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 2
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 3
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 4
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 7
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 8
+    }
   ]
 }
