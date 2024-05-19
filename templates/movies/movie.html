@@ -7,6 +7,12 @@
 
   {{ age.title }}
 
+  <div>
+    {% for t in tags %}
+      {{ t.title }}
+    {% endfor %}
+  </div>
+
   {{ seasons_count }} season{% if seasons_count > 1 %}s{% endif %}
 
   {{ episodes_count }} episode{% if episodes_count > 1 %}s{% endif %}
