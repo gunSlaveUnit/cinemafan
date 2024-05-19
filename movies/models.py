@@ -37,6 +37,23 @@ class Genre(Entity):
     title: Mapped[str] = mapped_column(String(255))
 
 
+class Genreging(Entity):
+    __tablename__ = "genregings"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    genre_id: Mapped[int] = mapped_column(ForeignKey("genres.id"))
+
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
+
+
 class Tag(Entity):
     __tablename__ = "tags"
 
