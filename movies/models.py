@@ -37,8 +37,8 @@ class Genre(Entity):
     title: Mapped[str] = mapped_column(String(255))
 
 
-class Genreging(Entity):
-    __tablename__ = "genregings"
+class MovieGenre(Entity):
+    __tablename__ = "movies_genres"
 
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
     genre_id: Mapped[int] = mapped_column(ForeignKey("genres.id"))
