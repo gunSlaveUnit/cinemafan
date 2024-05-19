@@ -37,6 +37,13 @@ class Tag(Entity):
     title: Mapped[str] = mapped_column(String(255))
 
 
+class Tagging(Entity):
+    __tablename__ = "taggings"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    tag_id: Mapped[int] = mapped_column(ForeignKey("tags.id"))
+
+
 class Season(Entity):
     __tablename__ = "seasons"
 
