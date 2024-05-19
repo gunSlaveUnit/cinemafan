@@ -16,6 +16,12 @@
       </div>
 
       <div>
+        {% for g in i.genres %}
+          {{ g.title }}
+        {% endfor %}
+      </div>
+
+      <div>
         {{ i.seasons_count }} season{% if i.seasons_count > 1 %}s{% endif %}
 
         {{ i.episodes_count }} episode{% if i.episodes_count > 1 %}s{% endif %}
