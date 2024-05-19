@@ -39,6 +39,10 @@ class TagCreateSchema(BaseModel):
     title: str
 
 
+class TagDBSchema(TagCreateSchema, EntityDBSchema):
+    pass
+
+
 class SeasonCreateSchema(BaseModel):
     number: int
     title: str | None = None
