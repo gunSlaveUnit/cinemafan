@@ -72,6 +72,11 @@ async def item(
 
     screenshots = [_ async for _ in Screenshot.by_movie_id(movie_id, db)]
 
+    taggings = [_ async for _ in Tagging.by_movie_id(movie_id, db)]
+    tags = []
+    for tagging in taggings:
+        tags.append(await Tag.by_id(tagging.tag_id, db))
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
@@ -82,5 +87,6 @@ async def item(
             "screenshots": screenshots,
             "episodes_count": episodes_count,
             "seasons_count": seasons_count,
+            "tags": tags,
         }
     )
