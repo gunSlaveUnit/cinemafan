@@ -39,6 +39,10 @@ class GenreCreateSchema(BaseModel):
     title: str
 
 
+class GenreDBSchema(GenreCreateSchema, EntityDBSchema):
+    pass
+
+
 class TagCreateSchema(BaseModel):
     title: str
 
