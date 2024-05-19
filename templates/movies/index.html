@@ -5,11 +5,9 @@
     <div>
       <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" />
 
-      <p>
-        <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }}</a>
-      </p>
-
-      <p>{{ i.movie.original_title }}</p>
+      <div>
+        <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }}</a> | {{ i.movie.original_title }}
+      </div>
 
       <div>
         {% for t in i.tags %}
