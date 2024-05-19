@@ -48,6 +48,10 @@ class TaggingCreateSchema(BaseModel):
     tag_id: int
 
 
+class TaggingDBSchema(TaggingCreateSchema, EntityDBSchema):
+    pass
+
+
 class SeasonCreateSchema(BaseModel):
     number: int
     title: str | None = None
