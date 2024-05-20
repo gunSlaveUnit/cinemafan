@@ -34,6 +34,12 @@
   ],
   "qualities": [
     {
+      "resolution": 144
+    },
+    {
+      "resolution": 240
+    },
+    {
       "resolution": 360
     },
     {
@@ -144,6 +150,72 @@
     {
       "movie_id": 1,
       "tag_id": 2
+    }
+  ],
+  "genres": [
+    {
+      "title": "Action"
+    },
+    {
+      "title": "Adventure"
+    },
+    {
+      "title": "Animated"
+    },
+    {
+      "title": "Comedy"
+    },
+    {
+      "title": "Drama"
+    },
+    {
+      "title": "Fantasy"
+    },
+    {
+      "title": "Historical"
+    },
+    {
+      "title": "Horror"
+    },
+    {
+      "title": "Musical"
+    },
+    {
+      "title": "Noir"
+    },
+    {
+      "title": "Romance"
+    },
+    {
+      "title": "Science fiction"
+    },
+    {
+      "title": "Thriller"
+    },
+    {
+      "title": "Western"
+    }
+  ],
+  "movie_genres": [
+    {
+      "movie_id": 1,
+      "genre_id": 1
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 2
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 3
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 4
+    },
+    {
+      "movie_id": 1,
+      "genre_id": 8
     }
   ]
 }

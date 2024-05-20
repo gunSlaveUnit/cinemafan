@@ -6,12 +6,18 @@
       <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" />
 
       <div>
-        <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }}</a> | {{ i.movie.original_title }}
+        <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }} | {{ i.movie.original_title }}</a>
       </div>
 
       <div>
         {% for t in i.tags %}
           {{ t.title }}
+        {% endfor %}
+      </div>
+
+      <div>
+        {% for g in i.genres %}
+          {{ g.title }}
         {% endfor %}
       </div>
 

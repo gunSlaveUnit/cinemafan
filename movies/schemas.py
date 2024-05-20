@@ -35,6 +35,23 @@ class MovieDBSchema(MovieCreateSchema, EntityDBSchema):
     pass
 
 
+class GenreCreateSchema(BaseModel):
+    title: str
+
+
+class GenreDBSchema(GenreCreateSchema, EntityDBSchema):
+    pass
+
+
+class MovieGenreCreateSchema(BaseModel):
+    movie_id: int
+    genre_id: int
+
+
+class MovieGenreDBSchema(MovieGenreCreateSchema, EntityDBSchema):
+    pass
+
+
 class TagCreateSchema(BaseModel):
     title: str
 
