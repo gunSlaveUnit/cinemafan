@@ -43,6 +43,24 @@ class Movie(Entity):
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
 
+class MoviePerson(Entity):
+    __tablename__ = "movies_persons"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    person_id: Mapped[int] = mapped_column(ForeignKey("persons.id"))
+    activity_id: Mapped[int] = mapped_column(ForeignKey("activities.id"))
+
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
+
+
 class Genre(Entity):
     __tablename__ = "genres"
 
