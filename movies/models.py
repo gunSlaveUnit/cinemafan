@@ -13,6 +13,12 @@ class Person(Entity):
     name: Mapped[str] = mapped_column(String(255))
 
 
+class Activity(Entity):
+    __tablename__ = "activities"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Age(Entity):
     __tablename__ = "ages"
 
