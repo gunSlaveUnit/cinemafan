@@ -233,5 +233,17 @@
     {
         "title": "Some other activity"
     }
+  ],
+  "movies_persons": [
+    {
+      "movie_id": 1,
+      "person_id": 1,
+      "activity_id": 1
+    },
+    {
+      "movie_id": 1,
+      "person_id": 2,
+      "activity_id": 2
+    }
   ]
 }
