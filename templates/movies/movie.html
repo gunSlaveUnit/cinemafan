@@ -22,6 +22,16 @@
 
   <div>{{ age.title }}</div>
 
+  {% for _, activity_persons in activities_persons.items() %}
+    <div>
+      {{ activity_persons["activity"].title }}:
+
+      {% for person in activity_persons["persons"] %}
+        <a href="/persons/{{ person.id }}">{{ person.name }}</a>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
   {% for screenshot in screenshots %}
     <div>
       <img src="/media/{{ screenshot.filename }}" alt="{{ movie.translated_title }} screenshot" />

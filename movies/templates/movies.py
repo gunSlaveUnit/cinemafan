@@ -2,7 +2,8 @@ from fastapi import APIRouter, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.api import movies
-from movies.models import Episode, Age, Season, Screenshot, Tagging, Tag, MovieGenre, Genre
+from movies.models import Episode, Age, Season, Screenshot, Tagging, Tag, MovieGenre, Genre, MoviePerson, Person, \
+    Activity
 from infrastructure.db import session
 from infrastructure.settings import templates
 
@@ -89,6 +90,20 @@ async def item(
     for movie_genre in movie_genres:
         genres.append(await Genre.by_id(movie_genre.genre_id, db))
 
+    movie_persons = [_ async for _ in MoviePerson.by_movie_id(movie_id, db)]
+
+    activities_persons = {}
+    for movie_person in movie_persons:
+        activity = await Activity.by_id(movie_person.activity_id, db)
+        activities_persons[activity.title] = {
+            "activity": activity,
+            "persons": [],
+        }
+
+    for movie_person in movie_persons:
+        activity = await Activity.by_id(movie_person.activity_id, db)
+        activities_persons[activity.title]["persons"].append(await Person.by_id(movie_person.person_id, db))
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
@@ -101,5 +116,6 @@ async def item(
             "seasons_count": seasons_count,
             "tags": tags,
             "genres": genres,
+            "activities_persons": activities_persons,
         }
     )

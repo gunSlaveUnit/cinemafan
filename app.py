@@ -19,7 +19,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator:
 
 app = FastAPI(
     title="cinemafan",
-    version="0.1.8",
+    version="0.12.0",
     lifespan=lifespan,
 )
 

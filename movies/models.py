@@ -7,6 +7,18 @@ from sqlalchemy.orm import Mapped, mapped_column
 from shared.models import Entity
 
 
+class Person(Entity):
+    __tablename__ = "persons"
+
+    name: Mapped[str] = mapped_column(String(255))
+
+
+class Activity(Entity):
+    __tablename__ = "activities"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Age(Entity):
     __tablename__ = "ages"
 
@@ -29,6 +41,24 @@ class Movie(Entity):
     description: Mapped[str] = mapped_column(Text)
     age_id: Mapped[int] = mapped_column(ForeignKey("ages.id"))
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+
+
+class MoviePerson(Entity):
+    __tablename__ = "movies_persons"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    person_id: Mapped[int] = mapped_column(ForeignKey("persons.id"))
+    activity_id: Mapped[int] = mapped_column(ForeignKey("activities.id"))
+
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
 
 
 class Genre(Entity):
