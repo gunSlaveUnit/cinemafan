@@ -183,7 +183,7 @@ async def create_activities(data):
     async with session_maker() as s:
         try:
             for activity_data in data['activities']:
-                await Activity.create(ActivityCreateSchema(name=activity_data['name']).model_dump(), s)
+                await Activity.create(ActivityCreateSchema(title=activity_data['title']).model_dump(), s)
         finally:
             await s.close()
 
