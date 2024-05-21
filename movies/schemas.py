@@ -5,6 +5,10 @@ from pydantic import BaseModel
 from shared.schemas import EntityDBSchema
 
 
+class PersonCreateSchema(BaseModel):
+    name: str
+
+
 class AgeCreateSchema(BaseModel):
     title: str
     description: str
