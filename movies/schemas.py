@@ -13,6 +13,10 @@ class PersonDBSchema(PersonCreateSchema, EntityDBSchema):
     pass
 
 
+class ActionCreateSchema(BaseModel):
+    title: str
+
+
 class AgeCreateSchema(BaseModel):
     title: str
     description: str
