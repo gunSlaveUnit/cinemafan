@@ -7,6 +7,12 @@ from sqlalchemy.orm import Mapped, mapped_column
 from shared.models import Entity
 
 
+class Person(Entity):
+    __tablename__ = "persons"
+
+    name: Mapped[str] = mapped_column(String(255))
+
+
 class Age(Entity):
     __tablename__ = "ages"
 
