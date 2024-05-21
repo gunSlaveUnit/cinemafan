@@ -225,5 +225,13 @@
     {
       "name": "Jane Doe"
     }
+  ],
+  "activities": [
+    {
+        "title": "Some activity"
+    },
+    {
+        "title": "Some other activity"
+    }
   ]
 }
