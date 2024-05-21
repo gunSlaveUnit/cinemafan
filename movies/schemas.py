@@ -27,6 +27,10 @@ class MoviePersonCreateSchema(BaseModel):
     activity_id: int
 
 
+class MoviePersonDBSchema(MoviePersonCreateSchema, EntityDBSchema):
+    pass
+
+
 class AgeCreateSchema(BaseModel):
     title: str
     description: str
