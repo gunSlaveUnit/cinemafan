@@ -196,7 +196,7 @@
       "title": "Western"
     }
   ],
-  "movie_genres": [
+  "movies_genres": [
     {
       "movie_id": 1,
       "genre_id": 1
@@ -216,6 +216,14 @@
     {
       "movie_id": 1,
       "genre_id": 8
+    }
+  ],
+  "persons": [
+    {
+      "name": "John Doe"
+    },
+    {
+      "name": "Jane Doe"
     }
   ]
 }
