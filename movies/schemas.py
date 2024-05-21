@@ -9,6 +9,10 @@ class PersonCreateSchema(BaseModel):
     name: str
 
 
+class PersonDBSchema(PersonCreateSchema, EntityDBSchema):
+    pass
+
+
 class AgeCreateSchema(BaseModel):
     title: str
     description: str
