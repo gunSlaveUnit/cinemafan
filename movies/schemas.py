@@ -21,6 +21,12 @@ class ActionDBSchema(ActionCreateSchema, EntityDBSchema):
     pass
 
 
+class MoviePersonCreateSchema(BaseModel):
+    movie_id: int
+    person_id: int
+    activity_id: int
+
+
 class AgeCreateSchema(BaseModel):
     title: str
     description: str
