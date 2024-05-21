@@ -179,6 +179,15 @@ async def create_persons(data):
             await s.close()
 
 
+async def create_activities(data):
+    async with session_maker() as s:
+        try:
+            for activity_data in data['activities']:
+                await Activity.create(ActivityCreateSchema(name=activity_data['name']).model_dump(), s)
+        finally:
+            await s.close()
+
+
 async def init():
     with open('data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -196,6 +205,7 @@ async def init():
     await create_genres_from_json(data)
     await create_movies_genres_from_json(data)
     await create_persons(data)
+    await create_activities(data)
 
 
 asyncio.run(init())
