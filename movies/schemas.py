@@ -13,11 +13,11 @@ class PersonDBSchema(PersonCreateSchema, EntityDBSchema):
     pass
 
 
-class ActionCreateSchema(BaseModel):
+class ActivityCreateSchema(BaseModel):
     title: str
 
 
-class ActionDBSchema(ActionCreateSchema, EntityDBSchema):
+class ActivityDBSchema(ActivityCreateSchema, EntityDBSchema):
     pass
 
 
