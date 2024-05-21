@@ -17,6 +17,10 @@ class ActionCreateSchema(BaseModel):
     title: str
 
 
+class ActionDBSchema(ActionCreateSchema, EntityDBSchema):
+    pass
+
+
 class AgeCreateSchema(BaseModel):
     title: str
     description: str
