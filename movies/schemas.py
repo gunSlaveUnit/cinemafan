@@ -18,6 +18,10 @@ class MovieStudioCreateSchema(BaseModel):
     studio_id: int
 
 
+class MovieStudioDBSchema(MovieStudioCreateSchema, EntityDBSchema):
+    pass
+
+
 class PersonCreateSchema(BaseModel):
     name: str
 
