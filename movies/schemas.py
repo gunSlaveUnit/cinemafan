@@ -9,6 +9,10 @@ class StudioCreateSchema(BaseModel):
     title: str
 
 
+class StudioDBSchema(StudioCreateSchema, EntityDBSchema):
+    pass
+
+
 class PersonCreateSchema(BaseModel):
     name: str
 
