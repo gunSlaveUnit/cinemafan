@@ -32,6 +32,12 @@ class Category(Entity):
     title: Mapped[str] = mapped_column(String(255))
 
 
+class Studio(Entity):
+    __tablename__ = "studios"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Movie(Entity):
     __tablename__ = "movies"
 
