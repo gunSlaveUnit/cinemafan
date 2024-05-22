@@ -49,6 +49,13 @@ class Movie(Entity):
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
 
+class MovieStudio(Entity):
+    __tablename__ = "movies_studios"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    studio_id: Mapped[int] = mapped_column(ForeignKey("studios.id"))
+
+
 class MoviePerson(Entity):
     __tablename__ = "movies_persons"
 
