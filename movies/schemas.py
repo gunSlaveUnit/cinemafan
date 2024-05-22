@@ -13,6 +13,11 @@ class StudioDBSchema(StudioCreateSchema, EntityDBSchema):
     pass
 
 
+class MovieStudioCreateSchema(BaseModel):
+    movie_id: int
+    studio_id: int
+
+
 class PersonCreateSchema(BaseModel):
     name: str
 
