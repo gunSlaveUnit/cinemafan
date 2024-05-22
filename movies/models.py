@@ -55,6 +55,16 @@ class MovieStudio(Entity):
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
     studio_id: Mapped[int] = mapped_column(ForeignKey("studios.id"))
 
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
+
 
 class MoviePerson(Entity):
     __tablename__ = "movies_persons"
