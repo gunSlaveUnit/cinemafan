@@ -22,6 +22,14 @@
 
   <div>{{ age.title }}</div>
 
+  <div>
+    Studios:
+
+    {% for studio in studios %}
+      <a href="/studios/{{ studio.id }}">{{ studio.title }}</a>
+    {% endfor %}
+  </div>
+
   {% for _, activity_persons in activities_persons.items() %}
     <div>
       {{ activity_persons["activity"].title }}:
