@@ -253,5 +253,15 @@
     {
       "title": "Some other studio"
     }
+  ],
+  "movie_studios": [
+    {
+      "movie_id": 1,
+      "studio_id": 1
+    },
+    {
+      "movie_id": 1,
+      "studio_id": 2
+    }
   ]
 }
