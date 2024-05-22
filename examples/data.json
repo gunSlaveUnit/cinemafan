@@ -245,5 +245,23 @@
       "person_id": 2,
       "activity_id": 2
     }
+  ],
+  "studios": [
+    {
+      "title": "Some studio"
+    },
+    {
+      "title": "Some other studio"
+    }
+  ],
+  "movies_studios": [
+    {
+      "movie_id": 1,
+      "studio_id": 1
+    },
+    {
+      "movie_id": 1,
+      "studio_id": 2
+    }
   ]
 }

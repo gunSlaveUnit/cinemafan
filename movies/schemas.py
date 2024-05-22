@@ -5,6 +5,23 @@ from pydantic import BaseModel
 from shared.schemas import EntityDBSchema
 
 
+class StudioCreateSchema(BaseModel):
+    title: str
+
+
+class StudioDBSchema(StudioCreateSchema, EntityDBSchema):
+    pass
+
+
+class MovieStudioCreateSchema(BaseModel):
+    movie_id: int
+    studio_id: int
+
+
+class MovieStudioDBSchema(MovieStudioCreateSchema, EntityDBSchema):
+    pass
+
+
 class PersonCreateSchema(BaseModel):
     name: str
 

@@ -32,6 +32,12 @@ class Category(Entity):
     title: Mapped[str] = mapped_column(String(255))
 
 
+class Studio(Entity):
+    __tablename__ = "studios"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Movie(Entity):
     __tablename__ = "movies"
 
@@ -41,6 +47,23 @@ class Movie(Entity):
     description: Mapped[str] = mapped_column(Text)
     age_id: Mapped[int] = mapped_column(ForeignKey("ages.id"))
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+
+
+class MovieStudio(Entity):
+    __tablename__ = "movies_studios"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    studio_id: Mapped[int] = mapped_column(ForeignKey("studios.id"))
+
+    @classmethod
+    async def by_movie_id(
+            cls,
+            movie_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
 
 
 class MoviePerson(Entity):

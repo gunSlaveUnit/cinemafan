@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from movies.api import movies
 from movies.models import Episode, Age, Season, Screenshot, Tagging, Tag, MovieGenre, Genre, MoviePerson, Person, \
-    Activity
+    Activity, MovieStudio, Studio
 from infrastructure.db import session
 from infrastructure.settings import templates
 
@@ -85,6 +85,11 @@ async def item(
     for tagging in taggings:
         tags.append(await Tag.by_id(tagging.tag_id, db))
 
+    movie_studios = [_ async for _ in MovieStudio.by_movie_id(movie_id, db)]
+    studios = []
+    for movie_studio in movie_studios:
+        studios.append(await Studio.by_id(movie_studio.studio_id, db))
+
     movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie_id, db)]
     genres = []
     for movie_genre in movie_genres:
@@ -117,5 +122,6 @@ async def item(
             "tags": tags,
             "genres": genres,
             "activities_persons": activities_persons,
+            "studios": studios,
         }
     )
