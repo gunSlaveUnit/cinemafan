@@ -3,12 +3,12 @@ import json
 import datetime
 
 from movies.models import Age, Movie, Episode, Quality, Record, Category, Season, Screenshot, Tag, Tagging, Genre, \
-    MovieGenre, Person, Activity, MoviePerson
+    MovieGenre, Person, Activity, MoviePerson, Studio, MovieStudio
 from infrastructure.db import session_maker
 from movies.schemas import AgeCreateSchema, MovieCreateSchema, EpisodeCreateSchema, QualityCreateSchema, \
     RecordCreateSchema, CategoryCreateSchema, SeasonCreateSchema, ScreenshotCreateSchema, TagCreateSchema, \
     TaggingCreateSchema, GenreCreateSchema, MovieGenreCreateSchema, MoviePersonCreateSchema, PersonCreateSchema, \
-    ActivityCreateSchema
+    ActivityCreateSchema, StudioCreateSchema, MovieStudioCreateSchema
 
 
 async def create_ages_from_json(data):
@@ -205,6 +205,15 @@ async def create_movies_persons(data):
             await s.close()
 
 
+async def create_studios(data):
+    async with session_maker() as s:
+        try:
+            for studio_data in data['studios']:
+                await Studio.create(StudioCreateSchema(title=studio_data['title']).model_dump(), s)
+        finally:
+            await s.close()
+
+
 async def init():
     with open('data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -224,6 +233,7 @@ async def init():
     await create_persons(data)
     await create_activities(data)
     await create_movies_persons(data)
+    await create_studios(data)
 
 
 asyncio.run(init())
