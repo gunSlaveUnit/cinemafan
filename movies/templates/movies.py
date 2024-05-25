@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from movies.api import movies
 from movies.models import Episode, Age, Season, Screenshot, Tagging, Tag, MovieGenre, Genre, MoviePerson, Person, \
     Activity, MovieStudio, Studio
-from infrastructure.db import session
+from infrastructure.db import get_db
 from infrastructure.settings import templates
 
 router = APIRouter(prefix="/movies", tags=["Movies"])
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/movies", tags=["Movies"])
 @router.get("")
 async def items(
         request: Request,
-        db: AsyncSession = Depends(session)
+        db: AsyncSession = Depends(get_db)
 ):
     response = await movies.items(db)
     data = response["data"]
@@ -63,7 +63,7 @@ async def items(
 async def item(
         request: Request,
         item_id: int,
-        db: AsyncSession = Depends(session)
+        db: AsyncSession = Depends(get_db)
 ):
     response = await movies.item(item_id, db)
     movie_id = response.id
