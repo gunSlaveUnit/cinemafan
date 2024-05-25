@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <p>cinemafan</p>
+  <div>cinemafan</div>
 
-  Continue
-  Recommendations
-  Popular
-  New episodes
-  Soon
+  <div>Continue</div>
+  <div>Recommendations</div>
+  <div>Popular</div>
+  <div>New episodes</div>
+  <div>Coming soon</div>
+
+  <button onclick="go_random_movie(`{{ movie_id }}`)">Random</button>
+
+  <script>
+    const go_random_movie = (movie_id) => {
+      window.location.reload();
+      window.location.href = `/movies/${movie_id}`
+    }
+  </script>
 {% endblock %}
