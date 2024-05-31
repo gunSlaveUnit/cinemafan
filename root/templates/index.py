@@ -21,7 +21,7 @@ async def index(
     context = {}
     movie_id = None
     if data:
-        movie_id = random.choice(data)["id"]
+        movie_id = random.choice(data).id
     context["movie_id"] = movie_id
 
     return templates.TemplateResponse(
