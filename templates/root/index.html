@@ -9,12 +9,14 @@
   <div>New episodes</div>
   <div>Coming soon</div>
 
-  <button onclick="go_random_movie(`{{ movie_id }}`)">Random</button>
+  {% if movie_id %}
+    <button onclick="go_random_movie(`{{ movie_id }}`)">Random</button>
 
-  <script>
-    const go_random_movie = (movie_id) => {
-      window.location.reload();
-      window.location.href = `/movies/${movie_id}`
-    }
-  </script>
+    <script>
+      const go_random_movie = (movie_id) => {
+        window.location.reload();
+        window.location.href = `/movies/${movie_id}`
+      }
+    </script>
+  {% endif %}
 {% endblock %}
