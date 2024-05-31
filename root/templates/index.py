@@ -11,14 +11,21 @@ router = APIRouter(tags=["Root"])
 
 
 @router.get("/")
-async def index(request: Request,
-                db: AsyncSession = Depends(get_db),
-                ):
+async def index(
+        request: Request,
+        db: AsyncSession = Depends(get_db),
+):
     response = await movies.items(db)
     data = response["data"]
-    movie = random.choice(data)
+
+    context = {}
+    movie_id = None
+    if data:
+        movie_id = random.choice(data)["id"]
+    context["movie_id"] = movie_id
+
     return templates.TemplateResponse(
         request=request,
         name="root/index.html",
-        context={"movie_id": movie.id},
+        context=context,
     )
