@@ -1,4 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <label>
+    Email
+    <input type="email" required/>
+  </label>
+
+  <label>
+    Account name
+    <input type="text" required/>
+  </label>
+
+  <label>
+    Password
+    <input type="password" required/>
+  </label>
+
+  <button>Sign up</button>
+
+  <div>
+    Already have an account? <a href="/auth/sign-in">Sign in</a>
+  </div>
 {% endblock %}
