@@ -13,9 +13,9 @@
     </label>
   </div>
 
-  <video src="/media/{{ records[0].filename }}" controls>
+  <video src="/api/player/{{ records[0].filename }}" controls>
     {% for record in records %}
-      <source src="/media/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
+      <source src="/api/player/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
     {% endfor %}
   </video>
 

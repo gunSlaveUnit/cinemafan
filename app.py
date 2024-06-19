@@ -2,13 +2,12 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
-from starlette.staticfiles import StaticFiles
 
 from movies.routes import router as movies_router
 from infrastructure.db import init
 from root.routes import router as root_router
 from auth.routes import router as auth_router
-from infrastructure.settings import MEDIA_DIR
+from player.routes import router as player_router
 
 
 @asynccontextmanager
@@ -24,8 +23,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")
-
 app.include_router(auth_router)
 app.include_router(root_router)
 app.include_router(movies_router)
+app.include_router(player_router)
