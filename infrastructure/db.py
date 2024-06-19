@@ -1,5 +1,8 @@
+import os
+
 from typing import AsyncGenerator
 
+from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -8,51 +11,10 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from root.models import Base
-from infrastructure.settings import DB_CONFIG
 
+load_dotenv()
 
-def build_url(data: dict) -> str:
-    """
-    Builds url for database connection.
-
-    Args:
-        data: database connection data.
-
-    Returns:
-        str: url for database connection.
-    """
-
-    engine = data.get("engine")
-    name = data.get("name")
-    user = data.get("user")
-    password = data.get("password")
-    host = data.get("host")
-    port = data.get("port")
-
-    auth: str = (
-        f"{user}:{password}"
-        if user is not None and password is not None
-        else user if user is not None else None
-    )
-    location: str = (
-        f"{host}:{port}"
-        if host is not None and port is not None
-        else host if host is not None else None
-    )
-    credentials: str = (
-        f"{auth}@{location}"
-        if auth is not None and location is not None
-        else location if location is not None else None
-    )
-
-    return (
-        f"{engine}://{credentials}/{name}"
-        if credentials is not None
-        else f"{engine}:///{name}"
-    )
-
-
-DB_URL = build_url(DB_CONFIG)
+DB_URL = os.getenv("DB_URL")
 
 engine: AsyncEngine = create_async_engine(DB_URL)
 session_maker: async_sessionmaker = async_sessionmaker(
