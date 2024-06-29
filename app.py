@@ -1,7 +1,10 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
+from starlette.staticfiles import StaticFiles 
 
 from fastapi import FastAPI
+
+from infrastructure.settings import MEDIA_DIR
 
 from movies.routes import router as movies_router
 from infrastructure.db import init
