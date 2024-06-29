@@ -23,6 +23,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")
+
 app.include_router(auth_router)
 app.include_router(root_router)
 app.include_router(movies_router)
