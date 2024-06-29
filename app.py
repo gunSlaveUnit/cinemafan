@@ -1,3 +1,5 @@
+import os
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles 
@@ -12,6 +14,8 @@ from root.routes import router as root_router
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    os.makedirs(MEDIA_DIR, exist_ok=True)
+
     await init()
 
     yield
