@@ -1,7 +1,5 @@
 import os
 
-from typing import AsyncGenerator
-
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -24,19 +22,12 @@ session_maker: async_sessionmaker = async_sessionmaker(
 )
 
 
-async def init() -> None:
+async def init():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    """
-    Provides a database session.
-
-    Returns:
-        AsyncGenerator[AsyncSession, None]: database session.
-    """
-
+async def get_db():
     async with session_maker() as s:
         try:
             yield s
