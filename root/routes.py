@@ -5,18 +5,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from infrastructure.db import get_db
 from infrastructure.settings import templates
-from movies.api import movies
+from movies.models import Movie
 
-router = APIRouter(prefix="", tags=["root"])
+router = APIRouter(prefix="")
 
 
 @router.get("/")
-async def index(
+async def home(
         request: Request,
         db: AsyncSession = Depends(get_db),
 ):
-    response = await movies.items(db)
-    data = response["data"]
+    data = [_ async for _ in Movie.every(db)]
 
     context = {}
     movie_id = None
@@ -26,6 +25,6 @@ async def index(
 
     return templates.TemplateResponse(
         request=request,
-        name="root/index.html",
+        name="root/home.html",
         context=context,
     )

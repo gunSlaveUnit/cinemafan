@@ -1,14 +1,37 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
-from auth.api import router as auth_router
-from auth.templates import router as auth_templates_router
-
-api_router = APIRouter(prefix="/api", tags=["API"])
-api_router.include_router(auth_router)
-
-templates_router = APIRouter(prefix="", tags=["Templates"])
-templates_router.include_router(auth_templates_router)
+from infrastructure.settings import templates
 
 router = APIRouter()
-router.include_router(api_router)
-router.include_router(templates_router)
+
+@router.get("/auth/sign-up")
+async def sign_up_page(request: Request):
+    return templates.TemplateResponse(
+        context={},
+        name="auth/sign-up.html",
+        request=request,
+    )
+
+
+@router.get("/auth/sign-in")
+async def sign_in_page(request: Request):
+    return templates.TemplateResponse(
+        context={},
+        name="auth/sign-in.html",
+        request=request,
+    )
+
+
+@router.post("/api/auth/sign-up")
+async def sign_up() -> None:
+    pass
+
+
+@router.post("/api/auth/sign-in")
+async def sign_in() -> None:
+    pass
+
+
+@router.post("/api/auth/sign-out")
+async def sign_out() -> None:
+    pass
