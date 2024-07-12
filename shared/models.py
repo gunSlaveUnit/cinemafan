@@ -1,6 +1,9 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from root.models import Base
+
+class Base(DeclarativeBase, AsyncAttrs):
+    pass
 
 
 class Entity(Base):
