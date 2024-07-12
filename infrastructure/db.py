@@ -1,6 +1,5 @@
 import os
 
-
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -9,8 +8,6 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from shared.models import Base
-
-
 
 DB_URL = os.getenv("DB_URL")
 
