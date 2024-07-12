@@ -4,7 +4,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles 
 
-from auth.routes import router as auth_router
 from infrastructure.settings import MEDIA_DIR
 from infrastructure.db import init
 from movies.routes import router as movies_router
@@ -33,7 +32,6 @@ app.mount(
     name="media",
 )
 
-app.include_router(auth_router)
 app.include_router(movies_router)
 app.include_router(player_router)
 app.include_router(root_router)
