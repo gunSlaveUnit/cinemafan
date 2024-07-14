@@ -11,7 +11,8 @@ if __name__ == '__main__':
     RELOAD = os.getenv("RELOAD") == "True"
     WORKERS = 1 if RELOAD else os.cpu_count() + 1
 
-    uvicorn.run("app:app",
+    uvicorn.run(
+        "app:app",
         host=HOST,
         port=PORT,
         reload=RELOAD,
