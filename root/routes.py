@@ -17,8 +17,11 @@ async def home(
         db: AsyncSession = Depends(get_db),
 ):
     count = await db.scalar(select(func.count()).select_from(Movie))
-    result = await db.execute(select(Movie.id).offset(random.randint(0, count - 1)))
-    movie_id = result.scalars().first()
+    if count == 0:
+        movie_id = None
+    else:
+        result = await db.execute(select(Movie.id).offset(random.randint(0, count - 1)))
+        movie_id = result.scalars().first()
 
     return templates.TemplateResponse(
         request=request,
