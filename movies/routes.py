@@ -8,19 +8,19 @@ from movies.models import (
     Activity,
     Age,
     Episode,
+    Genre,
+    Movie,
+    MovieGenre,
+    MoviePerson,
+    MovieStudio,
+    MovieTag,
+    Person,
+    Record,
+    Quality,
     Season,
     Screenshot,
-    Tagging,
-    Tag,
-    MovieGenre,
-    Genre,
-    MoviePerson,
-    Movie,
-    Person,
-    MovieStudio,
     Studio,
-    Record,
-    Quality
+    Tag,
 )
 
 from infrastructure.db import get_db
@@ -48,10 +48,10 @@ async def movies_page(
             episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
         episodes_count = len(episodes)
 
-        taggings = [_ async for _ in Tagging.by_movie_id(movie.id, db)]
+        movies_tags = [_ async for _ in MovieTag.by_movie_id(movie.id, db)]
         tags = []
-        for tagging in taggings:
-            tags.append(await Tag.by_id(tagging.tag_id, db))
+        for movie_tag in movies_tags:
+            tags.append(await Tag.by_id(movie_tag.tag_id, db))
 
         movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie.id, db)]
 
@@ -98,10 +98,10 @@ async def movie_page(
 
     screenshots = [_ async for _ in Screenshot.by_movie_id(movie_id, db)]
 
-    taggings = [_ async for _ in Tagging.by_movie_id(movie_id, db)]
+    movies_tags = [_ async for _ in MovieTag.by_movie_id(movie_id, db)]
     tags = []
-    for tagging in taggings:
-        tags.append(await Tag.by_id(tagging.tag_id, db))
+    for movie_tag in movies_tags:
+        tags.append(await Tag.by_id(movie_tag.tag_id, db))
 
     movie_studios = [_ async for _ in MovieStudio.by_movie_id(movie_id, db)]
     studios = []

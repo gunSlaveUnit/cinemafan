@@ -16,8 +16,8 @@ class Activity(Entity):
 class Age(Entity):
     __tablename__ = "ages"
 
-    title: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
+    title: Mapped[str] = mapped_column(String(255))
 
 
 class Category(Entity):
@@ -55,19 +55,19 @@ class Genre(Entity):
 class Movie(Entity):
     __tablename__ = "movies"
 
-    original_title: Mapped[str] = mapped_column(String(255))
-    translated_title: Mapped[str] = mapped_column(String(255))
-    poster: Mapped[str] = mapped_column(String(255))
-    description: Mapped[str] = mapped_column(Text)
     age_id: Mapped[int] = mapped_column(ForeignKey("ages.id"))
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+    description: Mapped[str] = mapped_column(Text)
+    original_title: Mapped[str] = mapped_column(String(255))
+    poster: Mapped[str] = mapped_column(String(255))
+    translated_title: Mapped[str] = mapped_column(String(255))
 
 
 class MovieGenre(Entity):
     __tablename__ = "movies_genres"
 
-    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
     genre_id: Mapped[int] = mapped_column(ForeignKey("genres.id"))
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
 
     @classmethod
     async def by_movie_id(
@@ -83,9 +83,9 @@ class MovieGenre(Entity):
 class MoviePerson(Entity):
     __tablename__ = "movies_persons"
 
+    activity_id: Mapped[int] = mapped_column(ForeignKey("activities.id"))
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
     person_id: Mapped[int] = mapped_column(ForeignKey("persons.id"))
-    activity_id: Mapped[int] = mapped_column(ForeignKey("activities.id"))
 
     @classmethod
     async def by_movie_id(
@@ -148,8 +148,8 @@ class Record(Entity):
     __tablename__ = "records"
 
     episode_id: Mapped[int] = mapped_column(ForeignKey("episodes.id"))
-    quality_id: Mapped[int] = mapped_column(ForeignKey("qualities.id"))
     filename: Mapped[str] = mapped_column(String(255))
+    quality_id: Mapped[int] = mapped_column(ForeignKey("qualities.id"))
 
     @classmethod
     async def by_episode_id(
@@ -162,12 +162,12 @@ class Record(Entity):
             yield scalar
 
 
-class Season(Entity):
-    __tablename__ = "seasons"
+class Screenshot(Entity):
+    __tablename__ = "screenshots"
 
-    number: Mapped[int]
-    title: Mapped[str] = mapped_column(String(255), nullable=True)
+    filename: Mapped[str] = mapped_column(String(255))
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    title: Mapped[str] = mapped_column(String(255))
 
     @classmethod
     async def by_movie_id(
@@ -180,12 +180,12 @@ class Season(Entity):
             yield scalar
 
 
-class Screenshot(Entity):
-    __tablename__ = "screenshots"
+class Season(Entity):
+    __tablename__ = "seasons"
 
-    title: Mapped[str] = mapped_column(String(255))
+    number: Mapped[int]
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
-    filename: Mapped[str] = mapped_column(String(255))
+    title: Mapped[str] = mapped_column(String(255), nullable=True)
 
     @classmethod
     async def by_movie_id(
