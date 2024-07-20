@@ -3,7 +3,7 @@
 {% block content %}
   {% for i in info %}
     <div>
-      <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" />
+      <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" width="180" height="320"/>
 
       <div>
         <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }} | {{ i.movie.original_title }}</a>
