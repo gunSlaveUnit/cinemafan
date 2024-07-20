@@ -38,7 +38,7 @@ FIXED_DATA = {
   "genres": [
     {"title": "action"},
     {"title": "adventure"},
-    {"title": "aimated"},
+    {"title": "animated"},
     {"title": "comedy"},
     {"title": "drama"},
     {"title": "fantasy"},
