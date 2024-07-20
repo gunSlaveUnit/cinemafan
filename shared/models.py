@@ -1,25 +1,18 @@
-import datetime
 from typing import AsyncIterator
 
 from sqlalchemy import func, select
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from root.models import Base
+
+class Base(DeclarativeBase, AsyncAttrs):
+    pass
 
 
 class Entity(Base):
-    """
-    Used as base class for all models
-    with useful base fields
-    like id, created_at, updated_at etc.
-    """
-
     __abstract__ = True
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    created_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    updated_at: Mapped[datetime.datetime] = mapped_column(server_default=None, onupdate=func.now(), nullable=True)
 
     @classmethod
     async def every(cls, session: AsyncSession) -> AsyncIterator:

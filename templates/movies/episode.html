@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <p>{{ episode.number }}. {{ episode.title }}</p>
+  {{ episode.number }}. {{ episode.title }}
   <div>
     <label>
       Quality
@@ -13,9 +13,9 @@
     </label>
   </div>
 
-  <video src="/api/player/{{ records[0].filename }}" controls>
+  <video src="/videos/{{ records[0].filename }}" controls>
     {% for record in records %}
-      <source src="/api/player/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
+      <source src="/videos/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
     {% endfor %}
   </video>
 
@@ -24,10 +24,15 @@
       const player = document.querySelector("video");
       const sources = player.querySelectorAll("source");
 
+      const current_time = player.currentTime
+      
       sources.forEach(
         source => {
           if (quality_id === source.getAttribute("quality_id"))
             player.setAttribute("src", source.getAttribute("src"))
+            player.currentTime = current_time
+            <!-- TODO: fix some issues in browser -->
+            player.play();
         }
       );
     }

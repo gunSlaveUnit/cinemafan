@@ -1,9 +1,30 @@
-from fastapi import APIRouter
+import random
 
-from root.templates.index import router as index_router
+from fastapi import APIRouter, Request, Depends
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-templates_router = APIRouter(prefix="", tags=["Templates"])
-templates_router.include_router(index_router)
+from infrastructure.db import get_db
+from infrastructure.settings import templates
+from movies.models import Movie
 
 router = APIRouter()
-router.include_router(templates_router)
+
+
+@router.get("/")
+async def home(
+        request: Request,
+        db: AsyncSession = Depends(get_db),
+):
+    count = await db.scalar(select(func.count()).select_from(Movie))
+    if count == 0:
+        movie_id = None
+    else:
+        result = await db.execute(select(Movie.id).offset(random.randint(0, count - 1)))
+        movie_id = result.scalars().first()
+
+    return templates.TemplateResponse(
+        request=request,
+        name="root/home.html",
+        context={"movie_id": movie_id},
+    )

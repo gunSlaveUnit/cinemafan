@@ -1,21 +1,20 @@
+from datetime import datetime
 import os
 from typing import BinaryIO
 
 from fastapi import APIRouter, HTTPException, Request, status
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, Response
+from starlette._compat import md5_hexdigest
 
 from infrastructure.settings import MEDIA_DIR
 
-router = APIRouter(prefix="/api/player", tags=["API", "Player"])
+router = APIRouter(prefix="/videos")
 
 
+# TODO: must by async
 def send_bytes_range_requests(
-        file_obj: BinaryIO, start: int, end: int, chunk_size: int = 10_000
+    file_obj: BinaryIO, start: int, end: int, chunk_size: int = 8*1024
 ):
-    """Send a file in chunks using Range Requests specification RFC7233
-
-    `start` and `end` parameters are inclusive due to specification
-    """
     with file_obj as f:
         f.seek(start)
         while (pos := f.tell()) <= end:
@@ -43,14 +42,33 @@ def _get_range_header(range_header: str, file_size: int) -> tuple[int, int]:
 
 
 def range_requests_response(
-        request: Request, file_path: str, content_type: str
+    request: Request, file_path: str, content_type: str
 ):
     """Returns StreamingResponse using Range Requests of a given file"""
 
     file_size = os.stat(file_path).st_size
     range_header = request.headers.get("range")
 
+    """Compose etag from last_modified and file_size"""
+    last_modified = datetime.fromtimestamp(os.stat(file_path).st_mtime).strftime("%a, %d %b %Y %H:%M:%S")
+    etag_base = str(last_modified) + "-" + str(file_size)
+    etag = f'"{md5_hexdigest(etag_base.encode(), usedforsecurity=False)}"'
+
+    """Check if the browser sent etag matches the videos etag"""
+    request_if_non_match_etag = request.headers.get("if-none-match")
+
+    """if there is a match return 304 unmodified instead of 206 response without video file"""
+    if request_if_non_match_etag == etag:
+        headers = {
+            "cache-control": "public, max-age=86400, stale-while-revalidate=2592000",
+            "etag" : etag,
+            "last-modified":str(last_modified),
+        }
+        status_code = status.HTTP_304_NOT_MODIFIED
+        return Response(None, status_code=status_code, headers=headers)
+
     headers = {
+        "etag" : etag,
         "content-type": content_type,
         "accept-ranges": "bytes",
         "content-encoding": "identity",
@@ -63,6 +81,7 @@ def range_requests_response(
     start = 0
     end = file_size - 1
     status_code = status.HTTP_200_OK
+
 
     if range_header is not None:
         start, end = _get_range_header(range_header, file_size)
