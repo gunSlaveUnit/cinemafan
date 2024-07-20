@@ -6,7 +6,7 @@ from fastapi.responses import StreamingResponse
 
 from infrastructure.settings import MEDIA_DIR
 
-router = APIRouter(prefix="/api/player")
+router = APIRouter(prefix="/videos")
 
 
 def send_bytes_range_requests(
