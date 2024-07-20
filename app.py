@@ -7,7 +7,7 @@ from starlette.staticfiles import StaticFiles
 from infrastructure.settings import MEDIA_DIR
 from infrastructure.db import init
 from movies.routes import router as movies_router
-from player.routes import router as player_router
+from videos.routes import router as videos_router
 from root.routes import router as root_router
 
 
@@ -33,5 +33,5 @@ app.mount(
 )
 
 app.include_router(movies_router)
-app.include_router(player_router)
 app.include_router(root_router)
+app.include_router(videos_router)
