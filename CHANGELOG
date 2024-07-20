@@ -1,0 +1,51 @@
+0.16.0
+- Most of API routes deprecated, used only routes to get HTML pages;
+- Refactoring;
+- DB test data generating by a script.
+
+0.15.0
+- Playing video with rewind.
+
+0.14.0
+- Possibility to go to a random movie from home page.
+
+0.13.0
+- Studios: model, relation with a Movie model, showing in an episode page.
+
+0.12.0
+- Persons and activities: models, relation with a Movie model, showing in an episode page.
+
+0.11.0
+- Genres: relation with a Movie model, showing in an episode page.
+
+0.10.0
+- Tags: new models, relation with a Movie model, showing in an episode page.
+
+0.9.0
+- Screnshots: a model, them shows in an episode page.
+
+0.8.0
+- Season, category models;
+- Templates fixes.
+
+0.7.0
+- Render age title;
+- Fixed displaying of seasons and episodes count.
+
+0.6.0
+- Reworking video sources for the player.
+
+0.5.0
+- Video playing, very simple, just by video HTML tag with source changing.
+
+0.4.0
+- A movie page.
+
+0.3.0
+- Movies fetching and displaying.
+
+0.2.0
+- Base root app.
+
+0.1.0
+- Initiation.
