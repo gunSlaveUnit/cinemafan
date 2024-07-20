@@ -24,10 +24,15 @@
       const player = document.querySelector("video");
       const sources = player.querySelectorAll("source");
 
+      const current_time = player.currentTime
+      
       sources.forEach(
         source => {
           if (quality_id === source.getAttribute("quality_id"))
             player.setAttribute("src", source.getAttribute("src"))
+            player.currentTime = current_time
+            <!-- TODO: fix some issues in browser -->
+            player.play();
         }
       );
     }
