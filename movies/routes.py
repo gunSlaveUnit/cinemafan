@@ -86,13 +86,14 @@ async def movie_page(
     movie = await Movie.by_id(item_id, db)
     movie_id = movie.id
 
-    seasons = [_ async for _ in Season.by_movie_id(movie_id, db)]
+    seasons = [{"season": _, "episodes": []} async for _ in Season.by_movie_id(movie_id, db)]
+    for season in seasons:
+        season["episodes"] = [_ async for _ in Episode.by_season_id(season["season"].id, db)]
     seasons_count = len(seasons)
 
-    episodes = []
+    episodes_count = 0
     for season in seasons:
-        episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
-    episodes_count = len(episodes)
+        episodes_count += len(season["episodes"])
 
     age = await Age.by_id(movie.age_id, db)
 
@@ -133,10 +134,10 @@ async def movie_page(
         context={
             "age": age,
             "movie": movie,
-            "episodes": episodes,
             "screenshots": screenshots,
-            "episodes_count": episodes_count,
+            "seasons": seasons,
             "seasons_count": seasons_count,
+            "episodes_count": episodes_count,
             "tags": tags,
             "genres": genres,
             "activities_persons": activities_persons,

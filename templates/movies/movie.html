@@ -43,15 +43,23 @@
   {% for screenshot in screenshots %}
     <div>
       <img src="/media/{{ screenshot.filename }}" alt="{{ movie.translated_title }} screenshot" width="320" height="180"/>
-      <div>{{ screenshot.title }}<div>
+      <div>{{ screenshot.title }}</div>
     </div>
   {% endfor %}
 
-  <div>{{ movie.description }}<div>
+  <div>{{ movie.description }}</div>
 
-  {% for episode in episodes %}
-    <div>
-      <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }}</a>
-    </div>
+  {% for season in seasons %}
+    {% if season.season.title %}
+      <div>{{ season.season.title }}</div>
+    {% else %}
+      <div>season {{ season.season.number }}</div>
+    {% endif %}
+
+    {% for episode in season.episodes %}
+      <div>
+        <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }}</a>
+      </div>
+    {% endfor %}
   {% endfor %}
 {% endblock %}
