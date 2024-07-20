@@ -70,7 +70,7 @@ async def movies_page(
 
     return templates.TemplateResponse(
         request=request,
-        name="movies/index.html",
+        name="movies/movies.html",
         context={
             "info": info,
         }
