@@ -8,7 +8,7 @@ from starlette._compat import md5_hexdigest
 
 from infrastructure.settings import MEDIA_DIR
 
-router = APIRouter(prefix="/videos")
+router = APIRouter(prefix="/api/videos")
 
 
 # TODO: must by async
