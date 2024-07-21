@@ -1,3 +1,6 @@
+0.17.0
+- Tag accuracy for movies, its increase.
+
 0.16.0
 - Most of API routes deprecated, used only routes to get HTML pages;
 - Refactoring;

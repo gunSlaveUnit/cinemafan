@@ -119,6 +119,7 @@ class MovieTag(Entity):
     __tablename__ = "movies_tags"
 
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    relevance: Mapped[int]
     tag_id: Mapped[int] = mapped_column(ForeignKey("tags.id"))
 
     @classmethod

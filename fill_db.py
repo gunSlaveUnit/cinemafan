@@ -187,6 +187,7 @@ async def fill():
                 for _ in range(random.randint(1, MAX_TAGS_PER_MOVIE_AMOUNT)):
                     movie_tag = {
                         "movie_id": i + 1,
+                        "relevance": random.randint(1, 1000),
                         "tag_id": random.randint(1, TAGS_AMOUNT),
                     }
                     await MovieTag.create(movie_tag, db)

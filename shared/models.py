@@ -41,3 +41,14 @@ class Entity(Base):
         await session.flush()
 
         return item
+
+    async def update(
+            self,
+            data: dict,
+            session: AsyncSession,
+    ):
+        for attribute, value in data.items():
+            setattr(self, attribute, value)
+
+        await session.commit()
+        await session.refresh(self)
