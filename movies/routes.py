@@ -172,4 +172,4 @@ async def bump_tag(
         db: AsyncSession = Depends(get_db)
 ):
     movie_tag = await MovieTag.by_id(item_id, db)
-    await movie_tag.update({"accuracy": movie_tag.accuracy + 1}, db)
+    await movie_tag.update({"relevance": movie_tag.relevance + 1}, db)
