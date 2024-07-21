@@ -186,6 +186,7 @@ async def fill():
             for i in range(MOVIES_AMOUNT):
                 for _ in range(random.randint(1, MAX_TAGS_PER_MOVIE_AMOUNT)):
                     movie_tag = {
+                        "accuracy": random.randint(1, 1000),
                         "movie_id": i + 1,
                         "tag_id": random.randint(1, TAGS_AMOUNT),
                     }
