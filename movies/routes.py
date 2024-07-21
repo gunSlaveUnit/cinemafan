@@ -165,3 +165,12 @@ async def episode_page(
             "qualities": qualities
         }
     )
+
+
+@router.patch("/api/tags/{item_id}/bump")
+async def episode_page(
+        item_id: int,
+        db: AsyncSession = Depends(get_db)
+):
+    tag = await Tag.by_id(item_id, db)
+    await tag.update({"accuracy": tag.accuracy + 1})
