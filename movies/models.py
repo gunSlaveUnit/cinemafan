@@ -118,6 +118,7 @@ class MovieStudio(Entity):
 class MovieTag(Entity):
     __tablename__ = "movies_tags"
 
+    accuracy: Mapped[int]
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
     tag_id: Mapped[int] = mapped_column(ForeignKey("tags.id"))
 
