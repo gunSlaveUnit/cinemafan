@@ -101,7 +101,7 @@ async def movie_page(
 
     movies_tags = [{"movie_tag": _, "tag": None} async for _ in MovieTag.by_movie_id(movie_id, db)]
     for movie_tag in movies_tags:
-        movie_tag.tag = await Tag.by_id(movie_tag["movie_tag"].tag_id, db)
+        movie_tag["tag"] = await Tag.by_id(movie_tag["movie_tag"].tag_id, db)
 
     movie_studios = [_ async for _ in MovieStudio.by_movie_id(movie_id, db)]
     studios = []
@@ -137,7 +137,7 @@ async def movie_page(
             "seasons": seasons,
             "seasons_count": seasons_count,
             "episodes_count": episodes_count,
-            "tags": tags,
+            "tags": movies_tags,
             "genres": genres,
             "activities_persons": activities_persons,
             "studios": studios,
@@ -166,10 +166,10 @@ async def episode_page(
     )
 
 
-@router.patch("/api/tags/{item_id}/bump")
-async def episode_page(
+@router.patch("/api/movies-tags/{item_id}/bump")
+async def bump_tag(
         item_id: int,
         db: AsyncSession = Depends(get_db)
 ):
-    tag = await Tag.by_id(item_id, db)
-    await tag.update({"accuracy": tag.accuracy + 1})
+    movie_tag = await MovieTag.by_id(item_id, db)
+    await movie_tag.update({"accuracy": movie_tag.accuracy + 1}, db)
