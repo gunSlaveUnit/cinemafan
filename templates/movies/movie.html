@@ -63,6 +63,10 @@
     {% endfor %}
   {% endfor %}
 
+  {% for review in reviews %}
+    <div>{{ review.content }}</div>
+  {% endfor %}
+
   <script>
     const bump_tag = async (id) => {
       let response = await fetch(`/api/movies-tags/${id}/bump`, {method: 'PATCH'})
