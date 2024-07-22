@@ -16,12 +16,14 @@ from movies.models import (
     MovieTag,
     Person,
     Record,
+    Review,
     Quality,
     Season,
     Screenshot,
     Studio,
     Tag,
 )
+from movies.schemas import ReviewCreateSchema
 
 from infrastructure.db import get_db
 from infrastructure.settings import templates
@@ -127,6 +129,8 @@ async def movie_page(
         activity = await Activity.by_id(movie_person.activity_id, db)
         activities_persons[activity.title]["persons"].append(await Person.by_id(movie_person.person_id, db))
 
+    reviews = [_ async for _ in Review.by_movie_id(movie_id, db)]
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
@@ -141,6 +145,7 @@ async def movie_page(
             "genres": genres,
             "activities_persons": activities_persons,
             "studios": studios,
+            "reviews": reviews,
         }
     )
 
@@ -173,3 +178,11 @@ async def bump_tag(
 ):
     movie_tag = await MovieTag.by_id(item_id, db)
     await movie_tag.update({"relevance": movie_tag.relevance + 1}, db)
+
+
+@router.post("/api/reviews")
+async def create(
+        data: ReviewCreateSchema,
+        db: AsyncSession = Depends(get_db)
+):
+    return await Review.create(data.model_dump(), db)

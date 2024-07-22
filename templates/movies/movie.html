@@ -63,9 +63,38 @@
     {% endfor %}
   {% endfor %}
 
+  {% for review in reviews %}
+    <div>{{ review.content }}</div>
+  {% endfor %}
+
+  <div>
+    <input id="content"/>
+
+    <button onclick="send_review()">submit</button>
+  </div>
+
   <script>
     const bump_tag = async (id) => {
       let response = await fetch(`/api/movies-tags/${id}/bump`, {method: 'PATCH'})
+      window.location.reload()
+    }
+
+    const send_review = async () => {
+      const content = document.getElementById("content")
+
+      const review = {
+        content: content.value,
+        movie_id: {{ movie.id }}
+      }
+
+      let response = await fetch("/api/reviews", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(review)
+      });
+
       window.location.reload()
     }
   </script>
