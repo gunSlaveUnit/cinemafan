@@ -129,6 +129,8 @@ async def movie_page(
         activity = await Activity.by_id(movie_person.activity_id, db)
         activities_persons[activity.title]["persons"].append(await Person.by_id(movie_person.person_id, db))
 
+    reviews = [_ async for _ in Review.by_movie_id(movie_id, db)]
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
@@ -143,6 +145,7 @@ async def movie_page(
             "genres": genres,
             "activities_persons": activities_persons,
             "studios": studios,
+            "reviews": reviews,
         }
     )
 
