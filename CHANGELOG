@@ -1,3 +1,6 @@
+0.18.0
+- Simple reviews: added a model, a script and some page elements to send a review to a server. 
+
 0.17.0
 - Tag accuracy for movies, its increase.
 
