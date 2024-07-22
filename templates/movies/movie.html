@@ -67,6 +67,12 @@
     <div>{{ review.content }}</div>
   {% endfor %}
 
+  <div>
+    <input id="content"/>
+
+    <button onclick="send_review()">submit</button>
+  </div>
+
   <script>
     const bump_tag = async (id) => {
       let response = await fetch(`/api/movies-tags/${id}/bump`, {method: 'PATCH'})
