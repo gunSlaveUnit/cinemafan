@@ -3,9 +3,26 @@ from datetime import datetime
 import random
 
 from infrastructure.db import init, session_maker
-from movies.models import Age, Movie, Episode, Quality, Record, Category, Season, Screenshot, Tag, MovieTag, Genre, \
-    MovieGenre, Person, Activity, MoviePerson, Studio, MovieStudio
-
+from movies.models import (
+    Activity,
+    Age,
+    Category,
+    Episode,
+    Genre,
+    Movie,
+    MovieGenre,
+    MoviePerson,
+    MovieStudio,
+    MovieTag,
+    Person,
+    Record,
+    Review,
+    Quality,
+    Season,
+    Screenshot,
+    Studio,
+    Tag,
+)
 
 FIXED_DATA = {
   "ages": [
@@ -70,6 +87,7 @@ GENRES_AMOUNT = len(FIXED_DATA["genres"])
 MAX_ACTIVITIES_PER_MOVIE_AMOUNT=5
 MAX_EPISODES_PER_SEASON_AMOUNT=30
 MAX_GENRES_PER_MOVIE_AMOUNT=3
+MAX_REVIEWS_PER_MOVIE_AMOUNT=50
 MAX_SCREENSHOTS_PER_MOVIE_AMOUNT=10
 MAX_SEASONS_PER_MOVIE_AMOUNT=10
 MAX_STUDIOS_PER_MOVIE_AMOUNT=3
@@ -191,6 +209,14 @@ async def fill():
                         "tag_id": random.randint(1, TAGS_AMOUNT),
                     }
                     await MovieTag.create(movie_tag, db)
+
+            for i in range(MOVIES_AMOUNT):
+                for j in range(random.randint(1, MAX_REVIEWS_PER_MOVIE_AMOUNT)):
+                    review = {
+                        "content": f"review {j}",
+                        "movie_id": i + 1,
+                    }
+                    await Review.create(review, db)
 
             for i in range(MOVIES_AMOUNT):
                 for j in range(random.randint(1, MAX_SCREENSHOTS_PER_MOVIE_AMOUNT)):
