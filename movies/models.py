@@ -163,6 +163,13 @@ class Record(Entity):
             yield scalar
 
 
+class Review(Entity):
+    __tablename__ = "reviews"
+
+    content: Mapped[str] = mapped_column(Text)
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+
+
 class Screenshot(Entity):
     __tablename__ = "screenshots"
 
