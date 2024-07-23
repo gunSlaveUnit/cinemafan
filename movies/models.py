@@ -114,6 +114,16 @@ class MovieStudio(Entity):
         async for scalar in scalars:
             yield scalar
 
+    @classmethod
+    async def by_studio_id(
+            cls,
+            studio_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.studio_id == studio_id))
+        async for scalar in scalars:
+            yield scalar
+
 
 class MovieTag(Entity):
     __tablename__ = "movies_tags"
