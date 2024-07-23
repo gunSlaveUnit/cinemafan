@@ -186,3 +186,55 @@ async def create(
         db: AsyncSession = Depends(get_db)
 ):
     return await Review.create(data.model_dump(), db)
+
+
+@router.get("/studios/{item_id}")
+async def studio_page(
+        request: Request,
+        item_id: int,
+        db: AsyncSession = Depends(get_db)
+):
+    studio = await Studio.by_id(item_id, db)
+    movies_studios = [_ async for _ in MovieStudio.by_studio_id(studio.id, db)]
+    data = [await Movie.by_id(movie_studio.movie_id, db) for movie_studio in movies_studios]
+
+    info = []
+    for movie in data:
+        seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
+        seasons_count = len(seasons)
+
+        age = await Age.by_id(movie.age_id, db)
+
+        episodes = []
+        for season in seasons:
+            episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
+        episodes_count = len(episodes)
+
+        movies_tags = [_ async for _ in MovieTag.by_movie_id(movie.id, db)]
+        tags = []
+        for movie_tag in movies_tags:
+            tags.append(await Tag.by_id(movie_tag.tag_id, db))
+
+        movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie.id, db)]
+
+        genres = []
+        for movie_genre in movie_genres:
+            genres.append(await Genre.by_id(movie_genre.genre_id, db))
+
+        info.append({
+            "movie": movie,
+            "episodes_count": episodes_count,
+            "seasons_count": seasons_count,
+            "tags": tags,
+            "age": age,
+            "genres": genres,
+        })
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/studio.html",
+        context={
+            "info": info,
+            "studio": studio,
+        }
+    )
