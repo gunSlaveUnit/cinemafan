@@ -238,3 +238,56 @@ async def studio_page(
             "studio": studio,
         }
     )
+
+
+
+@router.get("/persons/{item_id}")
+async def person_page(
+        request: Request,
+        item_id: int,
+        db: AsyncSession = Depends(get_db)
+):
+    person = await Person.by_id(item_id, db)
+    movies_persons = [_ async for _ in MoviePerson.by_person_id(person.id, db)]
+    data = [await Movie.by_id(movie_person.movie_id, db) for movie_person in movies_persons]
+
+    info = []
+    for movie in data:
+        seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
+        seasons_count = len(seasons)
+
+        age = await Age.by_id(movie.age_id, db)
+
+        episodes = []
+        for season in seasons:
+            episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
+        episodes_count = len(episodes)
+
+        movies_tags = [_ async for _ in MovieTag.by_movie_id(movie.id, db)]
+        tags = []
+        for movie_tag in movies_tags:
+            tags.append(await Tag.by_id(movie_tag.tag_id, db))
+
+        movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie.id, db)]
+
+        genres = []
+        for movie_genre in movie_genres:
+            genres.append(await Genre.by_id(movie_genre.genre_id, db))
+
+        info.append({
+            "movie": movie,
+            "episodes_count": episodes_count,
+            "seasons_count": seasons_count,
+            "tags": tags,
+            "age": age,
+            "genres": genres,
+        })
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/person.html",
+        context={
+            "info": info,
+            "person": person,
+        }
+    )
