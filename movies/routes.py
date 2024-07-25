@@ -7,6 +7,7 @@ from infrastructure.settings import templates
 from movies.models import (
     Activity,
     Age,
+    Category,
     Episode,
     Genre,
     Movie,
@@ -290,6 +291,90 @@ async def person_page(
             "info": info,
             "person": person,
         }
+    )
+
+
+@router.get("/activities")
+async def activities_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db)
+):
+    data = [_ async for _ in Activity.every(db)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/activities.html",
+        context={"activities": data},
+    )
+
+
+@router.get("/ages")
+async def ages_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db)
+):
+    data = [_ async for _ in Age.every(db)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/ages.html",
+        context={"ages": data},
+    )
+
+
+@router.get("/categories")
+async def categories_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db)
+):
+    data = [_ async for _ in Category.every(db)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/categories.html",
+        context={"categories": data},
+    )
+
+
+@router.get("/genres")
+async def genres_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db)
+):
+    data = [_ async for _ in Genre.every(db)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/genres.html",
+        context={"genres": data},
+    )
+
+
+@router.get("/studios")
+async def studios_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db)
+):
+    data = [_ async for _ in Studio.every(db)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/studios.html",
+        context={"studios": data},
+    )
+
+
+@router.get("/persons")
+async def persons_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db)
+):
+    data = [_ async for _ in Person.every(db)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/persons.html",
+        context={"persons": data},
     )
 
 
