@@ -242,6 +242,27 @@ async def studio_page(
 
 
 
+@router.get("/activities/{item_id}")
+async def activity_page(
+        request: Request,
+        item_id: int,
+        db: AsyncSession = Depends(get_db)
+):
+    activity = await Activity.by_id(item_id, db)
+    movies_persons = [_ async for _ in MoviePerson.by_activity_id(activity.id, db)]
+    persons = [await Person.by_id(movie_person.person_id, db) for movie_person in movies_persons]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/activity.html",
+        context={
+            "activity": activity,
+            "persons": persons,
+        },
+    )
+
+
+
 @router.get("/persons/{item_id}")
 async def person_page(
         request: Request,
