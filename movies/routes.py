@@ -291,3 +291,17 @@ async def person_page(
             "person": person,
         }
     )
+
+
+@router.get("/tags")
+async def tags_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db)
+):
+    tags = [_ async for _ in Tag.every(db)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/tags.html",
+        context={"tags": tags},
+    )
