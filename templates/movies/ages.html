@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for age in ages %}
+    <div>
+      <a href="/ages/{{age.id}}">{{ age.title }}</a>
+    </div>
+  {% endfor %}
+{% endblock %}

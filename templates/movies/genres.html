@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for genre in genres %}
+    <div>
+      <a href="/genres/{{genre.id}}">{{ genre.title }}</a>
+    </div>
+  {% endfor %}
+{% endblock %}

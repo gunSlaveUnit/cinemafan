@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for studio in studios %}
+    <div>
+      <a href="/studios/{{studio.id}}">{{ studio.title }}</a>
+    </div>
+  {% endfor %}
+{% endblock %}
