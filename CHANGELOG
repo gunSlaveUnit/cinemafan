@@ -1,3 +1,6 @@
+0.19.0
+- List pages for main entities; icon for the site.
+
 0.18.0
 - Simple reviews: added a model, a script and some page elements to send a review to a server. 
 
