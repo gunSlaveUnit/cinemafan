@@ -390,12 +390,12 @@ async def persons_page(
         request: Request,
         db: AsyncSession = Depends(get_db)
 ):
-    data = [_ async for _ in Person.every(db)]
+    persons = [_ async for _ in Person.every(db)]
 
     return templates.TemplateResponse(
         request=request,
         name="movies/persons.html",
-        context={"persons": data},
+        context={"persons": persons},
     )
 
 
