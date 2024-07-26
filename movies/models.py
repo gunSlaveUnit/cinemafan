@@ -88,12 +88,32 @@ class MoviePerson(Entity):
     person_id: Mapped[int] = mapped_column(ForeignKey("persons.id"))
 
     @classmethod
+    async def by_activity_id(
+            cls,
+            activity_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.activity_id == activity_id))
+        async for scalar in scalars:
+            yield scalar
+
+    @classmethod
     async def by_movie_id(
             cls,
             movie_id: int,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
+
+    @classmethod
+    async def by_person_id(
+            cls,
+            person_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.person_id == person_id))
         async for scalar in scalars:
             yield scalar
 
@@ -111,6 +131,16 @@ class MovieStudio(Entity):
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
+        async for scalar in scalars:
+            yield scalar
+
+    @classmethod
+    async def by_studio_id(
+            cls,
+            studio_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.studio_id == studio_id))
         async for scalar in scalars:
             yield scalar
 
