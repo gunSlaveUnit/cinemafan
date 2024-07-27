@@ -175,6 +175,13 @@ class Quality(Entity):
     resolution: Mapped[int]
 
 
+class Rating(Entity):
+    __tablename__ = "ratings"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"))
+    value: Mapped[int]
+
+
 class Record(Entity):
     __tablename__ = "records"
 
