@@ -27,11 +27,16 @@
 
   {% for moment in moments %}
     <div>
-      <button>{{moment.time}}</button> - {{ moment.content }}
+      <button onclick="go_moment({{moment.time}})">{{moment.time}}</button> - {{ moment.content }}
     </div>
   {% endfor %}
 
   <script>
+    const go_moment = (time) => {
+      const player = document.querySelector("video");
+      player.currentTime = time
+    }
+
     const send_moment = async () => {
       const content = document.getElementById("content")
 
