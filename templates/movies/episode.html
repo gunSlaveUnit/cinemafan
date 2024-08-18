@@ -32,6 +32,27 @@
   {% endfor %}
 
   <script>
+    const send_moment = async () => {
+      const content = document.getElementById("content")
+
+      const player = document.querySelector("video");
+      const current_time = player.currentTime
+
+      const moment = {
+        content: content.value,
+        episode_id: {{ episode.id }},
+        time: current_time
+      }
+
+      let response = await fetch("/api/moments", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(moment)
+      });
+    }
+
     const set_suitable_source = (quality_id) => {
       const player = document.querySelector("video");
       const sources = player.querySelectorAll("source");
