@@ -8,6 +8,8 @@
     {% for i in range(1, 11) %}
       <input id="{{ i }}" type="checkbox" value="{{ i }}" onclick="change_rating(this.id)" />
     {% endfor %}
+  </div>
+
   <div>
     {% for t in tags %}
       {{ t.tag.title }} ({{ t.movie_tag.relevance }}) <button onclick="bump_tag({{ t.movie_tag.id }})">upvote</button>
@@ -90,9 +92,9 @@
 
       const is_rating_set = false
       if (is_rating_set)
-        const response = await fetch(`/api/ratings/${id}`, {method: 'PUT'})
+        await fetch(`/api/ratings/${id}`, {method: 'PUT'})
       else
-        const response = await fetch(`/api/ratings`, {method: 'POST'})
+        await fetch(`/api/ratings`, {method: 'POST'})
     }
 
     const bump_tag = async (id) => {
