@@ -5,7 +5,7 @@
   <div>
     <label>
       Quality
-      <select onchange="quality_changed(this.value)">
+      <select onchange="set_suitable_source(this.value)">
         {% for quality in qualities %}
           <option value="{{ quality.id }}">{{ quality.resolution }}</option>
         {% endfor %}
@@ -13,13 +13,52 @@
     </label>
   </div>
 
-  <video src="/api/videos/{{ records[0].filename }}" controls>
+  <!-- TODO: should we don't use muted? Is it helpful? Maybe disable autoplay -->
+  <video src="/api/videos/{{ records[0].filename }}" controls autoplay="autoplay" muted="muted">
     {% for record in records %}
       <source src="/api/videos/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
     {% endfor %}
   </video>
 
+  <div>
+    <input id="content"/>
+
+    <button onclick="send_moment()">submit</button>
+  </div>
+
+  {% for moment in moments %}
+    <div>
+      <button onclick="go_moment({{moment.time}})">{{moment.time}}</button> - {{ moment.content }}
+    </div>
+  {% endfor %}
+
   <script>
+    const go_moment = (time) => {
+      const player = document.querySelector("video");
+      player.currentTime = time
+    }
+
+    const send_moment = async () => {
+      const content = document.getElementById("content")
+
+      const player = document.querySelector("video");
+      const current_time = player.currentTime
+
+      const moment = {
+        content: content.value,
+        episode_id: {{ episode.id }},
+        time: current_time
+      }
+
+      let response = await fetch("/api/moments", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(moment)
+      });
+    }
+
     const set_suitable_source = (quality_id) => {
       const player = document.querySelector("video");
       const sources = player.querySelectorAll("source");
@@ -31,16 +70,17 @@
           if (quality_id === source.getAttribute("quality_id"))
             player.setAttribute("src", source.getAttribute("src"))
             player.currentTime = current_time
-            <!-- TODO: fix some issues in browser -->
-            player.play();
+
+            var isPlaying = player.currentTime > 0 && !player.paused && !player.ended
+                && player.readyState > player.HAVE_CURRENT_DATA;
+
+            <!-- FIXME: bad, but works fine in local -->
+            if (!isPlaying)
+              setTimeout(function () {
+                 player.play();
+              }, 150);
         }
       );
     }
-
-    const quality_changed = (quality_id) => {
-      set_suitable_source(quality_id);
-    }
-
-    window.onload = set_suitable_source;
   </script>
 {% endblock %}
