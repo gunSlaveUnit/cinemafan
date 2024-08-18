@@ -13,7 +13,8 @@
     </label>
   </div>
 
-  <video src="/api/videos/{{ records[0].filename }}" controls>
+  <!-- TODO: should we don't use muted? Is it helpful? -->
+  <video src="/api/videos/{{ records[0].filename }}" controls autoplay="autoplay" muted="muted">
     {% for record in records %}
       <source src="/api/videos/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
     {% endfor %}
@@ -69,7 +70,6 @@
           if (quality_id === source.getAttribute("quality_id"))
             player.setAttribute("src", source.getAttribute("src"))
             player.currentTime = current_time
-            <!-- TODO: fix some issues in browser -->
             player.play();
         }
       );
@@ -78,7 +78,5 @@
     const quality_changed = (quality_id) => {
       set_suitable_source(quality_id);
     }
-
-    window.onload = set_suitable_source;
   </script>
 {% endblock %}
