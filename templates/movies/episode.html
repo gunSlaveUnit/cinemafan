@@ -19,6 +19,12 @@
     {% endfor %}
   </video>
 
+  <div>
+    <input id="content"/>
+
+    <button onclick="send_moment()">submit</button>
+  </div>
+
   {% for moment in moments %}
     <div>
       <button>{{moment.time}}</button> - {{ moment.content }}
