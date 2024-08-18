@@ -52,6 +52,24 @@ class Genre(Entity):
     title: Mapped[str] = mapped_column(String(255))
 
 
+class Moment(Entity):
+    __tablename__ = "moments"
+
+    content: Mapped[str] = mapped_column(Text)
+    episode_id: Mapped[int]
+    time: Mapped[float]
+
+    @classmethod
+    async def by_episode_id(
+            cls,
+            episode_id: int,
+            session: AsyncSession,
+    ):
+        scalars = await session.stream_scalars(select(cls).where(cls.episode_id == episode_id))
+        async for scalar in scalars:
+            yield scalar
+
+
 class Movie(Entity):
     __tablename__ = "movies"
 
