@@ -5,7 +5,7 @@
   <div>
     <label>
       Quality
-      <select onchange="quality_changed(this.value)">
+      <select onchange="set_suitable_source(this.value)">
         {% for quality in qualities %}
           <option value="{{ quality.id }}">{{ quality.resolution }}</option>
         {% endfor %}
@@ -73,10 +73,6 @@
             player.play();
         }
       );
-    }
-
-    const quality_changed = (quality_id) => {
-      set_suitable_source(quality_id);
     }
   </script>
 {% endblock %}
