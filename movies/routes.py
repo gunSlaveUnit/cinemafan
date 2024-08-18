@@ -22,9 +22,9 @@ from movies.models import (
     Season,
     Screenshot,
     Studio,
-    Tag,
+    Tag, Moment,
 )
-from movies.schemas import ReviewCreateSchema
+from movies.schemas import ReviewCreateSchema, MomentCreateSchema
 
 from infrastructure.db import get_db
 from infrastructure.settings import templates
@@ -239,6 +239,14 @@ async def studio_page(
             "studio": studio,
         }
     )
+
+
+@router.post("/api/moments")
+async def create_moment(
+        data: MomentCreateSchema,
+        db: AsyncSession = Depends(get_db)
+):
+    return await Moment.create(data.model_dump(), db)
 
 
 
