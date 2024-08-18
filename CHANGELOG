@@ -1,60 +1,63 @@
+0.20.0
+- comments on the moments of the episode with the ability to jump to them
+
 0.19.0
-- List pages for main entities; icon for the site.
+- list pages for main entities; icon for the site
 
 0.18.0
-- Simple reviews: added a model, a script and some page elements to send a review to a server. 
+- simple reviews: added a model, a script and some page elements to send a review to a server
 
 0.17.0
-- Tag accuracy for movies, its increase.
+- tag accuracy for movies, its increase
 
 0.16.0
-- Most of API routes deprecated, used only routes to get HTML pages;
-- Refactoring;
-- DB test data generating by a script.
+- most of API routes deprecated, used only routes to get HTML pages
+- refactoring
+- db test data generating by a script
 
 0.15.0
-- Playing video with rewind.
+- playing video with rewind
 
 0.14.0
-- Possibility to go to a random movie from home page.
+- possibility to go to a random movie from home page
 
 0.13.0
-- Studios: model, relation with a Movie model, showing in an episode page.
+- studios: model, relation with a Movie model, showing in an episode page
 
 0.12.0
-- Persons and activities: models, relation with a Movie model, showing in an episode page.
+- persons and activities: models, relation with a Movie model, showing in an episode page
 
 0.11.0
-- Genres: relation with a Movie model, showing in an episode page.
+- genres: relation with a Movie model, showing in an episode page
 
 0.10.0
-- Tags: new models, relation with a Movie model, showing in an episode page.
+- tags: new models, relation with a Movie model, showing in an episode page
 
 0.9.0
-- Screnshots: a model, them shows in an episode page.
+- screenshots: a model, them shows in an episode page
 
 0.8.0
-- Season, category models;
-- Templates fixes.
+- season, category models
+- templates fixes
 
 0.7.0
-- Render age title;
-- Fixed displaying of seasons and episodes count.
+- render age title
+- fixed displaying of seasons and episodes count
 
 0.6.0
-- Reworking video sources for the player.
+- reworking video sources for the player
 
 0.5.0
-- Video playing, very simple, just by video HTML tag with source changing.
+- video playing, very simple, just by video HTML tag with source changing
 
 0.4.0
-- A movie page.
+- movie page
 
 0.3.0
-- Movies fetching and displaying.
+- movies fetching and displaying
 
 0.2.0
-- Base root app.
+- base root app
 
 0.1.0
-- Initiation.
+- initiation
