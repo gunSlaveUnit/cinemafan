@@ -158,6 +158,7 @@ async def episode_page(
         db: AsyncSession = Depends(get_db)
 ):
     episode = await Episode.by_id(item_id, db)
+    moments = [_ async for _ in Moment.by_episode_id(item_id, db)]
     records = [_ async for _ in Record.by_episode_id(item_id, db)]
     qualities = [await Quality.by_id(record.quality_id, db) for record in records]
 
@@ -166,6 +167,7 @@ async def episode_page(
         name="movies/episode.html",
         context={
             "episode": episode,
+            "moments": moments,
             "records": records,
             "qualities": qualities
         }
