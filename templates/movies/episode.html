@@ -13,7 +13,6 @@
     </label>
   </div>
 
-  <!-- TODO: should we don't use muted? Is it helpful? Maybe disable autoplay -->
   <video src="/api/videos/{{ records[0].filename }}" controls autoplay="autoplay" muted="muted">
     {% for record in records %}
       <source src="/api/videos/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
@@ -68,17 +67,10 @@
       sources.forEach(
         source => {
           if (quality_id === source.getAttribute("quality_id"))
-            player.setAttribute("src", source.getAttribute("src"))
+            player.src = source.src
             player.currentTime = current_time
-
-            var isPlaying = player.currentTime > 0 && !player.paused && !player.ended
-                && player.readyState > player.HAVE_CURRENT_DATA;
-
-            <!-- FIXME: bad, but works fine in local -->
-            if (!isPlaying)
-              setTimeout(function () {
-                 player.play();
-              }, 150);
+            const is_playing_possible = player.play()
+            is_playing_possible.then(_ => player.play())
         }
       );
     }
