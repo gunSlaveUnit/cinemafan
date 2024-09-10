@@ -1,5 +1,11 @@
+import json
+import subprocess
+
 from fastapi import APIRouter, Request, Depends
+from ffmpeg.asyncio import FFmpeg
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from infrastructure.settings import MEDIA_DIR
 
 from infrastructure.db import get_db
 from infrastructure.settings import templates
@@ -162,14 +168,27 @@ async def episode_page(
     records = [_ async for _ in Record.by_episode_id(item_id, db)]
     qualities = [await Quality.by_id(record.quality_id, db) for record in records]
 
+    duration = subprocess.check_output([
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "default=noprint_wrappers=1:nokey=1",
+        MEDIA_DIR / records[0].filename,
+    ])
+    duration = float(duration.decode("utf-8"))
+
     return templates.TemplateResponse(
         request=request,
         name="movies/episode.html",
         context={
+            "duration": duration,
             "episode": episode,
             "moments": moments,
             "records": records,
-            "qualities": qualities
+            "qualities": qualities,
         }
     )
 

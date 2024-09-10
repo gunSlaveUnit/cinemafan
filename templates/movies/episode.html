@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {{ episode.number }}. {{ episode.title }}
   <div>
-    <label>
-      Quality
-      <select onchange="set_suitable_source(this.value)">
-        {% for quality in qualities %}
-          <option value="{{ quality.id }}">{{ quality.resolution }}</option>
-        {% endfor %}
-      </select>
-    </label>
+    {{ episode.number }}. {{ episode.title }}
+  </div>
+
+  <div>
+    {{ duration }}
+  </div>
+
+  <div>
+    <select onchange="set_suitable_source(this.value)">
+      {% for quality in qualities %}
+        <option value="{{ quality.id }}">{{ quality.resolution }}</option>
+      {% endfor %}
+    </select>
   </div>
 
   <video src="/api/videos/{{ records[0].filename }}" controls autoplay="autoplay" muted="muted">
