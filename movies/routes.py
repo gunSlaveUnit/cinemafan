@@ -68,6 +68,21 @@ async def movies_page(
         for movie_genre in movie_genres:
             genres.append(await Genre.by_id(movie_genre.genre_id, db))
 
+        duration = 0.0
+        for episode in episodes:
+            records = [_ async for _ in Record.by_episode_id(episode.id, db)]
+            episode_duration = subprocess.check_output([
+                "ffprobe",
+                "-v",
+                "error",
+                "-show_entries",
+                "format=duration",
+                "-of",
+                "default=noprint_wrappers=1:nokey=1",
+                MEDIA_DIR / records[0].filename,
+            ])
+            duration += float(episode_duration.decode("utf-8"))
+
         info.append({
             "movie": movie,
             "episodes_count": episodes_count,
@@ -75,6 +90,7 @@ async def movies_page(
             "tags": tags,
             "age": age,
             "genres": genres,
+            "duration": duration,
         })
 
     return templates.TemplateResponse(
