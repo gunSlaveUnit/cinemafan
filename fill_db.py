@@ -25,78 +25,78 @@ from movies.models import (
 )
 
 FIXED_DATA = {
-  "ages": [
-    {
-      "title": "G",
-      "description": "all ages",
-    },
-    {
-      "title": "PG",
-      "description": "parental guidance",
-    },
-    {
-      "title": "PG-13",
-      "description": "parents strongly cautioned",
-    },
-    {
-      "title": "R",
-      "description": "restricted",
-    },
-    {
-      "title": "NC-17",
-      "description": "adults only",
-    },
-  ],
-  "categories": [
-    {"title": "full-length"},
-    {"title": "series"},
-    {"title": "short-length"},
-  ],
-  "genres": [
-    {"title": "action"},
-    {"title": "adventure"},
-    {"title": "animated"},
-    {"title": "comedy"},
-    {"title": "drama"},
-    {"title": "fantasy"},
-    {"title": "historical"},
-    {"title": "horror"},
-    {"title": "musical"},
-    {"title": "noir"},
-    {"title": "romance"},
-    {"title": "science fiction"},
-    {"title": "thriller"},
-    {"title": "western"},
-  ],
-  "qualities": [
-    {"resolution": 144},
-    {"resolution": 240},
-    {"resolution": 360},
-    {"resolution": 480},
-    {"resolution": 720},
-    {"resolution": 1080},
-    {"resolution": 2160},
-    {"resolution": 4320},
-  ],
+    "ages": [
+        {
+            "title": "G",
+            "description": "all ages",
+        },
+        {
+            "title": "PG",
+            "description": "parental guidance",
+        },
+        {
+            "title": "PG-13",
+            "description": "parents strongly cautioned",
+        },
+        {
+            "title": "R",
+            "description": "restricted",
+        },
+        {
+            "title": "NC-17",
+            "description": "adults only",
+        },
+    ],
+    "categories": [
+        {"title": "full-length"},
+        {"title": "series"},
+        {"title": "short-length"},
+    ],
+    "genres": [
+        {"title": "action"},
+        {"title": "adventure"},
+        {"title": "animated"},
+        {"title": "comedy"},
+        {"title": "drama"},
+        {"title": "fantasy"},
+        {"title": "historical"},
+        {"title": "horror"},
+        {"title": "musical"},
+        {"title": "noir"},
+        {"title": "romance"},
+        {"title": "science fiction"},
+        {"title": "thriller"},
+        {"title": "western"},
+    ],
+    "qualities": [
+        {"resolution": 144},
+        {"resolution": 240},
+        {"resolution": 360},
+        {"resolution": 480},
+        {"resolution": 720},
+        {"resolution": 1080},
+        {"resolution": 2160},
+        {"resolution": 4320},
+    ],
 }
 
-ACTIVITIES_AMOUNT=10
+ACTIVITIES_AMOUNT = 10
 AGES_AMOUNT = len(FIXED_DATA["ages"])
 CATEGORIES_AMOUNT = len(FIXED_DATA["categories"])
 GENRES_AMOUNT = len(FIXED_DATA["genres"])
-MAX_ACTIVITIES_PER_MOVIE_AMOUNT=5
-MAX_EPISODES_PER_SEASON_AMOUNT=30
-MAX_GENRES_PER_MOVIE_AMOUNT=3
-MAX_REVIEWS_PER_MOVIE_AMOUNT=50
-MAX_SCREENSHOTS_PER_MOVIE_AMOUNT=10
-MAX_SEASONS_PER_MOVIE_AMOUNT=10
-MAX_STUDIOS_PER_MOVIE_AMOUNT=3
-MAX_TAGS_PER_MOVIE_AMOUNT=10
-MOVIES_AMOUNT=100
-PERSONS_AMOUNT=100
-QUALITIES_AMOUNT=len(FIXED_DATA["qualities"])
-STUDIOS_AMOUNT=100
-TAGS_AMOUNT=100
+MAX_ACTIVITIES_PER_MOVIE_AMOUNT = 5
+MAX_EPISODES_PER_SEASON_AMOUNT = 30
+MAX_GENRES_PER_MOVIE_AMOUNT = 3
+MAX_REVIEWS_PER_MOVIE_AMOUNT = 50
+MAX_SCREENSHOTS_PER_MOVIE_AMOUNT = 10
+MAX_SEASONS_PER_MOVIE_AMOUNT = 10
+MAX_STUDIOS_PER_MOVIE_AMOUNT = 3
+MAX_TAGS_PER_MOVIE_AMOUNT = 10
+MOVIES_AMOUNT = 100
+PERSONS_AMOUNT = 100
+QUALITIES_AMOUNT = len(FIXED_DATA["qualities"])
+STUDIOS_AMOUNT = 100
+TAGS_AMOUNT = 100
 
 
 async def fill():
@@ -124,7 +124,7 @@ async def fill():
 
             for i in range(STUDIOS_AMOUNT):
                 await Studio.create({"title": f"studio {i}"}, db)
-            
+
             for i in range(TAGS_AMOUNT):
                 await Tag.create({"title": f"tag {i}"}, db)
 
@@ -132,7 +132,12 @@ async def fill():
                 movie = {
                     "age_id": random.randint(1, AGES_AMOUNT),
                     "category_id": random.randint(1, CATEGORIES_AMOUNT),
-                    "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
+                                   "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+                                   "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+                                   "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum "
+                                   "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
+                                   "sunt in culpa qui officia deserunt mollit anim id est laborum.",
                     "original_title": f"original language title {i}",
                     "poster": "poster.jpg",
                     "translated_title": f"any language title {i}",
@@ -175,7 +180,7 @@ async def fill():
                         "quality_id": k + 1,
                     }
                     await Record.create(record, db)
-                        
+
             for i in range(MOVIES_AMOUNT):
                 for _ in range(random.randint(1, MAX_GENRES_PER_MOVIE_AMOUNT)):
                     movie_genre = {
