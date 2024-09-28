@@ -1,63 +1,66 @@
-0.20.0
-- comments on the moments of the episode with the ability to jump to them
+0.21.0 - 2024.9.28:
+    - count duration: for episode and movie
 
-0.19.0
-- list pages for main entities; icon for the site
+0.20.0 - 2024.8.18:
+    - comments on the moments of the episode with the ability to jump to them
 
-0.18.0
-- simple reviews: added a model, a script and some page elements to send a review to a server
+0.19.0 - 2024.7.26:
+    - list pages for main entities; icon for the site
 
-0.17.0
-- tag accuracy for movies, its increase
+0.18.0 - 2024.7.22:
+    - simple reviews: added a model, a script and some page elements to send a review to a server
 
-0.16.0
-- most of API routes deprecated, used only routes to get HTML pages
-- refactoring
-- db test data generating by a script
+0.17.0 - 2024.7.21:
+    - tag accuracy for movies, its increase
 
-0.15.0
-- playing video with rewind
+0.16.0 - 2024.7.20:
+    - most of API routes deprecated, used only routes to get HTML pages
+    - refactoring
+    - db test data generating by a script
 
-0.14.0
-- possibility to go to a random movie from home page
+0.15.0 - 2024.6.19:
+    - playing video with rewind
 
-0.13.0
-- studios: model, relation with a Movie model, showing in an episode page
+0.14.0 - 2024.5.25:
+    - possibility to go to a random movie from home page
 
-0.12.0
-- persons and activities: models, relation with a Movie model, showing in an episode page
+0.13.0 - 2024.5.23:
+    - studios: model, relation with a Movie model, showing in an episode page
 
-0.11.0
-- genres: relation with a Movie model, showing in an episode page
+0.12.0 - 2024.5.21:
+    - persons and activities: models, relation with a Movie model, showing in an episode page
 
-0.10.0
-- tags: new models, relation with a Movie model, showing in an episode page
+0.11.0 - 2024.5.21:
+    - genres: relation with a Movie model, showing in an episode page
 
-0.9.0
-- screenshots: a model, them shows in an episode page
+0.10.0 - 2024.5.19:
+    - tags: new models, relation with a Movie model, showing in an episode page
 
-0.8.0
-- season, category models
-- templates fixes
+0.9.0 - 2024.5.17:
+    - screenshots: a model, them shows in an episode page
 
-0.7.0
-- render age title
-- fixed displaying of seasons and episodes count
+0.8.0 - 2024.5.14:
+    - season, category models
+    - templates fixes
 
-0.6.0
-- reworking video sources for the player
+0.7.0 - 2024.5.13:
+    - render age title
+    - fixed displaying of seasons and episodes count
 
-0.5.0
-- video playing, very simple, just by video HTML tag with source changing
+0.6.0 - 2024.5.11:
+    - reworking video sources for the player
 
-0.4.0
-- movie page
+0.5.0 - 2024.5.10:
+    - video playing, very simple, just by video HTML tag with source changing
 
-0.3.0
-- movies fetching and displaying
+0.4.0 - 2024.5.10:
+    - movie page
 
-0.2.0
-- base root app
+0.3.0 - 2024.5.9:
+    - movies fetching and displaying
 
-0.1.0
-- initiation
+0.2.0 - 2024.5.5:
+    - base root app
+
+0.1.0 - 2024.5.5:
+    - initiation

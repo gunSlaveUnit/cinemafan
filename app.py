@@ -22,7 +22,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="cinemafan",
-    version="0.20.0",
+    version="0.21.0",
     lifespan=lifespan,
 )
 
