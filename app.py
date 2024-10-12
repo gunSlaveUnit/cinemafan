@@ -4,8 +4,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles 
 
-from infrastructure.settings import MEDIA_DIR, STATIC_DIR
-from infrastructure.db import init
+from settings import MEDIA_DIR, STATIC_DIR
+from db import init
 from movies.routes import router as movies_router
 from videos.routes import router as videos_router
 from root.routes import router as root_router

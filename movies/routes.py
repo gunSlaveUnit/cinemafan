@@ -5,10 +5,10 @@ from fastapi import APIRouter, Request, Depends
 from ffmpeg.asyncio import FFmpeg
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from infrastructure.settings import MEDIA_DIR
+from settings import MEDIA_DIR
 
-from infrastructure.db import get_db
-from infrastructure.settings import templates
+from db import get_db
+from settings import templates
 
 from movies.models import (
     Activity,
@@ -32,8 +32,8 @@ from movies.models import (
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
 
-from infrastructure.db import get_db
-from infrastructure.settings import templates
+from db import get_db
+from settings import templates
 
 router = APIRouter(prefix="")
 

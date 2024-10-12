@@ -4,8 +4,8 @@ from fastapi import APIRouter, Request, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from infrastructure.db import get_db
-from infrastructure.settings import templates
+from db import get_db
+from settings import templates
 from movies.models import Movie
 
 router = APIRouter()
