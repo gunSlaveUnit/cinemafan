@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import StreamingResponse, Response
 from starlette._compat import md5_hexdigest
 
-from infrastructure.settings import MEDIA_DIR
+from settings import MEDIA_DIR
 
 router = APIRouter(prefix="/api/videos")
 

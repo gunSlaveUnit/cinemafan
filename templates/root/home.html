@@ -2,13 +2,6 @@
 
 {% block content %}
   {% if movie_id %}
-    <button onclick="go_random_movie(`{{ movie_id }}`)">random</button>
-
-    <script>
-      const go_random_movie = (movie_id) => {
-        window.location.reload()
-        window.location.href = `/movies/${movie_id}`
-      }
-    </script>
+    <a href="/movies/random">random</a>
   {% endif %}
 {% endblock %}
