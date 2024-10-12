@@ -1,6 +1,5 @@
 import os
 
-from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -9,10 +8,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from shared.models import Base
-
-load_dotenv()
-
-DB_URL = os.getenv("DB_URL")
+from settings import DB_URL
 
 engine: AsyncEngine = create_async_engine(DB_URL)
 session_maker: async_sessionmaker = async_sessionmaker(
