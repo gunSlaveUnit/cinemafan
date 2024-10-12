@@ -1,8 +1,11 @@
 import json
+import random
 import subprocess
 
 from fastapi import APIRouter, Request, Depends
+from fastapi.responses import RedirectResponse
 from ffmpeg.asyncio import FFmpeg
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from settings import MEDIA_DIR
@@ -100,6 +103,25 @@ async def movies_page(
             "info": info,
         }
     )
+
+
+@router.get("/movies/random")
+async def random_movie_page(
+        request: Request,
+        db: AsyncSession = Depends(get_db),
+):
+    count = await db.scalar(select(func.count()).select_from(Movie))
+
+    if count == 0:
+        movie_id = None
+    else:
+        result = await db.execute(select(Movie.id).offset(random.randint(0, count - 1)))
+        movie_id = result.scalars().first()
+
+    if movie_id:
+        return RedirectResponse(f"/movies/{movie_id}")
+    else:
+        return RedirectResponse(f"/")
 
 
 @router.get("/movies/{item_id}")
