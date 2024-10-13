@@ -1,3 +1,7 @@
+0.23.0 - 2024.10.13:
+    - uuids
+    - movies pagination
+
 0.22.0 - 2024.10.12:
     - improved going to a random movie: no js, ​​only a separate route and redirection
 
