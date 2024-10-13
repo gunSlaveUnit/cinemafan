@@ -1,6 +1,8 @@
 from typing import AsyncIterator
+import uuid
 
 from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -12,7 +14,11 @@ class Base(DeclarativeBase, AsyncAttrs):
 class Entity(Base):
     __abstract__ = True
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        default=uuid.uuid4,
+        primary_key=True, 
+    )
 
     @classmethod
     async def every(cls, session: AsyncSession) -> AsyncIterator:
@@ -23,7 +29,7 @@ class Entity(Base):
     @classmethod
     async def by_id(
             cls,
-            item_id: int,
+            item_id: uuid.UUID,
             session: AsyncSession,
     ):
         return await session.scalar(select(cls).where(cls.id == item_id))

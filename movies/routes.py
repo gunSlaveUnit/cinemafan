@@ -1,8 +1,10 @@
 import json
 import random
 import subprocess
+import typing
+import uuid
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, Query
 from fastapi.responses import RedirectResponse
 from ffmpeg.asyncio import FFmpeg
 from sqlalchemy import func, select
@@ -44,9 +46,14 @@ router = APIRouter(prefix="")
 @router.get("/movies")
 async def movies_page(
         request: Request,
+        page: typing.Annotated[int, Query(ge=0)] = 0,
         db: AsyncSession = Depends(get_db)
 ):
-    data = [_ async for _ in Movie.every(db)]
+    data = [_ async for _ in await db.stream_scalars(select(Movie).limit(2).offset(page * 2))]
+    count = await db.scalar(select(func.count()).select_from(Movie))
+    pages, remainder = divmod(count, 2)
+    if remainder > 0:
+        pages += 1
 
     info = []
     for movie in data:
@@ -101,6 +108,7 @@ async def movies_page(
         name="movies/movies.html",
         context={
             "info": info,
+            "pages": pages,
         }
     )
 
@@ -127,7 +135,7 @@ async def random_movie_page(
 @router.get("/movies/{item_id}")
 async def movie_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     movie = await Movie.by_id(item_id, db)
@@ -198,7 +206,7 @@ async def movie_page(
 @router.get("/episodes/{item_id}")
 async def episode_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     episode = await Episode.by_id(item_id, db)
@@ -233,7 +241,7 @@ async def episode_page(
 
 @router.patch("/api/movies-tags/{item_id}/bump")
 async def bump_tag(
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     movie_tag = await MovieTag.by_id(item_id, db)
@@ -251,7 +259,7 @@ async def create(
 @router.get("/studios/{item_id}")
 async def studio_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     studio = await Studio.by_id(item_id, db)
@@ -312,7 +320,7 @@ async def create_moment(
 @router.get("/activities/{item_id}")
 async def activity_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     activity = await Activity.by_id(item_id, db)
@@ -333,7 +341,7 @@ async def activity_page(
 @router.get("/persons/{item_id}")
 async def person_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     person = await Person.by_id(item_id, db)

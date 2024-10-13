@@ -1,8 +1,9 @@
 import asyncio
 from datetime import datetime
 import random
+import uuid
 
-from infrastructure.db import init, session_maker
+from db import init, session_maker
 from movies.models import (
     Activity,
     Age,
@@ -24,212 +25,232 @@ from movies.models import (
     Tag,
 )
 
-FIXED_DATA = {
-    "ages": [
-        {
-            "title": "G",
-            "description": "all ages",
-        },
-        {
-            "title": "PG",
-            "description": "parental guidance",
-        },
-        {
-            "title": "PG-13",
-            "description": "parents strongly cautioned",
-        },
-        {
-            "title": "R",
-            "description": "restricted",
-        },
-        {
-            "title": "NC-17",
-            "description": "adults only",
-        },
-    ],
-    "categories": [
-        {"title": "full-length"},
-        {"title": "series"},
-        {"title": "short-length"},
-    ],
-    "genres": [
-        {"title": "action"},
-        {"title": "adventure"},
-        {"title": "animated"},
-        {"title": "comedy"},
-        {"title": "drama"},
-        {"title": "fantasy"},
-        {"title": "historical"},
-        {"title": "horror"},
-        {"title": "musical"},
-        {"title": "noir"},
-        {"title": "romance"},
-        {"title": "science fiction"},
-        {"title": "thriller"},
-        {"title": "western"},
-    ],
-    "qualities": [
-        {"resolution": 144},
-        {"resolution": 240},
-        {"resolution": 360},
-        {"resolution": 480},
-        {"resolution": 720},
-        {"resolution": 1080},
-        {"resolution": 2160},
-        {"resolution": 4320},
-    ],
-}
-
-ACTIVITIES_AMOUNT = 10
-AGES_AMOUNT = len(FIXED_DATA["ages"])
-CATEGORIES_AMOUNT = len(FIXED_DATA["categories"])
-GENRES_AMOUNT = len(FIXED_DATA["genres"])
+ACTIVITIES_AMOUNT = 5
+PERSONS_AMOUNT = 10
+STUDIOS_AMOUNT = 10
 MAX_ACTIVITIES_PER_MOVIE_AMOUNT = 5
-MAX_EPISODES_PER_SEASON_AMOUNT = 30
+MAX_EPISODES_PER_SEASON_AMOUNT = 12
 MAX_GENRES_PER_MOVIE_AMOUNT = 3
-MAX_REVIEWS_PER_MOVIE_AMOUNT = 50
-MAX_SCREENSHOTS_PER_MOVIE_AMOUNT = 10
-MAX_SEASONS_PER_MOVIE_AMOUNT = 10
-MAX_STUDIOS_PER_MOVIE_AMOUNT = 3
-MAX_TAGS_PER_MOVIE_AMOUNT = 10
-MOVIES_AMOUNT = 100
-PERSONS_AMOUNT = 100
-QUALITIES_AMOUNT = len(FIXED_DATA["qualities"])
-STUDIOS_AMOUNT = 100
-TAGS_AMOUNT = 100
+MAX_REVIEWS_PER_MOVIE_AMOUNT = 5
+MAX_SCREENSHOTS_PER_MOVIE_AMOUNT = 3
+MAX_SEASONS_PER_MOVIE_AMOUNT = 3
+MAX_STUDIOS_PER_MOVIE_AMOUNT = 2
+MAX_PERSONS_PER_MOVIE_AMOUNT = 2
+MAX_TAGS_PER_MOVIE_AMOUNT = 5
+MOVIES_AMOUNT = 10
+TAGS_AMOUNT = 10
 
+ACTIVITIES = [{"id": uuid.uuid4(), "title": f"activity {i}"} for i in range(ACTIVITIES_AMOUNT)]
+AGES = [
+    {"id": uuid.uuid4(), "title": "G", "description": "all ages"},
+    {"id": uuid.uuid4(), "title": "PG", "description": "parental guidance"},
+    {"id": uuid.uuid4(), "title": "PG-13", "description": "parents strongly cautioned"},
+    {"id": uuid.uuid4(), "title": "R", "description": "restricted"},
+    {"id": uuid.uuid4(), "title": "NC-17", "description": "adults only"},
+]
+CATEGORIES = [
+    {"id": uuid.uuid4(), "title": "full-length"},
+    {"id": uuid.uuid4(), "title": "series"},
+    {"id": uuid.uuid4(), "title": "short-length"},
+]
+GENRES = [
+    {"id": uuid.uuid4(), "title": "action"},
+    {"id": uuid.uuid4(), "title": "adventure"},
+    {"id": uuid.uuid4(), "title": "animated"},
+    {"id": uuid.uuid4(), "title": "comedy"},
+    {"id": uuid.uuid4(), "title": "drama"},
+    {"id": uuid.uuid4(), "title": "fantasy"},
+    {"id": uuid.uuid4(), "title": "historical"},
+    {"id": uuid.uuid4(), "title": "horror"},
+    {"id": uuid.uuid4(), "title": "musical"},
+    {"id": uuid.uuid4(), "title": "noir"},
+    {"id": uuid.uuid4(), "title": "romance"},
+    {"id": uuid.uuid4(), "title": "science fiction"},
+    {"id": uuid.uuid4(), "title": "thriller"},
+    {"id": uuid.uuid4(), "title": "western"},
+]
+PERSONS = [{"id": uuid.uuid4(), "name": f"person {i}"} for i in range(PERSONS_AMOUNT)]
+QUALITIES = [
+    {"id": uuid.uuid4(), "resolution": 144},
+    {"id": uuid.uuid4(), "resolution": 240},
+    {"id": uuid.uuid4(), "resolution": 360},
+    {"id": uuid.uuid4(), "resolution": 480},
+    {"id": uuid.uuid4(), "resolution": 720},
+    {"id": uuid.uuid4(), "resolution": 1080},
+    {"id": uuid.uuid4(), "resolution": 2160},
+    {"id": uuid.uuid4(), "resolution": 4320},
+    {"id": uuid.uuid4(), "resolution": 8640},
+]
+STUDIOS = [{"id": uuid.uuid4(), "title": f"studio {i}"} for i in range(STUDIOS_AMOUNT)]
+TAGS = [{"id": uuid.uuid4(), "title": f"tag {i}"} for i in range(TAGS_AMOUNT)]
+MOVIES = [
+    {
+        "id": uuid.uuid4(), 
+        "age_id": AGES[random.randint(0, len(AGES) - 1)]["id"],
+        "category_id": CATEGORIES[random.randint(0, len(CATEGORIES) - 1)]["id"],
+        "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
+                        "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+                        "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+                        "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum "
+                        "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
+                        "sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "original_title": f"original language title {i}",
+        "poster": "poster.jpg",
+        "translated_title": f"any language title {i}",
+    } for i in range(MOVIES_AMOUNT)
+]
+MOVIE_SEASONS = []
+for movie in MOVIES:
+    seasons = []
+    for i in range(random.randint(1, MAX_SEASONS_PER_MOVIE_AMOUNT)):
+        seasons.append({
+            "id": uuid.uuid4(),
+            "movie_id": movie["id"],
+            "number": i + 1,
+            "title": f"season {i}",
+        })
+    MOVIE_SEASONS.append(seasons)
+EPISODES = []
+for seasons in MOVIE_SEASONS:
+    parent_id = None
+    for season in seasons:
+        for i in range(random.randint(1, MAX_EPISODES_PER_SEASON_AMOUNT)):
+            episode = {
+                "id": uuid.uuid4(),
+                "number": i,
+                "parent_id": parent_id,
+                "release_date": datetime.now(),
+                "season_id": season["id"],
+                "title": f"episode {i}",
+            }
+            EPISODES.append(episode)
+            parent_id = episode["id"]
+EPISODE_RECORDS = [
+    [
+        {
+            "episode_id": episode["id"],
+            "filename": "video.mp4",
+            "quality_id": quality["id"],
+        } for quality in QUALITIES
+    ] for episode in EPISODES
+]
+MOVIE_GENRES = [
+    [
+        {
+            "movie_id": movie["id"],
+            "genre_id": random.choice(GENRES)["id"],
+        } for _ in range(random.randint(1, MAX_GENRES_PER_MOVIE_AMOUNT))
+    ] for movie in MOVIES
+]
+MOVIE_PERSONS = [
+    [
+        {
+            "activity_id": random.choice(ACTIVITIES)["id"],
+            "movie_id": movie["id"],
+            "person_id": random.choice(PERSONS)["id"],
+        } for _ in range(random.randint(1, MAX_PERSONS_PER_MOVIE_AMOUNT))
+    ] for movie in MOVIES
+]
+MOVIE_STUDIOS = [
+    [
+        {
+            "movie_id": movie["id"],
+            "studio_id": random.choice(STUDIOS)["id"],
+        } for _ in range(random.randint(1, MAX_STUDIOS_PER_MOVIE_AMOUNT))
+    ] for movie in MOVIES
+]
+MOVIE_TAGS = [
+    [
+        {
+            "movie_id": movie["id"],
+            "relevance": random.randint(1, 1000),
+            "tag_id": random.choice(TAGS)["id"],
+        } for _ in range(random.randint(1, MAX_TAGS_PER_MOVIE_AMOUNT))
+    ] for movie in MOVIES
+]
+MOVIE_REVIEWS = [
+    [
+        {
+            "movie_id": movie["id"],
+            "content": f"review {i}",
+        } for i in range(random.randint(1, MAX_REVIEWS_PER_MOVIE_AMOUNT))
+    ] for movie in MOVIES
+]
+MOVIE_SCREENSHOTS = [
+    [
+        {
+            "movie_id": movie["id"],
+            "title": f"screenshot {i}",
+            "filename": "screenshot.jpg",
+        } for i in range(random.randint(1, MAX_SCREENSHOTS_PER_MOVIE_AMOUNT))
+    ] for movie in MOVIES
+]
 
 async def fill():
     await init()
 
     async with session_maker() as db:
         try:
-            for i in range(ACTIVITIES_AMOUNT):
-                await Activity.create({"title": f"activity {i}"}, db)
+            for activity in ACTIVITIES:
+                await Activity.create(activity, db)
 
-            for age in FIXED_DATA["ages"]:
+            for age in AGES:
                 await Age.create(age, db)
 
-            for category in FIXED_DATA["categories"]:
+            for category in CATEGORIES:
                 await Category.create(category, db)
 
-            for genre in FIXED_DATA["genres"]:
+            for genre in GENRES:
                 await Genre.create(genre, db)
 
-            for i in range(PERSONS_AMOUNT):
-                await Person.create({"name": f"person {i}"}, db)
+            for person in PERSONS:
+                await Person.create(person, db)
 
-            for quality in FIXED_DATA['qualities']:
+            for quality in QUALITIES:
                 await Quality.create(quality, db)
 
-            for i in range(STUDIOS_AMOUNT):
-                await Studio.create({"title": f"studio {i}"}, db)
+            for studio in STUDIOS:
+                await Studio.create(studio, db)
 
-            for i in range(TAGS_AMOUNT):
-                await Tag.create({"title": f"tag {i}"}, db)
+            for tag in TAGS:
+                await Tag.create(tag, db)
 
-            for i in range(MOVIES_AMOUNT):
-                movie = {
-                    "age_id": random.randint(1, AGES_AMOUNT),
-                    "category_id": random.randint(1, CATEGORIES_AMOUNT),
-                    "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
-                                   "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
-                                   "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
-                                   "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum "
-                                   "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
-                                   "sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    "original_title": f"original language title {i}",
-                    "poster": "poster.jpg",
-                    "translated_title": f"any language title {i}",
-                }
+            for movie in MOVIES:
                 await Movie.create(movie, db)
 
-            created_seasons_amount = 0
-            for i in range(MOVIES_AMOUNT):
-                seasons_per_movie = random.randint(1, MAX_SEASONS_PER_MOVIE_AMOUNT)
-
-                for j in range(seasons_per_movie):
-                    season = {
-                        "movie_id": i + 1,
-                        "number": j,
-                        "title": f"season {j}",
-                    }
+            for seasons in MOVIE_SEASONS:
+                for season in seasons:
                     await Season.create(season, db)
-                    created_seasons_amount += 1
 
-            created_episodes_amount = 0
-            for i in range(created_seasons_amount):
-                episodes_per_season = random.randint(1, MAX_EPISODES_PER_SEASON_AMOUNT)
+            for episode in EPISODES:
+                await Episode.create(episode, db)
 
-                for k in range(episodes_per_season):
-                    episode = {
-                        "number": k,
-                        "parent_id": created_episodes_amount if created_episodes_amount > 0 else None,
-                        "release_date": datetime.now(),
-                        "season_id": i + 1,
-                        "title": f"episode {k}",
-                    }
-                    await Episode.create(episode, db)
-                    created_episodes_amount += 1
-
-            for i in range(created_episodes_amount):
-                for k in range(QUALITIES_AMOUNT):
-                    record = {
-                        "episode_id": i,
-                        "filename": "video.mp4",
-                        "quality_id": k + 1,
-                    }
+            for records in EPISODE_RECORDS:
+                for record in records:
                     await Record.create(record, db)
 
-            for i in range(MOVIES_AMOUNT):
-                for _ in range(random.randint(1, MAX_GENRES_PER_MOVIE_AMOUNT)):
-                    movie_genre = {
-                        "genre_id": random.randint(1, GENRES_AMOUNT),
-                        "movie_id": i + 1,
-                    }
-                    await MovieGenre.create(movie_genre, db)
+            for genres in MOVIE_GENRES:
+                for genre in genres:
+                    await MovieGenre.create(genre, db)
 
-            for i in range(MOVIES_AMOUNT):
-                for _ in range(random.randint(1, MAX_ACTIVITIES_PER_MOVIE_AMOUNT)):
-                    movie_person = {
-                        "activity_id": random.randint(1, ACTIVITIES_AMOUNT),
-                        "movie_id": i + 1,
-                        "person_id": random.randint(1, PERSONS_AMOUNT),
-                    }
-                    await MoviePerson.create(movie_person, db)
+            for persons in MOVIE_PERSONS:
+                for person in persons:
+                    await MoviePerson.create(person, db)
 
-            for i in range(MOVIES_AMOUNT):
-                for _ in range(random.randint(1, MAX_STUDIOS_PER_MOVIE_AMOUNT)):
-                    movie_studio = {
-                        "movie_id": i + 1,
-                        "studio_id": random.randint(1, STUDIOS_AMOUNT),
-                    }
-                    await MovieStudio.create(movie_studio, db)
+            for studios in MOVIE_STUDIOS:
+                for studio in studios:
+                    await MovieStudio.create(studio, db)
 
-            for i in range(MOVIES_AMOUNT):
-                for _ in range(random.randint(1, MAX_TAGS_PER_MOVIE_AMOUNT)):
-                    movie_tag = {
-                        "movie_id": i + 1,
-                        "relevance": random.randint(1, 1000),
-                        "tag_id": random.randint(1, TAGS_AMOUNT),
-                    }
-                    await MovieTag.create(movie_tag, db)
+            for tags in MOVIE_TAGS:
+                for tag in tags:
+                    await MovieTag.create(tag, db)
 
-            for i in range(MOVIES_AMOUNT):
-                for j in range(random.randint(1, MAX_REVIEWS_PER_MOVIE_AMOUNT)):
-                    review = {
-                        "content": f"review {j}",
-                        "movie_id": i + 1,
-                    }
+            for reviews in MOVIE_REVIEWS:
+                for review in reviews:
                     await Review.create(review, db)
 
-            for i in range(MOVIES_AMOUNT):
-                for j in range(random.randint(1, MAX_SCREENSHOTS_PER_MOVIE_AMOUNT)):
-                    screenshot = {
-                        "filename": "screenshot.jpg",
-                        "movie_id": i + 1,
-                        "title": f"screenshot {j}",
-                    }
+            for screenshots in MOVIE_SCREENSHOTS:
+                for screenshot in screenshots:
                     await Screenshot.create(screenshot, db)
         finally:
             await db.close()
