@@ -1,6 +1,7 @@
 import json
 import random
 import subprocess
+import uuid
 
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import RedirectResponse
@@ -127,7 +128,7 @@ async def random_movie_page(
 @router.get("/movies/{item_id}")
 async def movie_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     movie = await Movie.by_id(item_id, db)
@@ -198,7 +199,7 @@ async def movie_page(
 @router.get("/episodes/{item_id}")
 async def episode_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     episode = await Episode.by_id(item_id, db)
@@ -233,7 +234,7 @@ async def episode_page(
 
 @router.patch("/api/movies-tags/{item_id}/bump")
 async def bump_tag(
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     movie_tag = await MovieTag.by_id(item_id, db)
@@ -251,7 +252,7 @@ async def create(
 @router.get("/studios/{item_id}")
 async def studio_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     studio = await Studio.by_id(item_id, db)
@@ -312,7 +313,7 @@ async def create_moment(
 @router.get("/activities/{item_id}")
 async def activity_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     activity = await Activity.by_id(item_id, db)
@@ -333,7 +334,7 @@ async def activity_page(
 @router.get("/persons/{item_id}")
 async def person_page(
         request: Request,
-        item_id: int,
+        item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
     person = await Person.by_id(item_id, db)
