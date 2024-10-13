@@ -1,6 +1,8 @@
 import datetime
+import uuid
 
 from sqlalchemy import String, select, Text
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -30,15 +32,15 @@ class Episode(Entity):
     __tablename__ = "episodes"
 
     number: Mapped[int]
-    parent_id: Mapped[int] = mapped_column(nullable=True)
+    parent_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=True)
     release_date: Mapped[datetime.datetime]
-    season_id: Mapped[int]
+    season_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     title: Mapped[str] = mapped_column(String(255))
 
     @classmethod
     async def by_season_id(
             cls,
-            season_id: int,
+            season_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.season_id == season_id))
@@ -56,13 +58,13 @@ class Moment(Entity):
     __tablename__ = "moments"
 
     content: Mapped[str] = mapped_column(Text)
-    episode_id: Mapped[int]
+    episode_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     time: Mapped[float]
 
     @classmethod
     async def by_episode_id(
             cls,
-            episode_id: int,
+            episode_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.episode_id == episode_id))
@@ -73,8 +75,8 @@ class Moment(Entity):
 class Movie(Entity):
     __tablename__ = "movies"
 
-    age_id: Mapped[int]
-    category_id: Mapped[int]
+    age_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    category_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     description: Mapped[str] = mapped_column(Text)
     original_title: Mapped[str] = mapped_column(String(255))
     poster: Mapped[str] = mapped_column(String(255))
@@ -84,13 +86,13 @@ class Movie(Entity):
 class MovieGenre(Entity):
     __tablename__ = "movies_genres"
 
-    genre_id: Mapped[int]
-    movie_id: Mapped[int]
+    genre_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
     async def by_movie_id(
             cls,
-            movie_id: int,
+            movie_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
@@ -101,14 +103,14 @@ class MovieGenre(Entity):
 class MoviePerson(Entity):
     __tablename__ = "movies_persons"
 
-    activity_id: Mapped[int]
-    movie_id: Mapped[int]
-    person_id: Mapped[int]
+    activity_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    person_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
     async def by_activity_id(
             cls,
-            activity_id: int,
+            activity_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.activity_id == activity_id))
@@ -139,13 +141,13 @@ class MoviePerson(Entity):
 class MovieStudio(Entity):
     __tablename__ = "movies_studios"
 
-    movie_id: Mapped[int]
-    studio_id: Mapped[int]
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    studio_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
     async def by_movie_id(
             cls,
-            movie_id: int,
+            movie_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
@@ -155,7 +157,7 @@ class MovieStudio(Entity):
     @classmethod
     async def by_studio_id(
             cls,
-            studio_id: int,
+            studio_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.studio_id == studio_id))
@@ -166,14 +168,14 @@ class MovieStudio(Entity):
 class MovieTag(Entity):
     __tablename__ = "movies_tags"
 
-    movie_id: Mapped[int]
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     relevance: Mapped[int]
-    tag_id: Mapped[int]
+    tag_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
     async def by_movie_id(
             cls,
-            movie_id: int,
+            movie_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
@@ -196,21 +198,21 @@ class Quality(Entity):
 class Rating(Entity):
     __tablename__ = "ratings"
 
-    movie_id: Mapped[int]
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     value: Mapped[int]
 
 
 class Record(Entity):
     __tablename__ = "records"
 
-    episode_id: Mapped[int]
+    episode_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     filename: Mapped[str] = mapped_column(String(255))
-    quality_id: Mapped[int]
+    quality_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
     async def by_episode_id(
             cls,
-            episode_id: int,
+            episode_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.episode_id == episode_id))
@@ -222,12 +224,12 @@ class Review(Entity):
     __tablename__ = "reviews"
 
     content: Mapped[str] = mapped_column(Text)
-    movie_id: Mapped[int]
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
     async def by_movie_id(
             cls,
-            movie_id: int,
+            movie_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
@@ -239,13 +241,13 @@ class Screenshot(Entity):
     __tablename__ = "screenshots"
 
     filename: Mapped[str] = mapped_column(String(255))
-    movie_id: Mapped[int]
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     title: Mapped[str] = mapped_column(String(255))
 
     @classmethod
     async def by_movie_id(
             cls,
-            movie_id: int,
+            movie_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
@@ -257,13 +259,13 @@ class Season(Entity):
     __tablename__ = "seasons"
 
     number: Mapped[int]
-    movie_id: Mapped[int]
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     title: Mapped[str] = mapped_column(String(255), nullable=True)
 
     @classmethod
     async def by_movie_id(
             cls,
-            movie_id: int,
+            movie_id: uuid.UUID,
             session: AsyncSession,
     ):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))

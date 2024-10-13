@@ -14,7 +14,7 @@ class Base(DeclarativeBase, AsyncAttrs):
 class Entity(Base):
     __abstract__ = True
 
-    id: Mapped[int] = mapped_column(
+    id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         default=uuid.uuid4,
         primary_key=True, 
@@ -29,7 +29,7 @@ class Entity(Base):
     @classmethod
     async def by_id(
             cls,
-            item_id: int,
+            item_id: uuid.UUID,
             session: AsyncSession,
     ):
         return await session.scalar(select(cls).where(cls.id == item_id))
