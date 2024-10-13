@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% for page in range(pages) %}
+    <a href="?page={{ page }}">{{ page }}</a>
+  {% endfor %}
+
   {% for i in info %}
     <div>
       <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" width="180" height="320"/>

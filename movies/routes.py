@@ -1,9 +1,10 @@
 import json
 import random
 import subprocess
+import typing
 import uuid
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, Query
 from fastapi.responses import RedirectResponse
 from ffmpeg.asyncio import FFmpeg
 from sqlalchemy import func, select
@@ -45,9 +46,14 @@ router = APIRouter(prefix="")
 @router.get("/movies")
 async def movies_page(
         request: Request,
+        page: typing.Annotated[int, Query(ge=0)] = 0,
         db: AsyncSession = Depends(get_db)
 ):
-    data = [_ async for _ in Movie.every(db)]
+    data = [_ async for _ in await db.stream_scalars(select(Movie).limit(2).offset(page * 2))]
+    count = await db.scalar(select(func.count()).select_from(Movie))
+    pages, remainder = divmod(count, 2)
+    if remainder > 0:
+        pages += 1
 
     info = []
     for movie in data:
@@ -102,6 +108,7 @@ async def movies_page(
         name="movies/movies.html",
         context={
             "info": info,
+            "pages": pages,
         }
     )
 
