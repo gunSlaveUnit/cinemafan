@@ -1,39 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for page in range(pages) %}
-    <a href="?page={{ page }}">{{ page }}</a>
+  {% for movie in movies %}
+    <img src="media/{{ movie.poster }}" alt="{{ movie.translated_title }} poster" width="180" height="320"/>
+
+    <div>
+      <a href="/movies/{{ movie.id }}">{{ movie.translated_title }} | {{ movie.original_title }}</a>
+    </div>
   {% endfor %}
 
-  {% for i in info %}
-    <div>
-      <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" width="180" height="320"/>
-
-      <div>
-        <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }} | {{ i.movie.original_title }}</a>
-      </div>
-
-      <div>
-        {% for t in i.tags %}
-          {{ t.title }}
-        {% endfor %}
-      </div>
-
-      <div>
-        {% for g in i.genres %}
-          {{ g.title }}
-        {% endfor %}
-      </div>
-
-      <div>
-        {{ i.seasons_count }} season{% if i.seasons_count > 1 %}s{% endif %}
-
-        {{ i.episodes_count }} episode{% if i.episodes_count > 1 %}s{% endif %}
-
-        {{ i.duration }}
-      </div>
-
-      <div>{{ i.age.title }}</div>
-    </div>
+  {% for page in range(pages) %}
+    <a href="?page={{ page }}&limit={{ limit }}">{{ page }}</a>
   {% endfor %}
 {% endblock %}

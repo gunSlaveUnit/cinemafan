@@ -3,6 +3,7 @@ import random
 import subprocess
 import typing
 import uuid
+import math
 
 from fastapi import APIRouter, Request, Depends, Query
 from fastapi.responses import RedirectResponse
@@ -44,71 +45,27 @@ router = APIRouter(prefix="")
 
 
 @router.get("/movies")
-async def movies_page(
+async def movies(
         request: Request,
         page: typing.Annotated[int, Query(ge=0)] = 0,
-        db: AsyncSession = Depends(get_db)
-):
-    data = [_ async for _ in await db.stream_scalars(select(Movie).limit(2).offset(page * 2))]
-    count = await db.scalar(select(func.count()).select_from(Movie))
-    pages, remainder = divmod(count, 2)
-    if remainder > 0:
-        pages += 1
+        limit: typing.Annotated[int, Query(ge=1, le=50)] = 2,
+        db: AsyncSession = Depends(get_db),
+) -> templates.TemplateResponse:
+    q = select(Movie).limit(limit).offset(page * limit)
+    data = [_ async for _ in await db.stream_scalars(q)]
 
-    info = []
-    for movie in data:
-        seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
-        seasons_count = len(seasons)
+    q = select(func.count()).select_from(Movie)
+    count = await db.scalar(q)
 
-        age = await Age.by_id(movie.age_id, db)
-
-        episodes = []
-        for season in seasons:
-            episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
-        episodes_count = len(episodes)
-
-        movies_tags = [_ async for _ in MovieTag.by_movie_id(movie.id, db)]
-        tags = []
-        for movie_tag in movies_tags:
-            tags.append(await Tag.by_id(movie_tag.tag_id, db))
-
-        movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie.id, db)]
-
-        genres = []
-        for movie_genre in movie_genres:
-            genres.append(await Genre.by_id(movie_genre.genre_id, db))
-
-        duration = 0.0
-        for episode in episodes:
-            records = [_ async for _ in Record.by_episode_id(episode.id, db)]
-            episode_duration = subprocess.check_output([
-                "ffprobe",
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "default=noprint_wrappers=1:nokey=1",
-                MEDIA_DIR / records[0].filename,
-            ])
-            duration += float(episode_duration.decode("utf-8"))
-
-        info.append({
-            "movie": movie,
-            "episodes_count": episodes_count,
-            "seasons_count": seasons_count,
-            "tags": tags,
-            "age": age,
-            "genres": genres,
-            "duration": duration,
-        })
+    pages = math.ceil(count / limit)
 
     return templates.TemplateResponse(
         request=request,
         name="movies/movies.html",
         context={
-            "info": info,
+            "movies": data,
             "pages": pages,
+            "limit": limit,
         }
     )
 
