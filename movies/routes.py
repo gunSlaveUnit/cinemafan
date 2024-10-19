@@ -54,6 +54,34 @@ async def movies(
     q = select(Movie).limit(limit).offset(page * limit)
     data = [_ async for _ in await db.stream_scalars(q)]
 
+    items = []
+    for movie in data:
+        age = await Age.by_id(movie.age_id, db)
+
+        q = select(func.count()).select_from(Season).where(Season.movie_id == movie.id)
+        seasons_amount = await db.scalar(q)
+
+        episodes_amount = 0
+        seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
+        for season in seasons:
+            q = select(func.count()).select_from(Episode).where(Episode.season_id == season.id)
+            episodes_amount += await db.scalar(q)
+
+        movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie.id, db)]
+        genres = [await Genre.by_id(movie_genre.genre_id, db) for movie_genre in movie_genres]
+
+        movie_tags = [_ async for _ in MovieTag.by_movie_id(movie.id, db)]
+        tags = [await Tag.by_id(movie_tag.tag_id, db) for movie_tag in movie_tags]
+
+        items.append({
+            "age": age,
+            "episodes_amount": episodes_amount,
+            "genres": genres,
+            "movie": movie,
+            "seasons_amount": seasons_amount,
+            "tags": tags,
+        })
+
     q = select(func.count()).select_from(Movie)
     count = await db.scalar(q)
 
@@ -63,7 +91,7 @@ async def movies(
         request=request,
         name="movies/movies.html",
         context={
-            "movies": data,
+            "items": items,
             "pages": pages,
             "limit": limit,
         }

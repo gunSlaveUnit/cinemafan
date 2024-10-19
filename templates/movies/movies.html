@@ -1,11 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for movie in movies %}
-    <img src="media/{{ movie.poster }}" alt="{{ movie.translated_title }} poster" width="180" height="320"/>
-
+  {% for item in items %}
     <div>
-      <a href="/movies/{{ movie.id }}">{{ movie.translated_title }} | {{ movie.original_title }}</a>
+      <img src="media/{{ item.movie.poster }}" alt="{{ item.movie.translated_title }} poster" width="180" height="320"/>
+
+      <a href="/movies/{{ item.movie.id }}">{{ item.movie.translated_title }} | {{ item.movie.original_title }}</a>
+
+      {% for t in item.tags %}
+        {{ t.title }}
+      {% endfor %}
+
+      {% for g in item.genres %}
+        {{ g.title }}
+      {% endfor %}
+
+      {{ item.seasons_amount }} season{% if item.seasons_amount > 1 %}s{% endif %}
+
+      {{ item.episodes_amount }} episode{% if item.episodes_amount > 1 %}s{% endif %}
+
+      {{ item.age.title }}
     </div>
   {% endfor %}
 
