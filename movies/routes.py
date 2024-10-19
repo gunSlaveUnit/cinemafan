@@ -48,30 +48,33 @@ router = APIRouter(prefix="")
 async def movies(
         request: Request,
         page: typing.Annotated[int, Query(ge=0)] = 0,
-        limit: typing.Annotated[int, Query(ge=1, le=50)] = 2,
+        limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
         db: AsyncSession = Depends(get_db),
 ) -> templates.TemplateResponse:
-    q = select(Movie).limit(limit).offset(page * limit)
-    data = [_ async for _ in await db.stream_scalars(q)]
-
     items = []
-    for movie in data:
+
+    q = select(Movie).limit(limit).offset(page * limit)
+    data = await db.stream_scalars(q)
+    
+    async for movie in data:
         age = await Age.by_id(movie.age_id, db)
 
         q = select(func.count()).select_from(Season).where(Season.movie_id == movie.id)
         seasons_amount = await db.scalar(q)
 
         episodes_amount = 0
-        seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
-        for season in seasons:
+        seasons = await db.stream_scalars(select(Season).where(Season.movie_id == movie.id))
+        async for season in seasons:
             q = select(func.count()).select_from(Episode).where(Episode.season_id == season.id)
             episodes_amount += await db.scalar(q)
 
-        movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie.id, db)]
-        genres = [await Genre.by_id(movie_genre.genre_id, db) for movie_genre in movie_genres]
+        q = select(MovieGenre).where(MovieGenre.movie_id == movie.id).limit(5)
+        movie_genres = await db.stream_scalars(q)
+        genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
 
-        movie_tags = [_ async for _ in MovieTag.by_movie_id(movie.id, db)]
-        tags = [await Tag.by_id(movie_tag.tag_id, db) for movie_tag in movie_tags]
+        q = select(MovieTag).where(MovieTag.movie_id == movie.id).order_by(MovieTag.relevance.desc()).limit(5)
+        movie_tags = await db.stream_scalars(q)
+        tags = [await Tag.by_id(movie_tag.tag_id, db) async for movie_tag in movie_tags]
 
         items.append({
             "age": age,
@@ -93,7 +96,6 @@ async def movies(
         context={
             "items": items,
             "pages": pages,
-            "limit": limit,
         }
     )
 
