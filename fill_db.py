@@ -41,52 +41,51 @@ MAX_TAGS_PER_MOVIE_AMOUNT = 30
 MOVIES_AMOUNT = 10000
 TAGS_AMOUNT = 1000
 
-ACTIVITIES = [{"id": uuid.uuid4(), "title": f"activity {i}"} for i in range(ACTIVITIES_AMOUNT)]
+ACTIVITIES = [{"title": f"activity {i}"} for i in range(ACTIVITIES_AMOUNT)]
 AGES = [
-    {"id": uuid.uuid4(), "title": "G", "description": "all ages"},
-    {"id": uuid.uuid4(), "title": "PG", "description": "parental guidance"},
-    {"id": uuid.uuid4(), "title": "PG-13", "description": "parents strongly cautioned"},
-    {"id": uuid.uuid4(), "title": "R", "description": "restricted"},
-    {"id": uuid.uuid4(), "title": "NC-17", "description": "adults only"},
+    {"title": "G", "description": "all ages"},
+    {"title": "PG", "description": "parental guidance"},
+    {"title": "PG-13", "description": "parents strongly cautioned"},
+    {"title": "R", "description": "restricted"},
+    {"title": "NC-17", "description": "adults only"},
 ]
 CATEGORIES = [
-    {"id": uuid.uuid4(), "title": "full-length"},
-    {"id": uuid.uuid4(), "title": "series"},
-    {"id": uuid.uuid4(), "title": "short-length"},
+    {"title": "full-length"},
+    {"title": "series"},
+    {"title": "short-length"},
 ]
 GENRES = [
-    {"id": uuid.uuid4(), "title": "action"},
-    {"id": uuid.uuid4(), "title": "adventure"},
-    {"id": uuid.uuid4(), "title": "animated"},
-    {"id": uuid.uuid4(), "title": "comedy"},
-    {"id": uuid.uuid4(), "title": "drama"},
-    {"id": uuid.uuid4(), "title": "fantasy"},
-    {"id": uuid.uuid4(), "title": "historical"},
-    {"id": uuid.uuid4(), "title": "horror"},
-    {"id": uuid.uuid4(), "title": "musical"},
-    {"id": uuid.uuid4(), "title": "noir"},
-    {"id": uuid.uuid4(), "title": "romance"},
-    {"id": uuid.uuid4(), "title": "science fiction"},
-    {"id": uuid.uuid4(), "title": "thriller"},
-    {"id": uuid.uuid4(), "title": "western"},
+    {"title": "action"},
+    {"title": "adventure"},
+    {"title": "animated"},
+    {"title": "comedy"},
+    {"title": "drama"},
+    {"title": "fantasy"},
+    {"title": "historical"},
+    {"title": "horror"},
+    {"title": "musical"},
+    {"title": "noir"},
+    {"title": "romance"},
+    {"title": "science fiction"},
+    {"title": "thriller"},
+    {"title": "western"},
 ]
-PERSONS = [{"id": uuid.uuid4(), "name": f"person {i}"} for i in range(PERSONS_AMOUNT)]
+PERSONS = [{"name": f"person {i}"} for i in range(PERSONS_AMOUNT)]
 QUALITIES = [
-    {"id": uuid.uuid4(), "resolution": 144},
-    {"id": uuid.uuid4(), "resolution": 240},
-    {"id": uuid.uuid4(), "resolution": 360},
-    {"id": uuid.uuid4(), "resolution": 480},
-    {"id": uuid.uuid4(), "resolution": 720},
-    {"id": uuid.uuid4(), "resolution": 1080},
-    {"id": uuid.uuid4(), "resolution": 2160},
-    {"id": uuid.uuid4(), "resolution": 4320},
-    {"id": uuid.uuid4(), "resolution": 8640},
+    {"resolution": 144},
+    {"resolution": 240},
+    {"resolution": 360},
+    {"resolution": 480},
+    {"resolution": 720},
+    {"resolution": 1080},
+    {"resolution": 2160},
+    {"resolution": 4320},
+    {"resolution": 8640},
 ]
-STUDIOS = [{"id": uuid.uuid4(), "title": f"studio {i}"} for i in range(STUDIOS_AMOUNT)]
-TAGS = [{"id": uuid.uuid4(), "title": f"tag {i}"} for i in range(TAGS_AMOUNT)]
+STUDIOS = [{"title": f"studio {i}"} for i in range(STUDIOS_AMOUNT)]
+TAGS = [{"title": f"tag {i}"} for i in range(TAGS_AMOUNT)]
 MOVIES = [
     {
-        "id": uuid.uuid4(), 
         "age_id": AGES[random.randint(0, len(AGES) - 1)]["id"],
         "category_id": CATEGORIES[random.randint(0, len(CATEGORIES) - 1)]["id"],
         "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
@@ -105,7 +104,6 @@ for movie in MOVIES:
     seasons = []
     for i in range(random.randint(1, MAX_SEASONS_PER_MOVIE_AMOUNT)):
         seasons.append({
-            "id": uuid.uuid4(),
             "movie_id": movie["id"],
             "number": i + 1,
             "title": f"season {i}",
@@ -117,7 +115,6 @@ for seasons in MOVIE_SEASONS:
     for season in seasons:
         for i in range(random.randint(1, MAX_EPISODES_PER_SEASON_AMOUNT)):
             episode = {
-                "id": uuid.uuid4(),
                 "duration": float(subprocess.check_output([
                     "ffprobe",
                     "-v",
