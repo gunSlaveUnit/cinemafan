@@ -31,6 +31,7 @@ class Category(Entity):
 class Episode(Entity):
     __tablename__ = "episodes"
 
+    duration: Mapped[float]
     number: Mapped[int]
     parent_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=True)
     release_date: Mapped[datetime.datetime]
