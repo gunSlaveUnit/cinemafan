@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 import random
+import subprocess
 import uuid
 
 from db import init, session_maker
@@ -24,6 +25,7 @@ from movies.models import (
     Studio,
     Tag,
 )
+from settings import MEDIA_DIR
 
 ACTIVITIES_AMOUNT = 5
 PERSONS_AMOUNT = 10
@@ -117,6 +119,16 @@ for seasons in MOVIE_SEASONS:
         for i in range(random.randint(1, MAX_EPISODES_PER_SEASON_AMOUNT)):
             episode = {
                 "id": uuid.uuid4(),
+                "duration": float(subprocess.check_output([
+                    "ffprobe",
+                    "-v",
+                    "error",
+                    "-show_entries",
+                    "format=duration",
+                    "-of",
+                    "default=noprint_wrappers=1:nokey=1",
+                    MEDIA_DIR / "video.mp4",
+                ]).decode("utf-8")),
                 "number": i,
                 "parent_id": parent_id,
                 "release_date": datetime.now(),
