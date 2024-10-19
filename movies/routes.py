@@ -63,10 +63,23 @@ async def movies(
         seasons_amount = await db.scalar(q)
 
         episodes_amount = 0
-        seasons = await db.stream_scalars(select(Season).where(Season.movie_id == movie.id))
+        q = select(Season).where(Season.movie_id == movie.id)
+        seasons = await db.stream_scalars(q)
         async for season in seasons:
             q = select(func.count()).select_from(Episode).where(Episode.season_id == season.id)
             episodes_amount += await db.scalar(q)
+
+        duration = 0.0
+        q = select(Season).where(Season.movie_id == movie.id)
+        seasons = await db.stream_scalars(q)
+        async for season in seasons:
+            q = select(func.sum(Episode.duration)).select_from(Episode).where(Episode.season_id == season.id)
+            duration += await db.scalar(q)
+
+        episode_duration = duration / episodes_amount
+
+        duration /= 3600
+        episode_duration /= 60
 
         q = select(MovieGenre).where(MovieGenre.movie_id == movie.id).limit(5)
         movie_genres = await db.stream_scalars(q)
@@ -78,7 +91,9 @@ async def movies(
 
         items.append({
             "age": age,
+            "duration": f"{duration:.2f}h",
             "episodes_amount": episodes_amount,
+            "episode_duration": f"{episode_duration:.2f}m",
             "genres": genres,
             "movie": movie,
             "seasons_amount": seasons_amount,
