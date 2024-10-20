@@ -139,6 +139,13 @@ class MoviePerson(Entity):
             yield scalar
 
 
+class MoviePlaylist(Entity):
+    __tablename__ = "movies_playlists"
+
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    playlist_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+
+
 class MovieStudio(Entity):
     __tablename__ = "movies_studios"
 
