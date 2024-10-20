@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for playlist in items %}
+    <div>
+      <a href="/playlists/{{playlist.id}}">{{ playlist.title }}</a>
+    </div>
+  {% endfor %}
+{% endblock %}
