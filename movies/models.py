@@ -190,6 +190,12 @@ class Person(Entity):
     name: Mapped[str] = mapped_column(String(255))
 
 
+class Playlist(Entity):
+    __tablename__ = "playlists"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Quality(Entity):
     __tablename__ = "qualities"
 
