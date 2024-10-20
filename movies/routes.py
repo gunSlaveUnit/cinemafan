@@ -26,6 +26,7 @@ from movies.models import (
     Movie,
     MovieGenre,
     MoviePerson,
+    MoviePlaylist,
     MovieStudio,
     MovieTag,
     Person,
@@ -126,7 +127,7 @@ async def playlists(
 ) -> templates.TemplateResponse:
     q = select(Playlist).limit(limit).offset(page * limit)
     data = await db.stream_scalars(q)
-    items = (_ async for _ in data)
+    items = [_ async for _ in data]
 
     q = select(func.count()).select_from(Playlist)
     count = await db.scalar(q)
@@ -139,6 +140,30 @@ async def playlists(
         context={
             "items": items,
             "pages": pages,
+        }
+    )
+
+
+@router.get("/playlists/{item_id}")
+async def playlist(
+        request: Request,
+        item_id: uuid.UUID,
+        db: AsyncSession = Depends(get_db)
+):
+    item = await Playlist.by_id(item_id, db)
+
+    movies = []
+    q = select(MoviePlaylist).where(MoviePlaylist.playlist_id == item_id)
+    async for playlist_movies in await db.stream_scalars(q):
+        movie = await Movie.by_id(playlist_movies.movie_id, db)
+        movies.append(movie)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/playlist.html",
+        context={
+            "item": item,
+            "movies": movies,
         }
     )
 
