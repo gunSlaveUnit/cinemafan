@@ -22,19 +22,21 @@ from movies.models import (
     Category,
     Episode,
     Genre,
+    Moment,
     Movie,
     MovieGenre,
     MoviePerson,
     MovieStudio,
     MovieTag,
     Person,
+    Playlist,
     Record,
     Review,
     Quality,
     Season,
     Screenshot,
     Studio,
-    Tag, Moment,
+    Tag,
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
 
@@ -108,6 +110,32 @@ async def movies(
     return templates.TemplateResponse(
         request=request,
         name="movies/movies.html",
+        context={
+            "items": items,
+            "pages": pages,
+        }
+    )
+
+
+@router.get("/playlists")
+async def playlists(
+        request: Request,
+        page: typing.Annotated[int, Query(ge=0)] = 0,
+        limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
+        db: AsyncSession = Depends(get_db),
+) -> templates.TemplateResponse:
+    q = select(Playlist).limit(limit).offset(page * limit)
+    data = await db.stream_scalars(q)
+    items = (_ async for _ in data)
+
+    q = select(func.count()).select_from(Playlist)
+    count = await db.scalar(q)
+
+    pages = math.ceil(count / limit)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/playlists.html",
         context={
             "items": items,
             "pages": pages,
