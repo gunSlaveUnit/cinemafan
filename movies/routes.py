@@ -152,11 +152,9 @@ async def playlist(
 ):
     item = await Playlist.by_id(item_id, db)
 
-    movies = []
+    
     q = select(MoviePlaylist).where(MoviePlaylist.playlist_id == item_id)
-    async for playlist_movies in await db.stream_scalars(q):
-        movie = await Movie.by_id(playlist_movies.movie_id, db)
-        movies.append(movie)
+    movies = [await Movie.by_id(movie_playlist.movie_id, db) async for movie_playlist in await db.stream_scalars(q)]
 
     return templates.TemplateResponse(
         request=request,
