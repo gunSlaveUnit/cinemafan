@@ -82,6 +82,7 @@ class Movie(Entity):
     original_title: Mapped[str] = mapped_column(String(255))
     poster: Mapped[str] = mapped_column(String(255))
     translated_title: Mapped[str] = mapped_column(String(255))
+    status_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
 
 class MovieGenre(Entity):
@@ -286,6 +287,11 @@ class Season(Entity):
         async for scalar in scalars:
             yield scalar
 
+
+class Status(Entity):
+    __tablename__ = "statuses"
+
+    title: Mapped[str] = mapped_column(String(255))
 
 class Studio(Entity):
     __tablename__ = "studios"
