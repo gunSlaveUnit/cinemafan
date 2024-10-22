@@ -162,7 +162,7 @@ async def playlist(
         request=request,
         name="movies/playlist.html",
         context={
-            "item": item,
+            "playlist": item,
             "movies": movies,
         }
     )
