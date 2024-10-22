@@ -15,6 +15,8 @@
         {{ g.title }}
       {% endfor %}
 
+      {{ item.status.title }}
+
       {{ item.seasons_amount }} season{% if item.seasons_amount > 1 %}s{% endif %}
 
       {{ item.episodes_amount }} episode{% if item.episodes_amount > 1 %}s{% endif %}
