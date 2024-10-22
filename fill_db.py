@@ -24,6 +24,7 @@ from movies.models import (
     Quality,
     Season,
     Screenshot,
+    Status,
     Studio,
     Tag,
 )
@@ -42,7 +43,7 @@ MAX_STUDIOS_PER_MOVIE_AMOUNT = 3
 MAX_PERSONS_PER_MOVIE_AMOUNT = 30
 MAX_PLAYLISTS_PER_MOVIE_AMOUNT = 5
 MAX_TAGS_PER_MOVIE_AMOUNT = 15
-MOVIES_AMOUNT = 300
+MOVIES_AMOUNT = 10
 TAGS_AMOUNT = 100
 
 ACTIVITIES = [{"id": uuid.uuid4(), "title": f"activity {i}"} for i in range(ACTIVITIES_AMOUNT)]
@@ -89,6 +90,10 @@ QUALITIES = [
     {"id": uuid.uuid4(), "resolution": 4320},
     {"id": uuid.uuid4(), "resolution": 8640},
 ]
+STATUSES = [
+    {"id": uuid.uuid4(), "title": "completed"},
+    {"id": uuid.uuid4(), "title": "ongoing"},
+]
 STUDIOS = [{"id": uuid.uuid4(), "title": f"studio {i}"} for i in range(STUDIOS_AMOUNT)]
 TAGS = [{"id": uuid.uuid4(), "title": f"tag {i}"} for i in range(TAGS_AMOUNT)]
 MOVIES = [
@@ -104,6 +109,7 @@ MOVIES = [
                         "sunt in culpa qui officia deserunt mollit anim id est laborum.",
         "original_title": f"original language title {i}",
         "poster": "poster.jpg",
+        "status_id": STATUSES[random.randint(0, len(STATUSES) - 1)]["id"],
         "translated_title": f"any language title {i}",
     } for i in range(MOVIES_AMOUNT)
 ]
@@ -269,6 +275,9 @@ async def fill():
             for playlists in MOVIE_PLAYLISTS:
                 for playlist in playlists:
                     await MoviePlaylist.create(playlist, db)
+
+            for statuses in STATUSES:
+                await Status.create(statuses, db)
 
             for studios in MOVIE_STUDIOS:
                 for studio in studios:

@@ -36,6 +36,7 @@ from movies.models import (
     Quality,
     Season,
     Screenshot,
+    Status,
     Studio,
     Tag,
 )
@@ -92,6 +93,8 @@ async def movies(
         movie_tags = await db.stream_scalars(q)
         tags = [await Tag.by_id(movie_tag.tag_id, db) async for movie_tag in movie_tags]
 
+        status = await Status.by_id(movie.status_id, db)
+
         items.append({
             "age": age,
             "duration": f"{duration:.2f}h",
@@ -99,6 +102,7 @@ async def movies(
             "episode_duration": f"{episode_duration:.2f}m",
             "genres": genres,
             "movie": movie,
+            "status": status,
             "seasons_amount": seasons_amount,
             "tags": tags,
         })
