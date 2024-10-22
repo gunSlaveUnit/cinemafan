@@ -151,7 +151,6 @@ async def playlist(
         db: AsyncSession = Depends(get_db)
 ):
     item = await Playlist.by_id(item_id, db)
-
     
     q = select(MoviePlaylist).where(MoviePlaylist.playlist_id == item_id)
     movies = [await Movie.by_id(movie_playlist.movie_id, db) async for movie_playlist in await db.stream_scalars(q)]
