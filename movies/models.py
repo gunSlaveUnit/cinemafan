@@ -31,6 +31,7 @@ class Category(Entity):
 class Episode(Entity):
     __tablename__ = "episodes"
 
+    duration: Mapped[float]
     number: Mapped[int]
     parent_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=True)
     release_date: Mapped[datetime.datetime]
@@ -138,6 +139,13 @@ class MoviePerson(Entity):
             yield scalar
 
 
+class MoviePlaylist(Entity):
+    __tablename__ = "movies_playlists"
+
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    playlist_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+
+
 class MovieStudio(Entity):
     __tablename__ = "movies_studios"
 
@@ -187,6 +195,12 @@ class Person(Entity):
     __tablename__ = "persons"
 
     name: Mapped[str] = mapped_column(String(255))
+
+
+class Playlist(Entity):
+    __tablename__ = "playlists"
+
+    title: Mapped[str] = mapped_column(String(255))
 
 
 class Quality(Entity):

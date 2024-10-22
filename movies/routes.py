@@ -3,6 +3,7 @@ import random
 import subprocess
 import typing
 import uuid
+import math
 
 from fastapi import APIRouter, Request, Depends, Query
 from fastapi.responses import RedirectResponse
@@ -21,19 +22,22 @@ from movies.models import (
     Category,
     Episode,
     Genre,
+    Moment,
     Movie,
     MovieGenre,
     MoviePerson,
+    MoviePlaylist,
     MovieStudio,
     MovieTag,
     Person,
+    Playlist,
     Record,
     Review,
     Quality,
     Season,
     Screenshot,
     Studio,
-    Tag, Moment,
+    Tag,
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
 
@@ -44,71 +48,119 @@ router = APIRouter(prefix="")
 
 
 @router.get("/movies")
-async def movies_page(
+async def movies(
         request: Request,
         page: typing.Annotated[int, Query(ge=0)] = 0,
-        db: AsyncSession = Depends(get_db)
-):
-    data = [_ async for _ in await db.stream_scalars(select(Movie).limit(2).offset(page * 2))]
-    count = await db.scalar(select(func.count()).select_from(Movie))
-    pages, remainder = divmod(count, 2)
-    if remainder > 0:
-        pages += 1
+        limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
+        db: AsyncSession = Depends(get_db),
+) -> templates.TemplateResponse:
+    items = []
 
-    info = []
-    for movie in data:
-        seasons = [_ async for _ in Season.by_movie_id(movie.id, db)]
-        seasons_count = len(seasons)
-
+    q = select(Movie).limit(limit).offset(page * limit)
+    data = await db.stream_scalars(q)
+    
+    async for movie in data:
         age = await Age.by_id(movie.age_id, db)
 
-        episodes = []
-        for season in seasons:
-            episodes.extend([_ async for _ in Episode.by_season_id(season.id, db)])
-        episodes_count = len(episodes)
+        q = select(func.count()).select_from(Season).where(Season.movie_id == movie.id)
+        seasons_amount = await db.scalar(q)
 
-        movies_tags = [_ async for _ in MovieTag.by_movie_id(movie.id, db)]
-        tags = []
-        for movie_tag in movies_tags:
-            tags.append(await Tag.by_id(movie_tag.tag_id, db))
-
-        movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie.id, db)]
-
-        genres = []
-        for movie_genre in movie_genres:
-            genres.append(await Genre.by_id(movie_genre.genre_id, db))
+        episodes_amount = 0
+        q = select(Season).where(Season.movie_id == movie.id)
+        seasons = await db.stream_scalars(q)
+        async for season in seasons:
+            q = select(func.count()).select_from(Episode).where(Episode.season_id == season.id)
+            episodes_amount += await db.scalar(q)
 
         duration = 0.0
-        for episode in episodes:
-            records = [_ async for _ in Record.by_episode_id(episode.id, db)]
-            episode_duration = subprocess.check_output([
-                "ffprobe",
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "default=noprint_wrappers=1:nokey=1",
-                MEDIA_DIR / records[0].filename,
-            ])
-            duration += float(episode_duration.decode("utf-8"))
+        q = select(Season).where(Season.movie_id == movie.id)
+        seasons = await db.stream_scalars(q)
+        async for season in seasons:
+            q = select(func.sum(Episode.duration)).select_from(Episode).where(Episode.season_id == season.id)
+            duration += await db.scalar(q)
 
-        info.append({
-            "movie": movie,
-            "episodes_count": episodes_count,
-            "seasons_count": seasons_count,
-            "tags": tags,
+        episode_duration = duration / episodes_amount
+
+        duration /= 3600
+        episode_duration /= 60
+
+        q = select(MovieGenre).where(MovieGenre.movie_id == movie.id).limit(5)
+        movie_genres = await db.stream_scalars(q)
+        genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
+
+        q = select(MovieTag).where(MovieTag.movie_id == movie.id).order_by(MovieTag.relevance.desc()).limit(5)
+        movie_tags = await db.stream_scalars(q)
+        tags = [await Tag.by_id(movie_tag.tag_id, db) async for movie_tag in movie_tags]
+
+        items.append({
             "age": age,
+            "duration": f"{duration:.2f}h",
+            "episodes_amount": episodes_amount,
+            "episode_duration": f"{episode_duration:.2f}m",
             "genres": genres,
-            "duration": duration,
+            "movie": movie,
+            "seasons_amount": seasons_amount,
+            "tags": tags,
         })
+
+    q = select(func.count()).select_from(Movie)
+    count = await db.scalar(q)
+
+    pages = math.ceil(count / limit)
 
     return templates.TemplateResponse(
         request=request,
         name="movies/movies.html",
         context={
-            "info": info,
+            "items": items,
             "pages": pages,
+        }
+    )
+
+
+@router.get("/playlists")
+async def playlists(
+        request: Request,
+        page: typing.Annotated[int, Query(ge=0)] = 0,
+        limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
+        db: AsyncSession = Depends(get_db),
+) -> templates.TemplateResponse:
+    q = select(Playlist).limit(limit).offset(page * limit)
+    data = await db.stream_scalars(q)
+    items = [_ async for _ in data]
+
+    q = select(func.count()).select_from(Playlist)
+    count = await db.scalar(q)
+
+    pages = math.ceil(count / limit)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/playlists.html",
+        context={
+            "items": items,
+            "pages": pages,
+        }
+    )
+
+
+@router.get("/playlists/{item_id}")
+async def playlist(
+        request: Request,
+        item_id: uuid.UUID,
+        db: AsyncSession = Depends(get_db)
+):
+    item = await Playlist.by_id(item_id, db)
+    
+    q = select(MoviePlaylist).where(MoviePlaylist.playlist_id == item_id)
+    movies = [await Movie.by_id(movie_playlist.movie_id, db) async for movie_playlist in await db.stream_scalars(q)]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/playlist.html",
+        context={
+            "playlist": item,
+            "movies": movies,
         }
     )
 

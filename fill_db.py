@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 import random
+import subprocess
 import uuid
 
 from db import init, session_maker
@@ -13,9 +14,11 @@ from movies.models import (
     Movie,
     MovieGenre,
     MoviePerson,
+    MoviePlaylist,
     MovieStudio,
     MovieTag,
     Person,
+    Playlist,
     Record,
     Review,
     Quality,
@@ -24,21 +27,23 @@ from movies.models import (
     Studio,
     Tag,
 )
+from settings import MEDIA_DIR
 
-ACTIVITIES_AMOUNT = 5
-PERSONS_AMOUNT = 10
-STUDIOS_AMOUNT = 10
-MAX_ACTIVITIES_PER_MOVIE_AMOUNT = 5
+ACTIVITIES_AMOUNT = 10
+PERSONS_AMOUNT = 50
+PLAYLISTS_AMOUNT = 10
+STUDIOS_AMOUNT = 50
 MAX_EPISODES_PER_SEASON_AMOUNT = 12
-MAX_GENRES_PER_MOVIE_AMOUNT = 3
-MAX_REVIEWS_PER_MOVIE_AMOUNT = 5
-MAX_SCREENSHOTS_PER_MOVIE_AMOUNT = 3
-MAX_SEASONS_PER_MOVIE_AMOUNT = 3
-MAX_STUDIOS_PER_MOVIE_AMOUNT = 2
-MAX_PERSONS_PER_MOVIE_AMOUNT = 2
-MAX_TAGS_PER_MOVIE_AMOUNT = 5
-MOVIES_AMOUNT = 10
-TAGS_AMOUNT = 10
+MAX_GENRES_PER_MOVIE_AMOUNT = 5
+MAX_REVIEWS_PER_MOVIE_AMOUNT = 30
+MAX_SCREENSHOTS_PER_MOVIE_AMOUNT = 10
+MAX_SEASONS_PER_MOVIE_AMOUNT = 5
+MAX_STUDIOS_PER_MOVIE_AMOUNT = 3
+MAX_PERSONS_PER_MOVIE_AMOUNT = 30
+MAX_PLAYLISTS_PER_MOVIE_AMOUNT = 5
+MAX_TAGS_PER_MOVIE_AMOUNT = 15
+MOVIES_AMOUNT = 300
+TAGS_AMOUNT = 100
 
 ACTIVITIES = [{"id": uuid.uuid4(), "title": f"activity {i}"} for i in range(ACTIVITIES_AMOUNT)]
 AGES = [
@@ -70,6 +75,9 @@ GENRES = [
     {"id": uuid.uuid4(), "title": "western"},
 ]
 PERSONS = [{"id": uuid.uuid4(), "name": f"person {i}"} for i in range(PERSONS_AMOUNT)]
+PLAYLISTS = [
+    {"id": uuid.uuid4(), "title": f"playlist {i}"} for i in range(PLAYLISTS_AMOUNT)
+]
 QUALITIES = [
     {"id": uuid.uuid4(), "resolution": 144},
     {"id": uuid.uuid4(), "resolution": 240},
@@ -117,6 +125,16 @@ for seasons in MOVIE_SEASONS:
         for i in range(random.randint(1, MAX_EPISODES_PER_SEASON_AMOUNT)):
             episode = {
                 "id": uuid.uuid4(),
+                "duration": float(subprocess.check_output([
+                    "ffprobe",
+                    "-v",
+                    "error",
+                    "-show_entries",
+                    "format=duration",
+                    "-of",
+                    "default=noprint_wrappers=1:nokey=1",
+                    MEDIA_DIR / "video.mp4",
+                ]).decode("utf-8")),
                 "number": i,
                 "parent_id": parent_id,
                 "release_date": datetime.now(),
@@ -149,6 +167,14 @@ MOVIE_PERSONS = [
             "movie_id": movie["id"],
             "person_id": random.choice(PERSONS)["id"],
         } for _ in range(random.randint(1, MAX_PERSONS_PER_MOVIE_AMOUNT))
+    ] for movie in MOVIES
+]
+MOVIE_PLAYLISTS = [
+    [
+        {
+            "movie_id": movie["id"],
+            "playlist_id": random.choice(PLAYLISTS)["id"],
+        } for _ in range(random.randint(1, MAX_PLAYLISTS_PER_MOVIE_AMOUNT))
     ] for movie in MOVIES
 ]
 MOVIE_STUDIOS = [
@@ -206,6 +232,9 @@ async def fill():
             for person in PERSONS:
                 await Person.create(person, db)
 
+            for playlist in PLAYLISTS:
+                await Playlist.create(playlist, db)
+
             for quality in QUALITIES:
                 await Quality.create(quality, db)
 
@@ -236,6 +265,10 @@ async def fill():
             for persons in MOVIE_PERSONS:
                 for person in persons:
                     await MoviePerson.create(person, db)
+
+            for playlists in MOVIE_PLAYLISTS:
+                for playlist in playlists:
+                    await MoviePlaylist.create(playlist, db)
 
             for studios in MOVIE_STUDIOS:
                 for studio in studios:

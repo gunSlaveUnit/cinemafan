@@ -1,39 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for page in range(pages) %}
-    <a href="?page={{ page }}">{{ page }}</a>
+  {% for item in items %}
+    <div>
+      <img src="media/{{ item.movie.poster }}" alt="{{ item.movie.translated_title }} poster" width="180" height="320"/>
+
+      <a href="/movies/{{ item.movie.id }}">{{ item.movie.translated_title }} | {{ item.movie.original_title }}</a>
+
+      {% for t in item.tags %}
+        {{ t.title }}
+      {% endfor %}
+
+      {% for g in item.genres %}
+        {{ g.title }}
+      {% endfor %}
+
+      {{ item.seasons_amount }} season{% if item.seasons_amount > 1 %}s{% endif %}
+
+      {{ item.episodes_amount }} episode{% if item.episodes_amount > 1 %}s{% endif %}
+
+      {{ item.duration }}
+
+      {{ item.episode_duration }}
+
+      {{ item.age.title }}
+    </div>
   {% endfor %}
 
-  {% for i in info %}
-    <div>
-      <img src="media/{{ i.movie.poster }}" alt="{{ i.movie.translated_title }} poster" width="180" height="320"/>
-
-      <div>
-        <a href="/movies/{{ i.movie.id }}">{{ i.movie.translated_title }} | {{ i.movie.original_title }}</a>
-      </div>
-
-      <div>
-        {% for t in i.tags %}
-          {{ t.title }}
-        {% endfor %}
-      </div>
-
-      <div>
-        {% for g in i.genres %}
-          {{ g.title }}
-        {% endfor %}
-      </div>
-
-      <div>
-        {{ i.seasons_count }} season{% if i.seasons_count > 1 %}s{% endif %}
-
-        {{ i.episodes_count }} episode{% if i.episodes_count > 1 %}s{% endif %}
-
-        {{ i.duration }}
-      </div>
-
-      <div>{{ i.age.title }}</div>
-    </div>
+  {% for page in range(pages) %}
+    <a href="?page={{ page }}">{{ page }}</a>
   {% endfor %}
 {% endblock %}

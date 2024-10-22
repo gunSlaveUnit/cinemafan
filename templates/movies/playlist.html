@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ playlist.title }}
+
+  {% for movie in movies %}
+    <div>
+      <a href="/movies/{{movie.id}}">{{ movie.translated_title }} | {{ movie.original_title }}</a>
+    </div>
+  {% endfor %}
+{% endblock %}
