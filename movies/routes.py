@@ -189,42 +189,60 @@ async def random_movie_page(
 
 
 @router.get("/movies/{item_id}")
-async def movie_page(
+async def movie(
         request: Request,
         item_id: uuid.UUID,
         db: AsyncSession = Depends(get_db)
 ):
-    movie = await Movie.by_id(item_id, db)
-    movie_id = movie.id
+    item = await Movie.by_id(item_id, db)
 
-    seasons = [{"season": _, "episodes": []} async for _ in Season.by_movie_id(movie_id, db)]
+    age = await Age.by_id(item.age_id, db)
+
+    q = select(func.count()).select_from(Season).where(Season.movie_id == item.id)
+    seasons_amount = await db.scalar(q)
+
+    episodes_amount = 0
+    q = select(Season).where(Season.movie_id == item.id)
+    seasons = await db.stream_scalars(q)
+    async for season in seasons:
+        q = select(func.count()).select_from(Episode).where(Episode.season_id == season.id)
+        episodes_amount += await db.scalar(q)
+
+    duration = 0.0
+    q = select(Season).where(Season.movie_id == item.id)
+    seasons = await db.stream_scalars(q)
+    async for season in seasons:
+        q = select(func.sum(Episode.duration)).select_from(Episode).where(Episode.season_id == season.id)
+        duration += await db.scalar(q)
+
+    episode_duration = duration / episodes_amount
+
+    duration /= 3600
+    episode_duration /= 60
+
+    seasons = [{"season": _, "episodes": []} async for _ in Season.by_movie_id(item.id, db)]
     for season in seasons:
         season["episodes"] = [_ async for _ in Episode.by_season_id(season["season"].id, db)]
-    seasons_count = len(seasons)
 
-    episodes_count = 0
-    for season in seasons:
-        episodes_count += len(season["episodes"])
+    q = select(MovieGenre).where(MovieGenre.movie_id == item.id).limit(5)
+    movie_genres = await db.stream_scalars(q)
+    genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
 
-    age = await Age.by_id(movie.age_id, db)
+    q = select(MovieTag).where(MovieTag.movie_id == item.id).order_by(MovieTag.relevance.desc()).limit(5)
+    movie_tags = await db.stream_scalars(q)
+    tags = [{"movie_tag": movie_tag, "tag": await Tag.by_id(movie_tag.tag_id, db)} async for movie_tag in movie_tags]
 
-    screenshots = [_ async for _ in Screenshot.by_movie_id(movie_id, db)]
+    status = await Status.by_id(item.status_id, db)
 
-    movies_tags = [{"movie_tag": _, "tag": None} async for _ in MovieTag.by_movie_id(movie_id, db)]
-    for movie_tag in movies_tags:
-        movie_tag["tag"] = await Tag.by_id(movie_tag["movie_tag"].tag_id, db)
+    # TODO: possible lots items
+    screenshots = [_ async for _ in Screenshot.by_movie_id(item.id, db)]
 
-    movie_studios = [_ async for _ in MovieStudio.by_movie_id(movie_id, db)]
-    studios = []
-    for movie_studio in movie_studios:
-        studios.append(await Studio.by_id(movie_studio.studio_id, db))
+    # TODO: possible lots items
+    q = select(MovieStudio).where(MovieStudio.movie_id == item.id).limit(3)
+    movie_studios = await db.stream_scalars(q)
+    studios = [await Studio.by_id(movie_studio.studio_id, db) async for movie_studio in movie_studios]
 
-    movie_genres = [_ async for _ in MovieGenre.by_movie_id(movie_id, db)]
-    genres = []
-    for movie_genre in movie_genres:
-        genres.append(await Genre.by_id(movie_genre.genre_id, db))
-
-    movie_persons = [_ async for _ in MoviePerson.by_movie_id(movie_id, db)]
+    movie_persons = [_ async for _ in MoviePerson.by_movie_id(item.id, db)]
 
     activities_persons = {}
     for movie_person in movie_persons:
@@ -238,21 +256,25 @@ async def movie_page(
         activity = await Activity.by_id(movie_person.activity_id, db)
         activities_persons[activity.title]["persons"].append(await Person.by_id(movie_person.person_id, db))
 
-    reviews = [_ async for _ in Review.by_movie_id(movie_id, db)]
+    # TODO: possible lots items
+    reviews = [_ async for _ in Review.by_movie_id(item.id, db)]
 
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
         context={
             "age": age,
-            "movie": movie,
+            "duration": f"{duration:.2f}h",
+            "episodes_amount": episodes_amount,
+            "episode_duration": f"{episode_duration:.2f}m",
+            "movie": item,
             "screenshots": screenshots,
-            "seasons": seasons,
-            "seasons_count": seasons_count,
-            "episodes_count": episodes_count,
-            "tags": movies_tags,
+            "tags": tags,
             "genres": genres,
             "activities_persons": activities_persons,
+            "seasons_amount": seasons_amount,
+            "seasons": seasons,
+            "status": status,
             "studios": studios,
             "reviews": reviews,
         }

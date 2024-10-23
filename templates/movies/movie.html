@@ -2,82 +2,73 @@
 
 {% block content %}
   <img src="/media/{{ movie.poster }}" alt="{{ movie.translated_title }} poster" width="180" height="320"/>
-  <div>{{ movie.translated_title }} | {{ movie.original_title }}</div>
 
-  <div>
-    {% for i in range(1, 11) %}
-      <input id="{{ i }}" type="checkbox" value="{{ i }}" onclick="change_rating(this.id)" />
-    {% endfor %}
-  </div>
+  {{ movie.translated_title }} | {{ movie.original_title }}
 
-  <div>
-    {% for t in tags %}
-      {{ t.tag.title }} ({{ t.movie_tag.relevance }}) <button onclick="bump_tag({{ t.movie_tag.id }})">upvote</button>
-    {% endfor %}
-  </div>
+  {% for i in range(1, 11) %}
+    <input id="{{ i }}" type="checkbox" value="{{ i }}" onclick="change_rating(this.id)" />
+  {% endfor %}
 
-  <div>
-    {% for g in genres %}
-      {{ g.title }}
-    {% endfor %}
-  </div>
+  {% for t in tags %}
+    {{ t.tag.title }} ({{ t.movie_tag.relevance}}) <button onclick="bump_tag({{ t.movie_tag.id }})">upvote</button>
+  {% endfor %}
 
-  {{ seasons_count }} season{% if seasons_count > 1 %}s{% endif %}
+  {% for g in genres %}
+    {{ g.title }}
+  {% endfor %}
 
-  {{ episodes_count }} episode{% if episodes_count > 1 %}s{% endif %}
+  {{ status.title }}
 
-  <div>{{ age.title }}</div>
+  {{ seasons_amount }} season{% if seasons_amount > 1 %}s{% endif %}
 
-  <div>
-    Studios:
+  {{ episodes_amount }} episode{% if episodes_amount > 1 %}s{% endif %}
 
-    {% for studio in studios %}
-      <a href="/studios/{{ studio.id }}">{{ studio.title }}</a>
-    {% endfor %}
-  </div>
+  {{ duration }}
+
+  {{ episode_duration }}
+
+  {{ age.title }}
+
+  studios:
+
+  {% for studio in studios %}
+    <a href="/studios/{{ studio.id }}">{{ studio.title }}</a>
+  {% endfor %}
 
   {% for _, activity_persons in activities_persons.items() %}
-    <div>
-      {{ activity_persons["activity"].title }}:
+    {{ activity_persons["activity"].title }}:
 
-      {% for person in activity_persons["persons"] %}
-        <a href="/persons/{{ person.id }}">{{ person.name }}</a>
-      {% endfor %}
-    </div>
+    {% for person in activity_persons["persons"] %}
+      <a href="/persons/{{ person.id }}">{{ person.name }}</a>
+    {% endfor %}
   {% endfor %}
+
+  {{ movie.description }}
 
   {% for screenshot in screenshots %}
-    <div>
-      <img src="/media/{{ screenshot.filename }}" alt="{{ movie.translated_title }} screenshot" width="320" height="180"/>
-      <div>{{ screenshot.title }}</div>
-    </div>
+    <img src="/media/{{ screenshot.filename }}" alt="{{ movie.translated_title }} screenshot" width="320" height="180"/>
+    {{ screenshot.title }}
   {% endfor %}
-
-  <div>{{ movie.description }}</div>
 
   {% for season in seasons %}
     {% if season.season.title %}
-      <div>{{ season.season.title }}</div>
+      {{ season.season.title }}
     {% else %}
-      <div>season {{ season.season.number }}</div>
+      season {{ season.season.number }}
     {% endif %}
 
     {% for episode in season.episodes %}
-      <div>
-        <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }}</a>
-      </div>
+      <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }}</a>
     {% endfor %}
   {% endfor %}
 
   {% for review in reviews %}
-    <div>{{ review.content }}</div>
+    {{ review.content }}
   {% endfor %}
 
-  <div>
-    <input id="content"/>
+  <input id="content"/>
 
-    <button onclick="send_review()">submit</button>
-  </div>
+  <button onclick="send_review()">submit</button>
 
   <script>
     const change_rating = async (id) => {
