@@ -107,7 +107,7 @@
 
       const review = {
         content: content.value,
-        movie_id: {{ movie.id }}
+        movie_id: "{{ movie.id }}"
       }
 
       let response = await fetch("/api/reviews", {
