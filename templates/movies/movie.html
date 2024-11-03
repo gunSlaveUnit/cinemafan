@@ -9,6 +9,8 @@
     <input id="{{ i }}" type="checkbox" value="{{ i }}" onclick="change_rating(this.id)" />
   {% endfor %}
 
+  {{ years }}
+
   {% for t in tags %}
     {{ t.tag.title }} ({{ t.movie_tag.relevance}}) <button onclick="bump_tag({{ t.movie_tag.id }})">upvote</button>
   {% endfor %}

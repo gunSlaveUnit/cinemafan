@@ -225,6 +225,15 @@ async def movie(
 ):
     item = await Movie.by_id(item_id, db)
 
+    years = []
+    q = select(Season).where(Season.movie_id == item_id)
+    seasons = await db.stream_scalars(q)
+    async for season in seasons:
+        q = select(Episode).where(Episode.season_id == season.id)
+        episodes = await db.stream_scalars(q)
+        async for episode in episodes:
+            years.append(episode.release_date.year)
+
     age = await Age.by_id(item.age_id, db)
 
     q = select(func.count()).select_from(Season).where(Season.movie_id == item.id)
@@ -306,6 +315,7 @@ async def movie(
             "status": status,
             "studios": studios,
             "reviews": reviews,
+            "years": format_years(years),
         }
     )
 
