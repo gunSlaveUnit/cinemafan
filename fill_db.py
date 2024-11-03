@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+import datetime
 import random
 import subprocess
 import uuid
@@ -143,7 +143,7 @@ for seasons in MOVIE_SEASONS:
                 ]).decode("utf-8")),
                 "number": i,
                 "parent_id": parent_id,
-                "release_date": datetime.now(),
+                "release_date": datetime.datetime.now() - datetime.timedelta(days=random.randint(0, 365 * 50)),
                 "season_id": season["id"],
                 "title": f"episode {i}",
             }
