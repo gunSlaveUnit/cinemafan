@@ -60,7 +60,7 @@
     {% endif %}
 
     {% for episode in season.episodes %}
-      <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }}</a>
+      <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }} {{ episode.release_date }}</a>
     {% endfor %}
   {% endfor %}
 
