@@ -48,6 +48,25 @@ from settings import templates
 router = APIRouter(prefix="")
 
 
+def format_years(years):
+    years = sorted(set(years))
+    
+    periods = []
+    period_start = years[0]
+    previous = years[0]
+    
+    for year in years[1:] + [None]:
+        if year != previous + 1:
+            if period_start != previous:
+                periods.append(f"{period_start} - {previous}")
+            else:
+                periods.append(str(period_start))
+            period_start = year
+        previous = year
+    
+    return ", ".join(periods)
+
+
 @router.get("/movies")
 async def movies(
         request: Request,
@@ -85,6 +104,15 @@ async def movies(
         duration /= 3600
         episode_duration /= 60
 
+        years = []
+        q = select(Season).where(Season.movie_id == movie.id)
+        seasons = await db.stream_scalars(q)
+        async for season in seasons:
+            q = select(Episode).where(Episode.season_id == season.id)
+            episodes = await db.stream_scalars(q)
+            async for episode in episodes:
+                years.append(episode.release_date.year)
+        
         q = select(MovieGenre).where(MovieGenre.movie_id == movie.id).limit(5)
         movie_genres = await db.stream_scalars(q)
         genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
@@ -105,6 +133,7 @@ async def movies(
             "status": status,
             "seasons_amount": seasons_amount,
             "tags": tags,
+            "years": format_years(years),
         })
 
     q = select(func.count()).select_from(Movie)
