@@ -1,3 +1,6 @@
+0.26.0 - 2024.11.3:
+    - show years for movies and release date for episodes. Years are calculated based on episodes
+
 0.25.0 - 2024.10.22:
     - movie statuses (completed, ongoing)
 
