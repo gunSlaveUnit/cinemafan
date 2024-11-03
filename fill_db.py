@@ -19,6 +19,7 @@ from movies.models import (
     MovieTag,
     Person,
     Playlist,
+    Rating,
     Record,
     Review,
     Quality,
@@ -36,6 +37,7 @@ PLAYLISTS_AMOUNT = 10
 STUDIOS_AMOUNT = 50
 MAX_EPISODES_PER_SEASON_AMOUNT = 12
 MAX_GENRES_PER_MOVIE_AMOUNT = 5
+MAX_RATINGS_PER_MOVIE_AMOUNT = 50
 MAX_REVIEWS_PER_MOVIE_AMOUNT = 30
 MAX_SCREENSHOTS_PER_MOVIE_AMOUNT = 10
 MAX_SEASONS_PER_MOVIE_AMOUNT = 5
@@ -124,6 +126,15 @@ for movie in MOVIES:
             "title": f"season {i}",
         })
     MOVIE_SEASONS.append(seasons)
+
+RATINGS = []
+for movie in MOVIES:
+    for i in range(random.randint(0, MAX_RATINGS_PER_MOVIE_AMOUNT)):
+        RATINGS.append({
+            "movie_id": movie["id"],
+            "value": random.randint(1, 10),
+        })
+
 EPISODES = []
 for seasons in MOVIE_SEASONS:
     parent_id = None
@@ -259,6 +270,9 @@ async def fill():
 
             for episode in EPISODES:
                 await Episode.create(episode, db)
+
+            for rating in RATINGS:
+                await Rating.create(rating, db)
 
             for records in EPISODE_RECORDS:
                 for record in records:

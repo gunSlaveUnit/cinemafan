@@ -5,6 +5,8 @@
 
   {{ movie.translated_title }} | {{ movie.original_title }}
 
+  {{ rating }}
+
   {% for i in range(1, 11) %}
     <input id="{{ i }}" type="checkbox" value="{{ i }}" onclick="change_rating(this.id)" />
   {% endfor %}
