@@ -31,6 +31,7 @@ from movies.models import (
     MovieTag,
     Person,
     Playlist,
+    Rating,
     Record,
     Review,
     Quality,
@@ -80,6 +81,9 @@ async def movies(
     data = await db.stream_scalars(q)
     
     async for movie in data:
+        q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == movie.id)
+        rating = await db.scalar(q)
+
         age = await Age.by_id(movie.age_id, db)
 
         q = select(func.count()).select_from(Season).where(Season.movie_id == movie.id)
@@ -134,6 +138,7 @@ async def movies(
             "seasons_amount": seasons_amount,
             "tags": tags,
             "years": format_years(years),
+            "rating": rating,
         })
 
     q = select(func.count()).select_from(Movie)
@@ -224,6 +229,9 @@ async def movie(
         db: AsyncSession = Depends(get_db)
 ):
     item = await Movie.by_id(item_id, db)
+
+    q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == item_id)
+    rating = await db.scalar(q)
 
     years = []
     q = select(Season).where(Season.movie_id == item_id)
@@ -316,6 +324,7 @@ async def movie(
             "studios": studios,
             "reviews": reviews,
             "years": format_years(years),
+            "rating": rating,
         }
     )
 
