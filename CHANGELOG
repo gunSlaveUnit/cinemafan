@@ -1,3 +1,6 @@
+0.27.0 - 2024.11.3:
+    - show rating
+
 0.26.0 - 2024.11.3:
     - show years for movies and release date for episodes. Years are calculated based on episodes
 
