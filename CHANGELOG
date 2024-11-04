@@ -1,3 +1,9 @@
+0.28.0 - 2024.11.4:
+    - ratings amount
+    - more fields in a Movie model: budget, fees, slogan
+    - start to write tests
+    - requirements
+
 0.27.0 - 2024.11.3:
     - show rating
 
