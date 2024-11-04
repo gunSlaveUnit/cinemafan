@@ -82,6 +82,7 @@ class Movie(Entity):
     original_title: Mapped[str] = mapped_column(String(255))
     poster: Mapped[str] = mapped_column(String(255))
     translated_title: Mapped[str] = mapped_column(String(255))
+    slogan: Mapped[str] = mapped_column(String(255))
     status_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
 
