@@ -84,6 +84,9 @@ async def movies(
         q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == movie.id)
         rating = await db.scalar(q)
 
+        q = select(func.count()).select_from(Rating).where(Rating.movie_id == movie.id)
+        ratings_amount = await db.scalar(q)
+
         age = await Age.by_id(movie.age_id, db)
 
         q = select(func.count()).select_from(Season).where(Season.movie_id == movie.id)
@@ -139,6 +142,7 @@ async def movies(
             "tags": tags,
             "years": format_years(years),
             "rating": rating,
+            "ratings_amount": ratings_amount,
         })
 
     q = select(func.count()).select_from(Movie)
