@@ -77,6 +77,7 @@ class Movie(Entity):
     __tablename__ = "movies"
 
     age_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    budget: Mapped[int]
     category_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     country: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
