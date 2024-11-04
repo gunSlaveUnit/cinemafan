@@ -238,6 +238,9 @@ async def movie(
     q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == item_id)
     rating = await db.scalar(q)
 
+    q = select(func.count()).select_from(Rating).where(Rating.movie_id == item_id)
+    ratings_amount = await db.scalar(q)
+
     years = []
     q = select(Season).where(Season.movie_id == item_id)
     seasons = await db.stream_scalars(q)
@@ -330,6 +333,7 @@ async def movie(
             "reviews": reviews,
             "years": format_years(years),
             "rating": rating,
+            "ratings_amount": ratings_amount,
         }
     )
 
