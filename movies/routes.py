@@ -150,6 +150,7 @@ async def movies(
         request=request,
         name="movies/movies.html",
         context={
+            "count": count,
             "items": items,
             "pages": pages,
         }
