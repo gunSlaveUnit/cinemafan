@@ -102,15 +102,19 @@ MOVIES = [
     {
         "id": uuid.uuid4(), 
         "age_id": AGES[random.randint(0, len(AGES) - 1)]["id"],
+        "budget": random.randint(0, 100000000),
         "category_id": CATEGORIES[random.randint(0, len(CATEGORIES) - 1)]["id"],
+        "country": "country",
         "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
                         "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
                         "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
                         "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum "
                         "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
                         "sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "fees": random.randint(0, 100000000),
         "original_title": f"original language title {i}",
         "poster": "poster.jpg",
+        "slogan": "slogan",
         "status_id": STATUSES[random.randint(0, len(STATUSES) - 1)]["id"],
         "translated_title": f"any language title {i}",
     } for i in range(MOVIES_AMOUNT)

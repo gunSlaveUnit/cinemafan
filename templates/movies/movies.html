@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {{ count }}
+
   {% for item in items %}
     <div>
       <img src="media/{{ item.movie.poster }}" alt="{{ item.movie.translated_title }} poster" width="180" height="320"/>
@@ -11,7 +13,7 @@
         {{ t.title }}
       {% endfor %}
 
-      {{ item.rating }}
+      {{ item.rating }} / {{ item.ratings_amount }}
 
       {{ item.years }}
 
