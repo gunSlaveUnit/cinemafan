@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 
-from settings import templates
+from settings import base_context, templates
 
 router = APIRouter()
 
@@ -10,4 +10,5 @@ async def home(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="root/home.html",
+        context=base_context,
     )

@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles 
 
-from settings import MEDIA_DIR, STATIC_DIR
+from settings import MEDIA_DIR, STATIC_DIR, VERSION
 from db import init
 from movies.routes import router as movies_router
 from videos.routes import router as videos_router
@@ -22,7 +22,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="cinemafan",
-    version="0.28.0",
+    version=VERSION,
     lifespan=lifespan,
 )
 
