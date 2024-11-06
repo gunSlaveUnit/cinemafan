@@ -20,5 +20,8 @@ WORKERS = 1 if RELOAD else os.cpu_count() + 1
 
 DB_URL = os.getenv("DB_URL")
 
-base_context = {"version": VERSION}
+base_context = {
+    "version": VERSION,
+    "user": None,
+}
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
