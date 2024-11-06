@@ -15,6 +15,12 @@
         <a href="/">cinemafan</a>
         <a href="/movies">movies</a>
         <a href="/playlists">playlists</a>
+
+        {% if user %}
+          {{ user.name }}
+        {% else %}
+          <a href="/auth/sign-in">sign in</a>
+        {% endif %}
       </nav>
     </header>
 
