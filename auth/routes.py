@@ -11,7 +11,7 @@ router = APIRouter(prefix="")
 
 
 @router.get("/auth/sign-up")
-async def sign_up(request: Request):
+async def sign_up_page(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="auth/sign-up.html",
@@ -28,8 +28,21 @@ async def sign_up(
 
 
 @router.get("/auth/sign-in")
-async def sign_in(request: Request):
+async def sign_in_page(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="auth/sign-in.html",
     )
+
+
+@router.post("/api/v1/auth/sign-in")
+async def sign_in(
+        name: Annotated[str, Form()],
+        password: Annotated[str, Form()],
+        db: AsyncSession = Depends(get_db),
+):
+    user = await models.User.by_name(name, db)
+    if user and user.password == password:
+        print(user)
+    else:
+        print("not found")
