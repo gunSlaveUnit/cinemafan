@@ -20,6 +20,9 @@ WORKERS = 1 if RELOAD else os.cpu_count() + 1
 
 DB_URL = os.getenv("DB_URL")
 
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+
 base_context = {
     "version": VERSION,
     "user": None,
