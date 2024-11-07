@@ -15,7 +15,6 @@ async def sign_up(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="auth/sign-up.html",
-        context={},
     )
 
 
@@ -26,4 +25,11 @@ async def sign_up(
         db: AsyncSession = Depends(get_db),
 ):
     user = await models.User.create({"name": name, "password": password}, db)
-    
+
+
+@router.get("/auth/sign-in")
+async def sign_in(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="auth/sign-in.html",
+    )
