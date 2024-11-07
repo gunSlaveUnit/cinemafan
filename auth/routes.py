@@ -45,6 +45,6 @@ async def sign_in(
 ):
     user = await models.User.by_name(name, db)
     if user and user.password == password:
-        print(user)
+        return RedirectResponse("/", status_code=303)
     else:
         print("not found")
