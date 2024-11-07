@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db import get_db
@@ -25,6 +26,7 @@ async def sign_up(
         db: AsyncSession = Depends(get_db),
 ):
     user = await models.User.create({"name": name, "password": password}, db)
+    return RedirectResponse("/auth/sign-in", status_code=303)
 
 
 @router.get("/auth/sign-in")
