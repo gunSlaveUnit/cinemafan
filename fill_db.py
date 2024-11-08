@@ -9,6 +9,7 @@ from movies.models import (
     Activity,
     Age,
     Category,
+    Country,
     Episode,
     Genre,
     Movie,
@@ -98,13 +99,17 @@ STATUSES = [
 ]
 STUDIOS = [{"id": uuid.uuid4(), "title": f"studio {i}"} for i in range(STUDIOS_AMOUNT)]
 TAGS = [{"id": uuid.uuid4(), "title": f"tag {i}"} for i in range(TAGS_AMOUNT)]
+COUNTRIES_AMOUNT = 10
+COUNTRIES = [
+    {"id": uuid.uuid4(), "title": f"country {i}"} for i in range(COUNTRIES_AMOUNT)
+]
 MOVIES = [
     {
         "id": uuid.uuid4(), 
         "age_id": AGES[random.randint(0, len(AGES) - 1)]["id"],
         "budget": random.randint(0, 100000000),
         "category_id": CATEGORIES[random.randint(0, len(CATEGORIES) - 1)]["id"],
-        "country": "country",
+        "country": COUNTRIES[random.randint(0, len(COUNTRIES) - 1)]["id"],
         "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
                         "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
                         "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
@@ -246,6 +251,9 @@ async def fill():
 
             for category in CATEGORIES:
                 await Category.create(category, db)
+
+            for country in COUNTRIES:
+                await Country.create(country, db)
 
             for genre in GENRES:
                 await Genre.create(genre, db)
