@@ -11,6 +11,8 @@ MEDIA_DIR = BASE_DIR / "media"
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
+VERSION="0.29.0"
+
 HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
 RELOAD = os.getenv("RELOAD") == "True"
@@ -18,4 +20,11 @@ WORKERS = 1 if RELOAD else os.cpu_count() + 1
 
 DB_URL = os.getenv("DB_URL")
 
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+
+base_context = {
+    "version": VERSION,
+    "user": None,
+}
 templates = Jinja2Templates(directory=TEMPLATES_DIR)

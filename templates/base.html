@@ -15,10 +15,21 @@
         <a href="/">cinemafan</a>
         <a href="/movies">movies</a>
         <a href="/playlists">playlists</a>
+
+        {% if user %}
+          {{ user.name }}
+        {% else %}
+          <a href="/auth/sign-in">sign in</a>
+          <a href="/auth/sign-up">sign up</a>
+        {% endif %}
       </nav>
     </header>
 
     {% block content %}
     {% endblock %}
+
+    <footer>
+      {{ version }}
+    </footer>
   </body>
 </html>

@@ -1,91 +1,94 @@
+0.29.0 - 2024.11.8:
+- sign in / up
+
 0.28.0 - 2024.11.4:
-    - ratings amount
-    - more fields in a Movie model: budget, fees, slogan
-    - start to write tests
-    - requirements
+- ratings amount
+- more fields in a Movie model: budget, fees, slogan
+- start to write tests
+- requirements
 
 0.27.0 - 2024.11.3:
-    - show rating
+- show rating
 
 0.26.0 - 2024.11.3:
-    - show years for movies and release date for episodes. Years are calculated based on episodes
+- show years for movies and release date for episodes. Years are calculated based on episodes
 
 0.25.0 - 2024.10.22:
-    - movie statuses (completed, ongoing)
+- movie statuses (completed, ongoing)
 
 0.24.0 - 2024.10.22:
-    - playlists
+- playlists
 
 0.23.0 - 2024.10.13:
-    - uuids
-    - movies pagination
+- uuids
+- movies pagination
 
 0.22.0 - 2024.10.12:
-    - improved going to a random movie: no js, ​​only a separate route and redirection
+- improved going to a random movie: no js, ​​only a separate route and redirection
 
 0.21.0 - 2024.9.28:
-    - count duration: for episode and movie
+- count duration: for episode and movie
 
 0.20.0 - 2024.8.18:
-    - comments on the moments of the episode with the ability to jump to them
+- comments on the moments of the episode with the ability to jump to them
 
 0.19.0 - 2024.7.26:
-    - list pages for main entities; icon for the site
+- list pages for main entities; icon for the site
 
 0.18.0 - 2024.7.22:
-    - simple reviews: added a model, a script and some page elements to send a review to a server
+- simple reviews: added a model, a script and some page elements to send a review to a server
 
 0.17.0 - 2024.7.21:
-    - tag accuracy for movies, its increase
+- tag accuracy for movies, its increase
 
 0.16.0 - 2024.7.20:
-    - most of API routes deprecated, used only routes to get HTML pages
-    - refactoring
-    - db test data generating by a script
+- most of API routes deprecated, used only routes to get HTML pages
+- refactoring
+- db test data generating by a script
 
 0.15.0 - 2024.6.19:
-    - playing video with rewind
+- playing video with rewind
 
 0.14.0 - 2024.5.25:
-    - possibility to go to a random movie from home page
+- possibility to go to a random movie from home page
 
 0.13.0 - 2024.5.23:
-    - studios: model, relation with a Movie model, showing in an episode page
+- studios: model, relation with a Movie model, showing in an episode page
 
 0.12.0 - 2024.5.21:
-    - persons and activities: models, relation with a Movie model, showing in an episode page
+- persons and activities: models, relation with a Movie model, showing in an episode page
 
 0.11.0 - 2024.5.21:
-    - genres: relation with a Movie model, showing in an episode page
+- genres: relation with a Movie model, showing in an episode page
 
 0.10.0 - 2024.5.19:
-    - tags: new models, relation with a Movie model, showing in an episode page
+- tags: new models, relation with a Movie model, showing in an episode page
 
 0.9.0 - 2024.5.17:
-    - screenshots: a model, them shows in an episode page
+- screenshots: a model, them shows in an episode page
 
 0.8.0 - 2024.5.14:
-    - season, category models
-    - templates fixes
+- season, category models
+- templates fixes
 
 0.7.0 - 2024.5.13:
-    - render age title
-    - fixed displaying of seasons and episodes count
+- render age title
+- fixed displaying of seasons and episodes count
 
 0.6.0 - 2024.5.11:
-    - reworking video sources for the player
+- reworking video sources for the player
 
 0.5.0 - 2024.5.10:
-    - video playing, very simple, just by video HTML tag with source changing
+- video playing, very simple, just by video HTML tag with source changing
 
 0.4.0 - 2024.5.10:
-    - movie page
+- movie page
 
 0.3.0 - 2024.5.9:
-    - movies fetching and displaying
+- movies fetching and displaying
 
 0.2.0 - 2024.5.5:
-    - base root app
+- base root app
 
 0.1.0 - 2024.5.5:
-    - initiation
+- initiation
