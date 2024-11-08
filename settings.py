@@ -11,7 +11,7 @@ MEDIA_DIR = BASE_DIR / "media"
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
-VERSION="0.28.0"
+VERSION="0.29.0"
 
 HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
