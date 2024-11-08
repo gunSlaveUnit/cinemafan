@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles 
 
-from settings import MEDIA_DIR, STATIC_DIR, VERSION
+from settings import DEBUG, MEDIA_DIR, STATIC_DIR, VERSION
 from db import init
 
 from auth.routes import router as auth_router
@@ -23,21 +23,24 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(
+    debug=DEBUG,
+    lifespan=lifespan,
     title="cinemafan",
     version=VERSION,
-    lifespan=lifespan,
 )
 
-app.mount(
-    "/media", 
-    StaticFiles(directory=MEDIA_DIR), 
-    name="media",
-)
-app.mount(
-    "/static", 
-    StaticFiles(directory=STATIC_DIR), 
-    name="static",
-)
+if DEBUG:
+    print("Mounting static files")
+    app.mount(
+        "/media", 
+        StaticFiles(directory=MEDIA_DIR), 
+        name="media",
+    )
+    app.mount(
+        "/static", 
+        StaticFiles(directory=STATIC_DIR), 
+        name="static",
+    )
 
 app.include_router(auth_router)
 app.include_router(movies_router)

@@ -6,6 +6,8 @@ from fastapi.templating import Jinja2Templates
 
 load_dotenv()
 
+DEBUG = os.getenv("DEBUG") == "True"
+
 BASE_DIR = Path(__file__).resolve().parent
 MEDIA_DIR = BASE_DIR / "media"
 STATIC_DIR = BASE_DIR / "static"
