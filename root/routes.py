@@ -14,21 +14,18 @@ from settings import ALGORITHM, SECRET_KEY, base_context, templates
 
 router = APIRouter()
 
+from shared.utils import get_current_user
+
 
 @router.get("/")
 async def home(
-        request: Request, 
+        request: Request,
+        current_user: User = Depends(get_current_user),
         token: str = Cookie(None),
         db: AsyncSession = Depends(get_db),
 ):
     context = base_context.copy()
-
-    if token:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str = payload["id"]
-
-        user = await User.by_id(uuid.UUID(user_id), db)
-        context["user"] = user
+    context["user"] = current_user
 
     return templates.TemplateResponse(
         request=request,
