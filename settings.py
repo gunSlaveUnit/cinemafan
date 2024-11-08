@@ -26,7 +26,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 base_context = {
-    "version": VERSION,
+    "current_year": None,
     "user": None,
+    "version": VERSION,
 }
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
