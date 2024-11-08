@@ -14,16 +14,20 @@
   <body>
     <header>
       <nav>
-        <a href="/">cinemafan</a>
-        <a href="/movies">movies</a>
-        <a href="/playlists">playlists</a>
+        <div>
+          <a href="/">cinemafan</a>
+          <a href="/movies">movies</a>
+          <a href="/playlists">playlists</a>
+        </div>
 
-        {% if user %}
-          {{ user.name }}
-        {% else %}
-          <a href="/auth/sign-in">sign in</a>
-          <a href="/auth/sign-up">sign up</a>
-        {% endif %}
+        <div>
+          {% if user %}
+            {{ user.name }}
+          {% else %}
+            <a href="/auth/sign-in">sign in</a>
+            <a href="/auth/sign-up">sign up</a>
+          {% endif %}
+        </div>
       </nav>
     </header>
 
