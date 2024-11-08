@@ -13,6 +13,7 @@ MEDIA_DIR = BASE_DIR / "media"
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
+APP_NAME = "cinemafan"
 VERSION="0.29.0"
 
 HOST = os.getenv("HOST")
@@ -26,6 +27,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 base_context = {
+    "app_name": APP_NAME,
     "current_year": None,
     "user": None,
     "version": VERSION,
