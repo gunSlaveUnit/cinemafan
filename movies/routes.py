@@ -353,6 +353,9 @@ async def episode_page(
     records = [_ async for _ in Record.by_episode_id(item_id, db)]
     qualities = [await Quality.by_id(record.quality_id, db) for record in records]
 
+    q = select(Episode).where(Episode.parent_id == item_id)
+    next_episode = await db.scalar(q)
+
     duration = subprocess.check_output([
         "ffprobe",
         "-v",
@@ -374,6 +377,7 @@ async def episode_page(
             "moments": moments,
             "records": records,
             "qualities": qualities,
+            "next_episode": next_episode,
         }
     )
 
