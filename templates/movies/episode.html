@@ -25,7 +25,9 @@
     {% endfor %}
   </video>
 
-  <a href="/episodes/{{ episode.parent_id }}">previous</a>
+  {% if episode.parent_id %}
+    <a href="/episodes/{{ episode.parent_id }}">previous</a>
+  {% endif %}
 
   <a href="/episodes/{{ next_episode.id }}">next</a>
 
