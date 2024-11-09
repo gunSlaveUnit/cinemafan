@@ -2,18 +2,14 @@
 
 {% block content %}
   <form action="/api/v1/auth/sign-in" method="post">
-    <div>
-      <label for="name">name</label>
-      <input type="text" name="name" id="name"/>
-    </div>
+    <label for="name">name</label>
+    <input name="name"/>
 
-    <div>
-      <label for="password">password</label>
-      <input type="password" name="password" id="password"/>
-    </div>
+    <label for="password">password</label>
+    <input type="password" name="password"/>
 
-    <div>
-      <button type="submit">sign in</button>
-    </div>
+    <button type="submit">sign in</button>
+
+    don't have an account? <a href="/auth/sign-up">sign up</a>
   </form>
 {% endblock %}

@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="icon" href="/static/icon.ico" />
+
+    <link rel="stylesheet" href="/static/style.css" />
     
-    <title>cinemafan</title>
+    <title>{{ app_name }}</title>
   </head>
 
   <body>
     <header>
       <nav>
-        <a href="/">cinemafan</a>
+        <a href="/">{{ app_name }}</a>
+
         <a href="/movies">movies</a>
         <a href="/playlists">playlists</a>
 
@@ -25,11 +28,13 @@
       </nav>
     </header>
 
-    {% block content %}
-    {% endblock %}
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
 
     <footer>
-      {{ version }}
+      &copy; {{ current_year }} {{ app_name }} {{ version }}
     </footer>
   </body>
 </html>

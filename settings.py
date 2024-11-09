@@ -6,12 +6,15 @@ from fastapi.templating import Jinja2Templates
 
 load_dotenv()
 
+DEBUG = os.getenv("DEBUG") == "True"
+
 BASE_DIR = Path(__file__).resolve().parent
 MEDIA_DIR = BASE_DIR / "media"
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
-VERSION="0.29.0"
+APP_NAME = "cinemafan"
+VERSION="0.30.0"
 
 HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
@@ -24,7 +27,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 base_context = {
-    "version": VERSION,
+    "app_name": APP_NAME,
+    "current_year": None,
     "user": None,
+    "version": VERSION,
 }
 templates = Jinja2Templates(directory=TEMPLATES_DIR)

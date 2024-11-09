@@ -73,13 +73,19 @@ class Moment(Entity):
             yield scalar
 
 
+class Country(Entity):
+    __tablename__ = "countries"
+
+    title: Mapped[str] = mapped_column(String(255))
+
+
 class Movie(Entity):
     __tablename__ = "movies"
 
     age_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     budget: Mapped[int]
     category_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
-    country: Mapped[str] = mapped_column(String(255))
+    country: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     description: Mapped[str] = mapped_column(Text)
     fees: Mapped[int]
     original_title: Mapped[str] = mapped_column(String(255))

@@ -25,6 +25,14 @@
     {% endfor %}
   </video>
 
+  {% if episode.parent_id %}
+    <a href="/episodes/{{ episode.parent_id }}">previous</a>
+  {% endif %}
+
+  {% if next_episode %}
+    <a href="/episodes/{{ next_episode.id }}">next</a>
+  {% endif %}
+
   <div>
     <input id="content"/>
 

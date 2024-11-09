@@ -1,3 +1,10 @@
+0.30.0 - 2024.11.9:
+- previous / next episode buttons
+- font
+- current year and version in footer
+- media and statis dirs only if debug is enabled
+- sign in / up links to each other
+
 0.29.0 - 2024.11.8:
 - sign in / up
 
