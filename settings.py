@@ -14,7 +14,7 @@ STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
 APP_NAME = "cinemafan"
-VERSION="0.30.0"
+VERSION="0.31.0"
 
 HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
