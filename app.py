@@ -30,7 +30,6 @@ app = FastAPI(
 )
 
 if DEBUG:
-    print("Mounting static files")
     app.mount(
         "/media", 
         StaticFiles(directory=MEDIA_DIR), 

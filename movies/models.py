@@ -85,7 +85,6 @@ class Movie(Entity):
     age_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     budget: Mapped[int]
     category_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
-    country: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     description: Mapped[str] = mapped_column(Text)
     fees: Mapped[int]
     original_title: Mapped[str] = mapped_column(String(255))
@@ -93,6 +92,13 @@ class Movie(Entity):
     translated_title: Mapped[str] = mapped_column(String(255))
     slogan: Mapped[str] = mapped_column(String(255))
     status_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+
+
+class MovieCountry(Entity):
+    __tablename__ = "movies_countries"
+
+    country_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
 
 class MovieGenre(Entity):
@@ -188,7 +194,6 @@ class MovieTag(Entity):
     __tablename__ = "movies_tags"
 
     movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
-    relevance: Mapped[int]
     tag_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
@@ -200,6 +205,13 @@ class MovieTag(Entity):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
         async for scalar in scalars:
             yield scalar
+
+
+class Upvote(Entity):
+    __tablename__ = "upvotes"
+
+    movie_tag_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
 
 class Person(Entity):

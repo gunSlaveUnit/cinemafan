@@ -13,6 +13,7 @@ from movies.models import (
     Episode,
     Genre,
     Movie,
+    MovieCountry,
     MovieGenre,
     MoviePerson,
     MoviePlaylist,
@@ -29,6 +30,7 @@ from movies.models import (
     Status,
     Studio,
     Tag,
+    Upvote,
 )
 from settings import MEDIA_DIR
 
@@ -37,6 +39,7 @@ PERSONS_AMOUNT = 50
 PLAYLISTS_AMOUNT = 10
 STUDIOS_AMOUNT = 50
 MAX_EPISODES_PER_SEASON_AMOUNT = 12
+MAX_COUNTRIES_PER_MOVIE_AMOUNT = 2
 MAX_GENRES_PER_MOVIE_AMOUNT = 5
 MAX_RATINGS_PER_MOVIE_AMOUNT = 50
 MAX_REVIEWS_PER_MOVIE_AMOUNT = 30
@@ -46,6 +49,7 @@ MAX_STUDIOS_PER_MOVIE_AMOUNT = 3
 MAX_PERSONS_PER_MOVIE_AMOUNT = 30
 MAX_PLAYLISTS_PER_MOVIE_AMOUNT = 5
 MAX_TAGS_PER_MOVIE_AMOUNT = 15
+MAX_UPVOTES_PER_MOVIE_AMOUNT = 50
 MOVIES_AMOUNT = 10
 TAGS_AMOUNT = 100
 
@@ -109,7 +113,6 @@ MOVIES = [
         "age_id": AGES[random.randint(0, len(AGES) - 1)]["id"],
         "budget": random.randint(0, 100000000),
         "category_id": CATEGORIES[random.randint(0, len(CATEGORIES) - 1)]["id"],
-        "country": COUNTRIES[random.randint(0, len(COUNTRIES) - 1)]["id"],
         "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
                         "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
                         "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
@@ -135,6 +138,14 @@ for movie in MOVIES:
             "title": f"season {i}",
         })
     MOVIE_SEASONS.append(seasons)
+
+MOVIE_COUNTRIES = []
+for movie in MOVIES:
+    for i in range(random.randint(0, MAX_COUNTRIES_PER_MOVIE_AMOUNT)):
+        MOVIE_COUNTRIES.append({
+            "movie_id": movie["id"],
+            "country_id": random.choice(COUNTRIES)["id"],
+        })
 
 RATINGS = []
 for movie in MOVIES:
@@ -211,15 +222,21 @@ MOVIE_STUDIOS = [
         } for _ in range(random.randint(1, MAX_STUDIOS_PER_MOVIE_AMOUNT))
     ] for movie in MOVIES
 ]
-MOVIE_TAGS = [
-    [
-        {
+MOVIE_TAGS = []
+for movie in MOVIES:
+    for i in range(random.randint(0, MAX_TAGS_PER_MOVIE_AMOUNT)):
+        MOVIE_TAGS.append({
+            "id": uuid.uuid4(),
             "movie_id": movie["id"],
-            "relevance": random.randint(1, 1000),
             "tag_id": random.choice(TAGS)["id"],
-        } for _ in range(random.randint(1, MAX_TAGS_PER_MOVIE_AMOUNT))
-    ] for movie in MOVIES
-]
+        })
+UPVOTES = []
+for movie in MOVIES:
+    for i in range(random.randint(0, MAX_UPVOTES_PER_MOVIE_AMOUNT)):
+        UPVOTES.append({
+            "movie_tag_id": random.choice(MOVIE_TAGS)["id"],
+            "user_id": uuid.uuid4(),
+        })
 MOVIE_REVIEWS = [
     [
         {
@@ -273,6 +290,9 @@ async def fill():
             for tag in TAGS:
                 await Tag.create(tag, db)
 
+            for upvote in UPVOTES:
+                await Upvote.create(upvote, db)
+
             for movie in MOVIES:
                 await Movie.create(movie, db)
 
@@ -297,6 +317,9 @@ async def fill():
             for persons in MOVIE_PERSONS:
                 for person in persons:
                     await MoviePerson.create(person, db)
+            
+            for movie_country in MOVIE_COUNTRIES:
+                await MovieCountry.create(movie_country, db)
 
             for playlists in MOVIE_PLAYLISTS:
                 for playlist in playlists:
@@ -309,9 +332,8 @@ async def fill():
                 for studio in studios:
                     await MovieStudio.create(studio, db)
 
-            for tags in MOVIE_TAGS:
-                for tag in tags:
-                    await MovieTag.create(tag, db)
+            for movie_tag in MOVIE_TAGS:
+                await MovieTag.create(movie_tag, db)
 
             for reviews in MOVIE_REVIEWS:
                 for review in reviews:

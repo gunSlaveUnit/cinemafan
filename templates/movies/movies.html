@@ -13,7 +13,9 @@
         {{ t.title }}
       {% endfor %}
 
-      {{ item.country.title }}
+      {% for c in item.countries %}
+        {{ c.title }}
+      {% endfor %}
 
       {{ item.rating }} / {{ item.ratings_amount }}
 

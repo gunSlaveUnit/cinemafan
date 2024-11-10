@@ -11,11 +11,8 @@ from ffmpeg.asyncio import FFmpeg
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from settings import MEDIA_DIR
-
+from auth.models import User
 from db import get_db
-from settings import templates
-
 from movies.models import (
     Activity,
     Age,
@@ -25,6 +22,7 @@ from movies.models import (
     Genre,
     Moment,
     Movie,
+    MovieCountry,
     MovieGenre,
     MoviePerson,
     MoviePlaylist,
@@ -41,11 +39,11 @@ from movies.models import (
     Status,
     Studio,
     Tag,
+    Upvote,
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
-
-from db import get_db
-from settings import templates
+from settings import MEDIA_DIR, templates
+from shared.utils import fill_base_context, get_current_user
 
 router = APIRouter(prefix="")
 
@@ -90,7 +88,9 @@ async def movies(
 
         age = await Age.by_id(movie.age_id, db)
 
-        country = await Country.by_id(movie.country, db)
+        q = select(MovieCountry).where(MovieCountry.movie_id == movie.id).limit(3)
+        movie_countries = await db.stream_scalars(q)
+        countries = [await Country.by_id(movie_country.country_id, db) async for movie_country in movie_countries]
 
         q = select(func.count()).select_from(Season).where(Season.movie_id == movie.id)
         seasons_amount = await db.scalar(q)
@@ -127,9 +127,28 @@ async def movies(
         movie_genres = await db.stream_scalars(q)
         genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
 
-        q = select(MovieTag).where(MovieTag.movie_id == movie.id).order_by(MovieTag.relevance.desc()).limit(5)
-        movie_tags = await db.stream_scalars(q)
-        tags = [await Tag.by_id(movie_tag.tag_id, db) async for movie_tag in movie_tags]
+        q = (
+            select(
+                MovieTag.tag_id,
+                func.count(Upvote.movie_tag_id)
+            )
+            .join(
+                Upvote,
+                Upvote.movie_tag_id == MovieTag.id
+            )
+            .where(MovieTag.movie_id == movie.id)
+            .group_by(MovieTag.tag_id)
+            .order_by(
+                func.count(Upvote.movie_tag_id).desc()
+            )
+            .limit(5)
+        )
+        result = await db.stream(q)
+        tags = []
+        async for row in result:
+            tag_id = row[0]
+            tag = await Tag.by_id(tag_id, db)
+            tags.append(tag)
 
         status = await Status.by_id(movie.status_id, db)
 
@@ -138,8 +157,8 @@ async def movies(
             "duration": f"{duration:.2f}h",
             "episodes_amount": episodes_amount,
             "episode_duration": f"{episode_duration:.2f}m",
+            "countries": countries,
             "genres": genres,
-            "country": country,
             "movie": movie,
             "status": status,
             "seasons_amount": seasons_amount,
@@ -235,7 +254,8 @@ async def random_movie_page(
 async def movie(
         request: Request,
         item_id: uuid.UUID,
-        db: AsyncSession = Depends(get_db)
+        base_context: dict = Depends(fill_base_context),
+        db: AsyncSession = Depends(get_db),
 ):
     item = await Movie.by_id(item_id, db)
 
@@ -286,9 +306,30 @@ async def movie(
     movie_genres = await db.stream_scalars(q)
     genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
 
-    q = select(MovieTag).where(MovieTag.movie_id == item.id).order_by(MovieTag.relevance.desc()).limit(5)
-    movie_tags = await db.stream_scalars(q)
-    tags = [{"movie_tag": movie_tag, "tag": await Tag.by_id(movie_tag.tag_id, db)} async for movie_tag in movie_tags]
+    q = (
+        select(
+            MovieTag,
+            func.count(Upvote.movie_tag_id).label('relevance')
+        )
+        .outerjoin(
+            Upvote,
+            Upvote.movie_tag_id == MovieTag.id
+        )
+        .where(MovieTag.movie_id == item.id)
+        .group_by(MovieTag)
+        .order_by(func.count(Upvote.movie_tag_id).desc())
+        .limit(5)
+    )
+
+    result = await db.execute(q)
+    tags = [
+        {
+            "movie_tag": movie_tag,
+            "tag": await Tag.by_id(movie_tag.tag_id, db),
+            "relevance": relevance or 0
+        }
+        for movie_tag, relevance in result.all()
+    ]
 
     status = await Status.by_id(item.status_id, db)
 
@@ -317,28 +358,32 @@ async def movie(
     # TODO: possible lots items
     reviews = [_ async for _ in Review.by_movie_id(item.id, db)]
 
+    extended_context = {
+        "age": age,
+        "duration": f"{duration:.2f}h",
+        "episodes_amount": episodes_amount,
+        "episode_duration": f"{episode_duration:.2f}m",
+        "movie": item,
+        "screenshots": screenshots,
+        "tags": tags,
+        "genres": genres,
+        "activities_persons": activities_persons,
+        "seasons_amount": seasons_amount,
+        "seasons": seasons,
+        "status": status,
+        "studios": studios,
+        "reviews": reviews,
+        "years": format_years(years),
+        "rating": rating,
+        "ratings_amount": ratings_amount,
+    }
+    context = base_context
+    context.update(extended_context)
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
-        context={
-            "age": age,
-            "duration": f"{duration:.2f}h",
-            "episodes_amount": episodes_amount,
-            "episode_duration": f"{episode_duration:.2f}m",
-            "movie": item,
-            "screenshots": screenshots,
-            "tags": tags,
-            "genres": genres,
-            "activities_persons": activities_persons,
-            "seasons_amount": seasons_amount,
-            "seasons": seasons,
-            "status": status,
-            "studios": studios,
-            "reviews": reviews,
-            "years": format_years(years),
-            "rating": rating,
-            "ratings_amount": ratings_amount,
-        }
+        context=context,
     )
 
 
@@ -385,10 +430,25 @@ async def episode_page(
 @router.patch("/api/movies-tags/{item_id}/bump")
 async def bump_tag(
         item_id: uuid.UUID,
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
+        current_user: User = Depends(get_current_user),
 ):
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
     movie_tag = await MovieTag.by_id(item_id, db)
-    await movie_tag.update({"relevance": movie_tag.relevance + 1}, db)
+
+    upvote = await db.scalar(select(Upvote).where(Upvote.movie_tag_id == item_id, Upvote.user_id == current_user.id))
+    if upvote:
+        raise HTTPException(status_code=409, detail="You already upvoted this tag")
+
+    await Upvote.create(
+        {
+            "movie_tag_id": item_id,
+            "user_id": current_user.id
+        },
+        db
+    )
 
 
 @router.post("/api/reviews")
