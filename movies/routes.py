@@ -11,11 +11,7 @@ from ffmpeg.asyncio import FFmpeg
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from settings import MEDIA_DIR
-
 from db import get_db
-from settings import templates
-
 from movies.models import (
     Activity,
     Age,
@@ -44,9 +40,8 @@ from movies.models import (
     Tag,
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
-
-from db import get_db
-from settings import templates
+from settings import MEDIA_DIR, templates
+from shared.utils import fill_base_context
 
 router = APIRouter(prefix="")
 
@@ -238,7 +233,8 @@ async def random_movie_page(
 async def movie(
         request: Request,
         item_id: uuid.UUID,
-        db: AsyncSession = Depends(get_db)
+        base_context: dict = Depends(fill_base_context),
+        db: AsyncSession = Depends(get_db),
 ):
     item = await Movie.by_id(item_id, db)
 
@@ -320,28 +316,32 @@ async def movie(
     # TODO: possible lots items
     reviews = [_ async for _ in Review.by_movie_id(item.id, db)]
 
+    extended_context = {
+        "age": age,
+        "duration": f"{duration:.2f}h",
+        "episodes_amount": episodes_amount,
+        "episode_duration": f"{episode_duration:.2f}m",
+        "movie": item,
+        "screenshots": screenshots,
+        "tags": tags,
+        "genres": genres,
+        "activities_persons": activities_persons,
+        "seasons_amount": seasons_amount,
+        "seasons": seasons,
+        "status": status,
+        "studios": studios,
+        "reviews": reviews,
+        "years": format_years(years),
+        "rating": rating,
+        "ratings_amount": ratings_amount,
+    }
+    context = base_context
+    context.update(extended_context)
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movie.html",
-        context={
-            "age": age,
-            "duration": f"{duration:.2f}h",
-            "episodes_amount": episodes_amount,
-            "episode_duration": f"{episode_duration:.2f}m",
-            "movie": item,
-            "screenshots": screenshots,
-            "tags": tags,
-            "genres": genres,
-            "activities_persons": activities_persons,
-            "seasons_amount": seasons_amount,
-            "seasons": seasons,
-            "status": status,
-            "studios": studios,
-            "reviews": reviews,
-            "years": format_years(years),
-            "rating": rating,
-            "ratings_amount": ratings_amount,
-        }
+        context=context,
     )
 
 
