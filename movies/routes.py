@@ -39,6 +39,7 @@ from movies.models import (
     Status,
     Studio,
     Tag,
+    Upvote,
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
 from settings import MEDIA_DIR, templates
@@ -126,9 +127,28 @@ async def movies(
         movie_genres = await db.stream_scalars(q)
         genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
 
-        q = select(MovieTag).where(MovieTag.movie_id == movie.id).order_by(MovieTag.relevance.desc()).limit(5)
-        movie_tags = await db.stream_scalars(q)
-        tags = [await Tag.by_id(movie_tag.tag_id, db) async for movie_tag in movie_tags]
+        q = (
+            select(
+                MovieTag.tag_id,
+                func.count(Upvote.movie_tag_id)
+            )
+            .join(
+                Upvote,
+                Upvote.movie_tag_id == MovieTag.id
+            )
+            .where(MovieTag.movie_id == movie.id)
+            .group_by(MovieTag.tag_id)
+            .order_by(
+                func.count(Upvote.movie_tag_id).desc()
+            )
+            .limit(5)
+        )
+        result = await db.stream(q)
+        tags = []
+        async for row in result:
+            tag_id = row[0]
+            tag = await Tag.by_id(tag_id, db)
+            tags.append(tag)
 
         status = await Status.by_id(movie.status_id, db)
 
@@ -286,9 +306,30 @@ async def movie(
     movie_genres = await db.stream_scalars(q)
     genres = [await Genre.by_id(movie_genre.genre_id, db) async for movie_genre in movie_genres]
 
-    q = select(MovieTag).where(MovieTag.movie_id == item.id).order_by(MovieTag.relevance.desc()).limit(5)
-    movie_tags = await db.stream_scalars(q)
-    tags = [{"movie_tag": movie_tag, "tag": await Tag.by_id(movie_tag.tag_id, db)} async for movie_tag in movie_tags]
+    q = (
+        select(
+            MovieTag,
+            func.count(Upvote.movie_tag_id).label('relevance')
+        )
+        .outerjoin(
+            Upvote,
+            Upvote.movie_tag_id == MovieTag.id
+        )
+        .where(MovieTag.movie_id == item.id)
+        .group_by(MovieTag)
+        .order_by(func.count(Upvote.movie_tag_id).desc())
+        .limit(5)
+    )
+
+    result = await db.execute(q)
+    tags = [
+        {
+            "movie_tag": movie_tag,
+            "tag": await Tag.by_id(movie_tag.tag_id, db),
+            "relevance": relevance or 0
+        }
+        for movie_tag, relevance in result.all()
+    ]
 
     status = await Status.by_id(item.status_id, db)
 
