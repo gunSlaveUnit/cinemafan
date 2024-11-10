@@ -30,6 +30,7 @@ from movies.models import (
     Status,
     Studio,
     Tag,
+    Upvote,
 )
 from settings import MEDIA_DIR
 
@@ -224,11 +225,17 @@ MOVIE_TAGS = [
     [
         {
             "movie_id": movie["id"],
-            "relevance": random.randint(1, 1000),
             "tag_id": random.choice(TAGS)["id"],
         } for _ in range(random.randint(1, MAX_TAGS_PER_MOVIE_AMOUNT))
     ] for movie in MOVIES
 ]
+UPVOTES = []
+for movie in MOVIES:
+    for i in range(random.randint(0, MAX_UPVOTES_PER_MOVIE_AMOUNT)):
+        UPVOTES.append({
+            "movie_tag_id": random.choice(MOVIE_TAGS)["id"],
+            "user_id": uuid.uuid4(),
+        })
 MOVIE_REVIEWS = [
     [
         {
@@ -281,6 +288,9 @@ async def fill():
 
             for tag in TAGS:
                 await Tag.create(tag, db)
+
+            for upvote in UPVOTES:
+                await Upvote.create(upvote, db)
 
             for movie in MOVIES:
                 await Movie.create(movie, db)
