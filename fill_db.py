@@ -13,6 +13,7 @@ from movies.models import (
     Episode,
     Genre,
     Movie,
+    MovieCountry,
     MovieGenre,
     MoviePerson,
     MoviePlaylist,
@@ -37,6 +38,7 @@ PERSONS_AMOUNT = 50
 PLAYLISTS_AMOUNT = 10
 STUDIOS_AMOUNT = 50
 MAX_EPISODES_PER_SEASON_AMOUNT = 12
+MAX_COUNTRIES_PER_MOVIE_AMOUNT = 2
 MAX_GENRES_PER_MOVIE_AMOUNT = 5
 MAX_RATINGS_PER_MOVIE_AMOUNT = 50
 MAX_REVIEWS_PER_MOVIE_AMOUNT = 30
@@ -109,7 +111,6 @@ MOVIES = [
         "age_id": AGES[random.randint(0, len(AGES) - 1)]["id"],
         "budget": random.randint(0, 100000000),
         "category_id": CATEGORIES[random.randint(0, len(CATEGORIES) - 1)]["id"],
-        "country": COUNTRIES[random.randint(0, len(COUNTRIES) - 1)]["id"],
         "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
                         "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
                         "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
@@ -135,6 +136,14 @@ for movie in MOVIES:
             "title": f"season {i}",
         })
     MOVIE_SEASONS.append(seasons)
+
+MOVIE_COUNTRIES = []
+for movie in MOVIES:
+    for i in range(random.randint(0, MAX_COUNTRIES_PER_MOVIE_AMOUNT)):
+        MOVIE_COUNTRIES.append({
+            "movie_id": movie["id"],
+            "country_id": random.choice(COUNTRIES)["id"],
+        })
 
 RATINGS = []
 for movie in MOVIES:
@@ -297,6 +306,9 @@ async def fill():
             for persons in MOVIE_PERSONS:
                 for person in persons:
                     await MoviePerson.create(person, db)
+            
+            for movie_country in MOVIE_COUNTRIES:
+                await MovieCountry.create(movie_country, db)
 
             for playlists in MOVIE_PLAYLISTS:
                 for playlist in playlists:

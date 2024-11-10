@@ -25,6 +25,7 @@ from movies.models import (
     Genre,
     Moment,
     Movie,
+    MovieCountry,
     MovieGenre,
     MoviePerson,
     MoviePlaylist,
@@ -90,7 +91,9 @@ async def movies(
 
         age = await Age.by_id(movie.age_id, db)
 
-        country = await Country.by_id(movie.country, db)
+        q = select(MovieCountry).where(MovieCountry.movie_id == movie.id).limit(3)
+        movie_countries = await db.stream_scalars(q)
+        countries = [await Country.by_id(movie_country.country_id, db) async for movie_country in movie_countries]
 
         q = select(func.count()).select_from(Season).where(Season.movie_id == movie.id)
         seasons_amount = await db.scalar(q)
@@ -138,8 +141,8 @@ async def movies(
             "duration": f"{duration:.2f}h",
             "episodes_amount": episodes_amount,
             "episode_duration": f"{episode_duration:.2f}m",
+            "countries": countries,
             "genres": genres,
-            "country": country,
             "movie": movie,
             "status": status,
             "seasons_amount": seasons_amount,
