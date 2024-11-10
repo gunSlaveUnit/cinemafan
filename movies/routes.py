@@ -11,6 +11,7 @@ from ffmpeg.asyncio import FFmpeg
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from auth.models import User
 from db import get_db
 from movies.models import (
     Activity,
@@ -41,7 +42,7 @@ from movies.models import (
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
 from settings import MEDIA_DIR, templates
-from shared.utils import fill_base_context
+from shared.utils import fill_base_context, get_current_user
 
 router = APIRouter(prefix="")
 
@@ -388,10 +389,25 @@ async def episode_page(
 @router.patch("/api/movies-tags/{item_id}/bump")
 async def bump_tag(
         item_id: uuid.UUID,
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
+        current_user: User = Depends(get_current_user),
 ):
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
     movie_tag = await MovieTag.by_id(item_id, db)
-    await movie_tag.update({"relevance": movie_tag.relevance + 1}, db)
+
+    upvote = await db.scalar(select(Upvote).where(Upvote.movie_tag_id == item_id, Upvote.user_id == current_user.id))
+    if upvote:
+        raise HTTPException(status_code=409, detail="You already upvoted this tag")
+
+    await Upvote.create(
+        {
+            "movie_tag_id": item_id,
+            "user_id": current_user.id
+        },
+        db
+    )
 
 
 @router.post("/api/reviews")
