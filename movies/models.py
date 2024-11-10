@@ -194,7 +194,6 @@ class MovieTag(Entity):
     __tablename__ = "movies_tags"
 
     movie_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
-    relevance: Mapped[int]
     tag_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
     @classmethod
@@ -206,6 +205,13 @@ class MovieTag(Entity):
         scalars = await session.stream_scalars(select(cls).where(cls.movie_id == movie_id))
         async for scalar in scalars:
             yield scalar
+
+
+class Upvote(Entity):
+    __tablename__ = "upvotes"
+
+    movie_tag_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
 
 
 class Person(Entity):
