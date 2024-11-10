@@ -49,6 +49,7 @@ MAX_STUDIOS_PER_MOVIE_AMOUNT = 3
 MAX_PERSONS_PER_MOVIE_AMOUNT = 30
 MAX_PLAYLISTS_PER_MOVIE_AMOUNT = 5
 MAX_TAGS_PER_MOVIE_AMOUNT = 15
+MAX_UPVOTES_PER_MOVIE_AMOUNT = 50
 MOVIES_AMOUNT = 10
 TAGS_AMOUNT = 100
 
@@ -221,14 +222,14 @@ MOVIE_STUDIOS = [
         } for _ in range(random.randint(1, MAX_STUDIOS_PER_MOVIE_AMOUNT))
     ] for movie in MOVIES
 ]
-MOVIE_TAGS = [
-    [
-        {
+MOVIE_TAGS = []
+for movie in MOVIES:
+    for i in range(random.randint(0, MAX_TAGS_PER_MOVIE_AMOUNT)):
+        MOVIE_TAGS.append({
+            "id": uuid.uuid4(),
             "movie_id": movie["id"],
             "tag_id": random.choice(TAGS)["id"],
-        } for _ in range(random.randint(1, MAX_TAGS_PER_MOVIE_AMOUNT))
-    ] for movie in MOVIES
-]
+        })
 UPVOTES = []
 for movie in MOVIES:
     for i in range(random.randint(0, MAX_UPVOTES_PER_MOVIE_AMOUNT)):
@@ -331,9 +332,8 @@ async def fill():
                 for studio in studios:
                     await MovieStudio.create(studio, db)
 
-            for tags in MOVIE_TAGS:
-                for tag in tags:
-                    await MovieTag.create(tag, db)
+            for movie_tag in MOVIE_TAGS:
+                await MovieTag.create(movie_tag, db)
 
             for reviews in MOVIE_REVIEWS:
                 for review in reviews:
