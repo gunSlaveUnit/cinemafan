@@ -61,3 +61,14 @@ async def sign_in(
         return response
     else:
         print("not found")
+
+
+
+@router.post("/auth/sign-out")
+async def sign_out(
+        request: Request,
+        db: AsyncSession = Depends(get_db),
+):
+    response = RedirectResponse("/", status_code=303)
+    response.delete_cookie(key="token")
+    return response
