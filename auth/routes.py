@@ -5,18 +5,23 @@ from fastapi.responses import RedirectResponse
 import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from auth.models import User
 from db import get_db
 from settings import ALGORITHM, SECRET_KEY, templates
-from . import models
+from shared.utils import fill_base_context
 
 router = APIRouter(prefix="")
 
 
 @router.get("/auth/sign-up")
-async def sign_up_page(request: Request):
+async def sign_up_page(
+        request: Request,
+        base_context: dict = Depends(fill_base_context),
+):
     return templates.TemplateResponse(
         request=request,
         name="auth/sign-up.html",
+        context=base_context,
     )
 
 
@@ -32,12 +37,15 @@ async def sign_up(
 
 
 @router.get("/auth/sign-in")
-async def sign_in_page(request: Request):
+async def sign_in_page(
+        request: Request,
+        base_context: dict = Depends(fill_base_context),
+):
     return templates.TemplateResponse(
         request=request,
         name="auth/sign-in.html",
+        context=base_context,
     )
-
 
 
 def create_access_token(data: dict):
