@@ -22,11 +22,12 @@ async def sign_up_page(request: Request):
 
 @router.post("/api/v1/auth/sign-up")
 async def sign_up(
+        email: Annotated[str, Form()],
         name: Annotated[str, Form()],
         password: Annotated[str, Form()],
         db: AsyncSession = Depends(get_db),
 ):
-    user = await models.User.create({"name": name, "password": password}, db)
+    user = await models.User.create({"email": email, "name": name, "password": password}, db)
     return RedirectResponse("/auth/sign-in", status_code=303)
 
 

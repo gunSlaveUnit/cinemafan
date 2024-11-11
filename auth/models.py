@@ -8,6 +8,7 @@ from shared.models import Entity
 class User(Entity):
     __tablename__ = "users"
 
+    email: Mapped[str] = mapped_column(String(255))
     name: Mapped[str] = mapped_column(String(255))
     password: Mapped[str] = mapped_column(String(255))
 

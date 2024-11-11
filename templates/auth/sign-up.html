@@ -2,6 +2,9 @@
 
 {% block content %}
   <form action="/api/v1/auth/sign-up" method="post">
+    <label for="email">email</label>
+    <input type="email" name="email"/>
+
     <label for="name">name</label>
     <input type="text" name="name"/>
 
