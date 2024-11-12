@@ -21,6 +21,10 @@
 
         {% if user %}
           {{ user.name }}
+
+          <form action="/auth/sign-out" method="post" style="display: inline;">
+            <button type="submit">sign out</button>
+          </form>
         {% else %}
           <a href="/auth/sign-in">sign in</a>
           <a href="/auth/sign-up">sign up</a>

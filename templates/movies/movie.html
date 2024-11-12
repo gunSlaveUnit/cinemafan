@@ -21,6 +21,10 @@
     {% endif %}
   {% endfor %}
 
+  {% if not user %}
+    sign in to vote for a tag or suggest your own
+  {% endif %}
+
   {% for g in genres %}
     {{ g.title }}
   {% endfor %}
