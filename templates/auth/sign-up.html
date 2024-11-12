@@ -2,17 +2,24 @@
 
 {% block content %}
   <form action="/api/v1/auth/sign-up" method="post">
-    <label for="email">email</label>
-    <input type="email" name="email"/>
+    <div>
+      <label for="email">email</label>
+      <input type="email" name="email" required autofocus autocomplete="email"/>
+    </div>
+    <div>
+      <label for="name">name</label>
+      <input type="text" name="name" required autocomplete="username"/>
+    </div>
 
-    <label for="name">name</label>
-    <input type="text" name="name"/>
-
-    <label for="password">password</label>
-    <input type="password" name="password"/>
+    <div>
+      <label for="password">password</label>
+      <input type="password" name="password" required autocomplete="current-password"/>
+    </div>
 
     <button type="submit">sign up</button>
 
-    already have an account? <a href="/auth/sign-in">sign in</a>
+    <div>
+      already have an account? <a href="/auth/sign-in">sign in</a>
+    </div>
   </form>
 {% endblock %}
