@@ -32,7 +32,7 @@ async def sign_up(
         password: Annotated[str, Form()],
         db: AsyncSession = Depends(get_db),
 ):
-    user = await models.User.create({"email": email, "name": name, "password": password}, db)
+    user = await User.create({"email": email, "name": name, "password": password}, db)
     return RedirectResponse("/auth/sign-in", status_code=303)
 
 
@@ -60,7 +60,7 @@ async def sign_in(
         password: Annotated[str, Form()],
         db: AsyncSession = Depends(get_db),
 ):
-    user = await models.User.by_name(name, db)
+    user = await User.by_name(name, db)
     if user and user.password == password:
         access_token = create_access_token(data={"id": str(user.id)})
 
