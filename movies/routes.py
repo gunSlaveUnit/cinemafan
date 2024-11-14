@@ -48,15 +48,13 @@ from shared.utils import fill_base_context, get_current_user
 router = APIRouter(prefix="")
 
 
-
-
-
 @router.get("/movies")
 async def movies(
         request: Request,
         page: typing.Annotated[int, Query(ge=0)] = 0,
         limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
         db: AsyncSession = Depends(get_db),
+        base_context: dict = Depends(fill_base_context),
 ) -> templates.TemplateResponse:
     items = []
 
@@ -157,14 +155,18 @@ async def movies(
 
     pages = math.ceil(count / limit)
 
+    extended_context = {
+        "count": count,
+        "items": items,
+        "pages": pages,
+    }
+    context = base_context
+    context.update(extended_context)
+
     return templates.TemplateResponse(
         request=request,
         name="movies/movies.html",
-        context={
-            "count": count,
-            "items": items,
-            "pages": pages,
-        }
+        context=context,
     )
 
 
