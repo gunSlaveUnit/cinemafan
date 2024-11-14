@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {{ count }}
+
   {% for playlist in items %}
     <div>
       <a href="/playlists/{{playlist.id}}">{{ playlist.title }}</a>
