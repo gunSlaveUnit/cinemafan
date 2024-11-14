@@ -176,6 +176,7 @@ async def playlists(
         page: typing.Annotated[int, Query(ge=0)] = 0,
         limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
         db: AsyncSession = Depends(get_db),
+        base_context: dict = Depends(fill_base_context),
 ) -> templates.TemplateResponse:
     q = select(Playlist).limit(limit).offset(page * limit)
     data = await db.stream_scalars(q)
@@ -186,13 +187,18 @@ async def playlists(
 
     pages = math.ceil(count / limit)
 
+    extended_context = {
+        "count": count,
+        "items": items,
+        "pages": pages,
+    }
+    context = base_context
+    context.update(extended_context)
+
     return templates.TemplateResponse(
         request=request,
         name="movies/playlists.html",
-        context={
-            "items": items,
-            "pages": pages,
-        }
+        context=context,
     )
 
 
