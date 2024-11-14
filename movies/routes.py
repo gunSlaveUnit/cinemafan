@@ -1,4 +1,3 @@
-import json
 import random
 import subprocess
 import typing
@@ -7,7 +6,7 @@ import math
 
 from fastapi import APIRouter, Request, Depends, Query
 from fastapi.responses import RedirectResponse
-from ffmpeg.asyncio import FFmpeg
+from fastapi.exceptions import HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -247,7 +246,7 @@ async def random_movie_page(
     if movie_id:
         return RedirectResponse(f"/movies/{movie_id}")
     else:
-        return RedirectResponse(f"/")
+        return RedirectResponse("/")
 
 
 @router.get("/movies/{item_id}")
@@ -435,8 +434,6 @@ async def bump_tag(
 ):
     if not current_user:
         raise HTTPException(status_code=401, detail="Unauthorized")
-
-    movie_tag = await MovieTag.by_id(item_id, db)
 
     upvote = await db.scalar(select(Upvote).where(Upvote.movie_tag_id == item_id, Upvote.user_id == current_user.id))
     if upvote:

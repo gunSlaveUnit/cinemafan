@@ -2,7 +2,6 @@
 
 """Cinemafan entrypoint."""
 
-import os
 
 import uvicorn
 

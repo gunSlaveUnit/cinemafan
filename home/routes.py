@@ -1,11 +1,6 @@
-import uuid
-import datetime
 
-from fastapi import APIRouter, Cookie, Depends, Request
-import jwt
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, Request
 
-from db import get_db
 from settings import templates
 from shared.utils import fill_base_context
 
