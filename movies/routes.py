@@ -42,28 +42,13 @@ from movies.models import (
 )
 from movies.schemas import ReviewCreateSchema, MomentCreateSchema
 from settings import MEDIA_DIR, templates
+from movies.utils import form_periods_movie_showing
 from shared.utils import fill_base_context, get_current_user
 
 router = APIRouter(prefix="")
 
 
-def format_years(years):
-    years = sorted(set(years))
-    
-    periods = []
-    period_start = years[0]
-    previous = years[0]
-    
-    for year in years[1:] + [None]:
-        if year != previous + 1:
-            if period_start != previous:
-                periods.append(f"{period_start} - {previous}")
-            else:
-                periods.append(str(period_start))
-            period_start = year
-        previous = year
-    
-    return ", ".join(periods)
+
 
 
 @router.get("/movies")
@@ -162,7 +147,7 @@ async def movies(
             "status": status,
             "seasons_amount": seasons_amount,
             "tags": tags,
-            "years": format_years(years),
+            "years": form_periods_movie_showing(years),
             "rating": rating,
             "ratings_amount": ratings_amount,
         })
@@ -372,7 +357,7 @@ async def movie(
         "status": status,
         "studios": studios,
         "reviews": reviews,
-        "years": format_years(years),
+        "years": form_periods_movie_showing(years),
         "rating": rating,
         "ratings_amount": ratings_amount,
     }

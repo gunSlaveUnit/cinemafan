@@ -1,6 +1,6 @@
 import pytest
 
-from .routes import format_years
+from movies.utils import form_periods_movie_showing
 
 
 @pytest.mark.parametrize(
@@ -14,5 +14,5 @@ from .routes import format_years
         ([2000, 2002, 2004, 2006], "2000, 2002, 2004, 2006"),
     ]
 )
-def test_format_years(value: list[int], result: str):
-    assert format_years(value) == result
+def test_form_periods_movie_showing(value: list[int], result: str):
+    assert form_periods_movie_showing(value) == result
