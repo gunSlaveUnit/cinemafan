@@ -200,20 +200,25 @@ async def playlists(
 async def playlist(
         request: Request,
         item_id: uuid.UUID,
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
+        base_context: dict = Depends(fill_base_context),
 ):
     item = await Playlist.by_id(item_id, db)
     
     q = select(MoviePlaylist).where(MoviePlaylist.playlist_id == item_id)
     movies = [await Movie.by_id(movie_playlist.movie_id, db) async for movie_playlist in await db.stream_scalars(q)]
 
+    extended_context = {
+        "playlist": item,
+        "movies": movies,
+    }
+    context = base_context
+    context.update(extended_context)
+
     return templates.TemplateResponse(
         request=request,
         name="movies/playlist.html",
-        context={
-            "playlist": item,
-            "movies": movies,
-        }
+        context=context,
     )
 
 
