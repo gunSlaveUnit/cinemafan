@@ -1,6 +1,12 @@
+"""Provides functions for initializing the database and
+obtaining asynchronous sessions.
+"""
+
+from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
+    AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
@@ -16,12 +22,24 @@ session_maker: async_sessionmaker = async_sessionmaker(
 )
 
 
-async def init():
+async def init() -> None:
+    """Creates database tables if they aren't 
+
+    Returns:
+        None
+    """
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def get_db():
+async def get_db() -> AsyncGenerator[AsyncSession]:
+    """Provides database session.
+
+    Returns:
+        AsyncGenerator[AsyncSession]: database session.
+    """
+
     async with session_maker() as s:
         try:
             yield s
