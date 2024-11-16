@@ -4,7 +4,7 @@ import typing
 import uuid
 import math
 
-from fastapi import APIRouter, Request, Depends, Query
+from fastapi import APIRouter, Request, Depends, Form, Query
 from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
 from sqlalchemy import func, select
@@ -51,6 +51,7 @@ router = APIRouter(prefix="")
 @router.get("/movies")
 async def movies(
         request: Request,
+        search: typing.Annotated[str | None, Query()] = None,
         page: typing.Annotated[int, Query(ge=0)] = 0,
         limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
         db: AsyncSession = Depends(get_db),
@@ -59,6 +60,10 @@ async def movies(
     items = []
 
     q = select(Movie).limit(limit).offset(page * limit)
+
+    if search:
+        q = q.where(Movie.translated_title.ilike(f"%{search}%"))
+
     data = await db.stream_scalars(q)
     
     async for movie in data:
