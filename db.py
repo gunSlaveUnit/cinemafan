@@ -23,7 +23,7 @@ session_maker: async_sessionmaker = async_sessionmaker(
 
 
 async def init() -> None:
-    """Creates database tables if they aren't 
+    """Creates database tables if they do not exist 
 
     Returns:
         None
