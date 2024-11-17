@@ -7,7 +7,7 @@ import math
 from fastapi import APIRouter, Request, Depends, Form, Query
 from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.models import User
@@ -62,7 +62,10 @@ async def movies(
     q = select(Movie).limit(limit).offset(page * limit)
 
     if search:
-        q = q.where(Movie.translated_title.ilike(f"%{search}%"))
+        q = q.where(or_(
+            Movie.translated_title.ilike(f"%{search}%"),
+            Movie.original_title.ilike(f"%{search}%")
+        ))
 
     data = await db.stream_scalars(q)
     
@@ -157,7 +160,10 @@ async def movies(
 
     q = select(func.count()).select_from(Movie)
     if search:
-        q = q.where(Movie.translated_title.ilike(f"%{search}%"))
+        q = q.where(or_(
+            Movie.translated_title.ilike(f"%{search}%"),
+            Movie.original_title.ilike(f"%{search}%")
+        ))
     count = await db.scalar(q)
 
     pages = math.ceil(count / limit)
