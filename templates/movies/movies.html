@@ -42,4 +42,14 @@
   {% for page in range(pages) %}
     <a href="?page={{ page }}{% if limit %}&limit={{ limit }}{% endif %}{% if search %}&search={{ search }}{% endif %}">{{ page }}</a>
   {% endfor %}
+
+  <form action="/movies{% if search %}?search={{ search }}{% endif %}" method="get">
+    <select name="limit" id="limit">
+        <option value="10" {% if limit == 10 %}selected{% endif %}>10</option>
+        <option value="30" {% if limit == 30 %}selected{% endif %}>30</option>
+        <option value="50" {% if limit == 50 %}selected{% endif %}>50</option>
+    </select>
+
+    <button type="submit">apply</button>
+  </form>
 {% endblock %}
