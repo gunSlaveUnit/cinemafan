@@ -40,6 +40,6 @@
   {% endfor %}
 
   {% for page in range(pages) %}
-    <a href="?page={{ page }}">{{ page }}</a>
+    <a href="?page={{ page }}{% if search %}&search={{ search }}{% endif %}">{{ page }}</a>
   {% endfor %}
 {% endblock %}
