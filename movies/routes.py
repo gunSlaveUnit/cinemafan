@@ -156,6 +156,8 @@ async def movies(
         })
 
     q = select(func.count()).select_from(Movie)
+    if search:
+        q = q.where(Movie.translated_title.ilike(f"%{search}%"))
     count = await db.scalar(q)
 
     pages = math.ceil(count / limit)
