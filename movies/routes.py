@@ -173,6 +173,7 @@ async def movies(
         "items": items,
         "pages": pages,
         "search": search,
+        "limit": limit,
     }
     context = base_context
     context.update(extended_context)
