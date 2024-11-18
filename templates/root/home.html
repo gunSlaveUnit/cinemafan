@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <form action="/movies" method="GET">
+    <input name="search" placeholder="search however you like" required>
+    <button type="submit">search</button>
+  </form>
+
   <a href="/movies/random">random</a>
 
   <div>continue</div>
