@@ -168,12 +168,15 @@ async def movies(
 
     pages = math.ceil(count / limit)
 
+    statuses = [_ async for _ in Status.every(db)]
+
     extended_context = {
         "count": count,
         "items": items,
         "pages": pages,
         "search": search,
         "limit": limit,
+        "statuses": statuses,
     }
     context = base_context
     context.update(extended_context)

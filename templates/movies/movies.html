@@ -50,6 +50,11 @@
         <option value="50" {% if limit == 50 %}selected{% endif %}>50</option>
     </select>
 
+    {% for status in statuses %}
+      <input type="checkbox" value="{{ status.id }}" name="{{ status.title}}" /> 
+      <label for="{{ status.title}}">{{ status.title }}</label>
+    {% endfor %}
+
     <button type="submit">apply</button>
   </form>
 {% endblock %}
