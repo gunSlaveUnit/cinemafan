@@ -55,14 +55,10 @@ async def movies(
         page: typing.Annotated[int, Query(ge=0)] = 0,
         limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
         status: typing.Annotated[list[str], Query()] = [],
-        #ongoing: typing.Annotated[bool, Query()] = None,
-        #completed: typing.Annotated[bool, Query()] = None,
         db: AsyncSession = Depends(get_db),
         base_context: dict = Depends(fill_base_context),
 ) -> templates.TemplateResponse:
     print(status)
-    #print(ongoing)
-    #print(completed)
 
     items = []
 
@@ -77,9 +73,12 @@ async def movies(
     data = await db.stream_scalars(q)
 
     statuses = [_ async for _ in Status.every(db)]
-    # statuses = [{"id": s.id, "title": s.title, "checked": s.title in status} for s in statuses]
     
     async for movie in data:
+        s = await Status.by_id(movie.status_id, db)
+        if s.title not in status:
+            continue
+
         q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == movie.id)
         rating = await db.scalar(q)
 
@@ -150,8 +149,6 @@ async def movies(
             tag = await Tag.by_id(tag_id, db)
             tags.append(tag)
 
-        s = await Status.by_id(movie.status_id, db)
-
         items.append({
             "age": age,
             "duration": f"{duration:.2f}h",
@@ -186,8 +183,6 @@ async def movies(
         "pages": pages,
         "search": search,
         "limit": limit,
-        #"ongoing": ongoing,
-        #"completed": completed,
         "statuses": statuses,
         "status": status,
     }
