@@ -44,6 +44,9 @@
   {% endfor %}
 
   <form action="/movies{% if search %}?search={{ search }}{% endif %}" method="get">
+    <input type="text" name="search" value="{% if search %}{{ search }}{% endif %}"/>
+    <label for="search">title</label>
+
     {% for s in statuses %}
       <input id="{{ s.id }}" type="checkbox" name="status" value="{{ s.title }}" {% if s.title in status %}checked{% endif %}/> 
       <label for="status">{{ s.title }}</label>
