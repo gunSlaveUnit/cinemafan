@@ -54,9 +54,16 @@ async def movies(
         search: typing.Annotated[str | None, Query()] = None,
         page: typing.Annotated[int, Query(ge=0)] = 0,
         limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
+        status: typing.Annotated[list[str], Query()] = [],
+        #ongoing: typing.Annotated[bool, Query()] = None,
+        #completed: typing.Annotated[bool, Query()] = None,
         db: AsyncSession = Depends(get_db),
         base_context: dict = Depends(fill_base_context),
 ) -> templates.TemplateResponse:
+    print(status)
+    #print(ongoing)
+    #print(completed)
+
     items = []
 
     q = select(Movie).limit(limit).offset(page * limit)
@@ -68,6 +75,9 @@ async def movies(
         ))
 
     data = await db.stream_scalars(q)
+
+    statuses = [_ async for _ in Status.every(db)]
+    # statuses = [{"id": s.id, "title": s.title, "checked": s.title in status} for s in statuses]
     
     async for movie in data:
         q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == movie.id)
@@ -140,7 +150,7 @@ async def movies(
             tag = await Tag.by_id(tag_id, db)
             tags.append(tag)
 
-        status = await Status.by_id(movie.status_id, db)
+        s = await Status.by_id(movie.status_id, db)
 
         items.append({
             "age": age,
@@ -150,7 +160,7 @@ async def movies(
             "countries": countries,
             "genres": genres,
             "movie": movie,
-            "status": status,
+            "status": s,
             "seasons_amount": seasons_amount,
             "tags": tags,
             "years": form_periods_movie_showing(years),
@@ -168,7 +178,7 @@ async def movies(
 
     pages = math.ceil(count / limit)
 
-    statuses = [_ async for _ in Status.every(db)]
+    print(search)
 
     extended_context = {
         "count": count,
@@ -176,7 +186,10 @@ async def movies(
         "pages": pages,
         "search": search,
         "limit": limit,
+        #"ongoing": ongoing,
+        #"completed": completed,
         "statuses": statuses,
+        "status": status,
     }
     context = base_context
     context.update(extended_context)
