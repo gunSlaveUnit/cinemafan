@@ -40,7 +40,7 @@
   {% endfor %}
 
   {% for page in range(pages) %}
-    <a href="?page={{ page }}{% if limit %}&limit={{ limit }}{% endif %}{% if search %}&search={{ search }}{% endif %}{% if status %}&status={{ status }}{% endif %}">{{ page }}</a>
+    <a href="?page={{ page }}{% if limit %}&limit={{ limit }}{% endif %}{% if search %}&search={{ search }}{% endif %}{% if status %}{% for s in status %}&status={{ s }}{% endfor %}{% endif %}">{{ page }}</a>
   {% endfor %}
 
   <form action="/movies{% if search %}?search={{ search }}{% endif %}" method="get">
