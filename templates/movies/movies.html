@@ -40,10 +40,17 @@
   {% endfor %}
 
   {% for page in range(pages) %}
-    <a href="?page={{ page }}{% if limit %}&limit={{ limit }}{% endif %}{% if search %}&search={{ search }}{% endif %}">{{ page }}</a>
+    <a href="?page={{ page }}{% if limit %}&limit={{ limit }}{% endif %}{% if search %}&search={{ search }}{% endif %}{% if status %}{% for s in status %}&status={{ s }}{% endfor %}{% endif %}">{{ page }}</a>
   {% endfor %}
 
-  <form action="/movies{% if search %}?search={{ search }}{% endif %}" method="get">
+  <form action="/movies" method="get">
+    <input name="search" placeholder="search however you like" value="{{ search or '' }}">
+
+    {% for s in statuses %}
+      <input id="{{ s.id }}" type="checkbox" name="status" value="{{ s.title }}" {% if not status or s.title in status %}checked{% endif %}/> 
+      <label for="status">{{ s.title }}</label>
+    {% endfor %}
+
     <select name="limit" id="limit">
         <option value="10" {% if limit == 10 %}selected{% endif %}>10</option>
         <option value="30" {% if limit == 30 %}selected{% endif %}>30</option>

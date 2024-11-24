@@ -54,12 +54,11 @@ async def movies(
         search: typing.Annotated[str | None, Query()] = None,
         page: typing.Annotated[int, Query(ge=0)] = 0,
         limit: typing.Annotated[int, Query(ge=1, le=50)] = 10,
+        status: typing.Annotated[list[str], Query()] = [],
         db: AsyncSession = Depends(get_db),
         base_context: dict = Depends(fill_base_context),
 ) -> templates.TemplateResponse:
-    items = []
-
-    q = select(Movie).limit(limit).offset(page * limit)
+    q = select(Movie)
 
     if search:
         q = q.where(or_(
@@ -68,8 +67,18 @@ async def movies(
         ))
 
     data = await db.stream_scalars(q)
-    
+
+    items = []
+    count = 0
+
     async for movie in data:
+        count += 1
+
+        s = await Status.by_id(movie.status_id, db)
+        if status and s.title not in status:
+            count -= 1
+            continue
+
         q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == movie.id)
         rating = await db.scalar(q)
 
@@ -140,8 +149,6 @@ async def movies(
             tag = await Tag.by_id(tag_id, db)
             tags.append(tag)
 
-        status = await Status.by_id(movie.status_id, db)
-
         items.append({
             "age": age,
             "duration": f"{duration:.2f}h",
@@ -150,7 +157,7 @@ async def movies(
             "countries": countries,
             "genres": genres,
             "movie": movie,
-            "status": status,
+            "status": s,
             "seasons_amount": seasons_amount,
             "tags": tags,
             "years": form_periods_movie_showing(years),
@@ -158,22 +165,19 @@ async def movies(
             "ratings_amount": ratings_amount,
         })
 
-    q = select(func.count()).select_from(Movie)
-    if search:
-        q = q.where(or_(
-            Movie.translated_title.ilike(f"%{search}%"),
-            Movie.original_title.ilike(f"%{search}%")
-        ))
-    count = await db.scalar(q)
-
     pages = math.ceil(count / limit)
 
+    items = items[page * limit : (page + 1) * limit]
+
+    statuses = [_ async for _ in Status.every(db)]
     extended_context = {
         "count": count,
         "items": items,
         "pages": pages,
         "search": search,
         "limit": limit,
+        "statuses": statuses,
+        "status": status,
     }
     context = base_context
     context.update(extended_context)
