@@ -58,11 +58,7 @@ async def movies(
         db: AsyncSession = Depends(get_db),
         base_context: dict = Depends(fill_base_context),
 ) -> templates.TemplateResponse:
-    print(status)
-
-    items = []
-
-    q = select(Movie).limit(limit).offset(page * limit)
+    q = select(Movie)
 
     if search:
         q = q.where(or_(
@@ -72,11 +68,15 @@ async def movies(
 
     data = await db.stream_scalars(q)
 
-    statuses = [_ async for _ in Status.every(db)]
-    
+    items = []
+    count = 0
+
     async for movie in data:
+        count += 1
+
         s = await Status.by_id(movie.status_id, db)
-        if s.title not in status:
+        if status and s.title not in status:
+            count -= 1
             continue
 
         q = select(func.avg(Rating.value)).select_from(Rating).where(Rating.movie_id == movie.id)
@@ -165,18 +165,11 @@ async def movies(
             "ratings_amount": ratings_amount,
         })
 
-    q = select(func.count()).select_from(Movie)
-    if search:
-        q = q.where(or_(
-            Movie.translated_title.ilike(f"%{search}%"),
-            Movie.original_title.ilike(f"%{search}%")
-        ))
-    count = await db.scalar(q)
-
     pages = math.ceil(count / limit)
 
-    print(search)
+    items = items[page * limit : (page + 1) * limit]
 
+    statuses = [_ async for _ in Status.every(db)]
     extended_context = {
         "count": count,
         "items": items,
