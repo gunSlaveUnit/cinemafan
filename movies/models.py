@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from sqlalchemy import String, select, Text
+from sqlalchemy import func, String, select, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
@@ -85,6 +85,7 @@ class Movie(Entity):
     age_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     budget: Mapped[int]
     category_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    created_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     description: Mapped[str] = mapped_column(Text)
     fees: Mapped[int]
     original_title: Mapped[str] = mapped_column(String(255))
