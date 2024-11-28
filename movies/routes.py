@@ -416,6 +416,8 @@ async def episode_page(
 
     q = select(Episode).where(Episode.parent_id == item_id)
     next_episode = await db.scalar(q)
+    if next_episode and not next_episode.released:
+        next_episode = None
 
     duration = subprocess.check_output([
         "ffprobe",
