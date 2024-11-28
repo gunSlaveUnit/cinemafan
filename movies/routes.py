@@ -419,6 +419,14 @@ async def episode_page(
     if next_episode and not next_episode.released:
         next_episode = None
 
+    if episode.parent_id:
+        q = select(Episode).where(Episode.id == episode.parent_id)
+        previous_episode = await db.scalar(q)
+        if previous_episode and not previous_episode.released:
+            previous_episode = None
+    else:
+        previous_episode = None
+
     duration = subprocess.check_output([
         "ffprobe",
         "-v",
@@ -440,6 +448,7 @@ async def episode_page(
             "moments": moments,
             "records": records,
             "qualities": qualities,
+            "previous_episode": previous_episode,
             "next_episode": next_episode,
         }
     )
