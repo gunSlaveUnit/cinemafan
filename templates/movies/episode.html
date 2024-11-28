@@ -1,92 +1,97 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div>
-    {{ episode.number }}. {{ episode.title }}
-  </div>
+  {% if episode.released %}
 
-  {{ episode.release_date }}
-
-  <div>
-    {{ duration }}
-  </div>
-
-  <div>
-    <select onchange="set_suitable_source(this.value)">
-      {% for quality in qualities %}
-        <option value="{{ quality.id }}">{{ quality.resolution }}</option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <video src="/api/videos/{{ records[0].filename }}" controls autoplay="autoplay" muted="muted">
-    {% for record in records %}
-      <source src="/api/videos/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
-    {% endfor %}
-  </video>
-
-  {% if episode.parent_id %}
-    <a href="/episodes/{{ episode.parent_id }}">previous</a>
-  {% endif %}
-
-  {% if next_episode %}
-    <a href="/episodes/{{ next_episode.id }}">next</a>
-  {% endif %}
-
-  <div>
-    <input id="content"/>
-
-    <button onclick="send_moment()">submit</button>
-  </div>
-
-  {% for moment in moments %}
     <div>
-      <button onclick="go_moment({{moment.time}})">{{moment.time}}</button> - {{ moment.content }}
+      {{ episode.number }}. {{ episode.title }}
     </div>
-  {% endfor %}
 
-  <script>
-    const go_moment = (time) => {
-      const player = document.querySelector("video");
-      player.currentTime = time
-    }
+    {{ episode.release_date }}
 
-    const send_moment = async () => {
-      const content = document.getElementById("content")
+    <div>
+      {{ duration }}
+    </div>
 
-      const player = document.querySelector("video");
-      const current_time = player.currentTime
+    <div>
+      <select onchange="set_suitable_source(this.value)">
+        {% for quality in qualities %}
+          <option value="{{ quality.id }}">{{ quality.resolution }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-      const moment = {
-        content: content.value,
-        episode_id: {{ episode.id }},
-        time: current_time
+    <video src="/api/videos/{{ records[0].filename }}" controls autoplay="autoplay" muted="muted">
+      {% for record in records %}
+        <source src="/api/videos/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
+      {% endfor %}
+    </video>
+
+    {% if episode.parent_id %}
+      <a href="/episodes/{{ episode.parent_id }}">previous</a>
+    {% endif %}
+
+    {% if next_episode %}
+      <a href="/episodes/{{ next_episode.id }}">next</a>
+    {% endif %}
+
+    <div>
+      <input id="content"/>
+
+      <button onclick="send_moment()">submit</button>
+    </div>
+
+    {% for moment in moments %}
+      <div>
+        <button onclick="go_moment({{moment.time}})">{{moment.time}}</button> - {{ moment.content }}
+      </div>
+    {% endfor %}
+
+    <script>
+      const go_moment = (time) => {
+        const player = document.querySelector("video");
+        player.currentTime = time
       }
 
-      let response = await fetch("/api/moments", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(moment)
-      });
-    }
+      const send_moment = async () => {
+        const content = document.getElementById("content")
 
-    const set_suitable_source = (quality_id) => {
-      const player = document.querySelector("video");
-      const sources = player.querySelectorAll("source");
+        const player = document.querySelector("video");
+        const current_time = player.currentTime
 
-      const current_time = player.currentTime
-
-      sources.forEach(
-        source => {
-          if (quality_id === source.getAttribute("quality_id"))
-            player.src = source.src
-            player.currentTime = current_time
-            const is_playing_possible = player.play()
-            is_playing_possible.then(_ => player.play())
+        const moment = {
+          content: content.value,
+          episode_id: {{ episode.id }},
+          time: current_time
         }
-      );
-    }
-  </script>
+
+        let response = await fetch("/api/moments", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          body: JSON.stringify(moment)
+        });
+      }
+
+      const set_suitable_source = (quality_id) => {
+        const player = document.querySelector("video");
+        const sources = player.querySelectorAll("source");
+
+        const current_time = player.currentTime
+
+        sources.forEach(
+          source => {
+            if (quality_id === source.getAttribute("quality_id"))
+              player.src = source.src
+              player.currentTime = current_time
+              const is_playing_possible = player.play()
+              is_playing_possible.then(_ => player.play())
+          }
+        );
+      }
+    </script>
+  {% else %}
+    not released
+  {% endif %}
 {% endblock %}
