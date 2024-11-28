@@ -1,14 +1,18 @@
 from datetime import datetime
 import os
 from typing import BinaryIO
+import uuid
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, Request, status, Depends
 from fastapi.responses import StreamingResponse, Response
 from starlette._compat import md5_hexdigest
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from db import get_db
+from movies.models import Record, Episode
 from settings import MEDIA_DIR
 
-router = APIRouter(prefix="/api/videos")
+router = APIRouter(prefix="/api/records")
 
 
 # TODO: must by async
@@ -97,9 +101,18 @@ def range_requests_response(
     )
 
 
-@router.get("/{file_name}")
-async def get_video(request: Request, file_name: str):
+@router.get("/{item_id}/stream")
+async def get_video(
+        item_id: uuid.UUID,
+        request: Request, 
+        db: AsyncSession = Depends(get_db),
+):
+    record = await Record.by_id(item_id, db)
+    episode = await Episode.by_id(record.episode_id, db)
+    if not episode.released:
+        raise HTTPException(status_code=404)
+
     return range_requests_response(
-        request, file_path=MEDIA_DIR / file_name,
+        request, file_path=MEDIA_DIR / record.filename,
         content_type="video/mp4"
     )

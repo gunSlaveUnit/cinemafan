@@ -21,9 +21,9 @@
       </select>
     </div>
 
-    <video src="/api/videos/{{ records[0].filename }}" controls autoplay="autoplay" muted="muted">
+    <video src="/api/records/{{ records[0].id }}/stream" controls autoplay="autoplay" muted="muted">
       {% for record in records %}
-        <source src="/api/videos/{{ record.filename }}" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
+        <source src="/api/records/{{ record.id }}/stream" quality_id="{{ record.quality_id }}" data-type="video/mp4" >
       {% endfor %}
     </video>
 
