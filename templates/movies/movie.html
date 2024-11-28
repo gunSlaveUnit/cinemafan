@@ -70,7 +70,11 @@
     {% endif %}
 
     {% for episode in season.episodes %}
-      <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }} {{ episode.release_date }}</a>
+      {% if episode.released %}
+        <a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }} {{ episode.release_date }}</a>
+      {% else %}
+        {{ episode.number }}. {{ episode.title }} {{ episode.release_date }}
+      {% endif %}
     {% endfor %}
   {% endfor %}
 

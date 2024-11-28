@@ -34,6 +34,7 @@ class Episode(Entity):
     duration: Mapped[float]
     number: Mapped[int]
     parent_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=True)
+    released: Mapped[bool]
     release_date: Mapped[datetime.datetime]
     season_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
     title: Mapped[str] = mapped_column(String(255))
