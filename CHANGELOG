@@ -1,3 +1,9 @@
+0.36.0 - 2024.11.28:
+- released field for Episode
+- previous and next links only if released
+- show episode page context only if released
+- do not stream video if not released
+
 0.35.0 - 2024.11.26:
 - section "new" in home page
 

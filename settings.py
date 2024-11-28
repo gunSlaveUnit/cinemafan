@@ -32,7 +32,7 @@ TEMPLATES_DIR: Path = BASE_DIR / "templates"
 APP_NAME: str = "cinemafan"
 """str: Name of the application."""
 
-VERSION: str = "0.35.0"
+VERSION: str = "0.36.0"
 """str: Version of the application in semantic format (major.minor.patch)."""
 
 HOST: str = os.getenv("HOST")
