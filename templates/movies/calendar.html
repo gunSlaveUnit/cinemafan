@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for episode in episodes %}<a href="/episodes/{{ episode.id }}">{{ episode.number }}. {{ episode.title }} {{ episode.release_date }}</a>{% endfor %}
+  {% for date, episodes in episodes_per_date.items() %}
+    {{ date }}
+
+    {% for episode in episodes %}
+      {{ episode.number }}. {{ episode.title }}
+    {% endfor %}
+  {% endfor %}
 {% endblock %}

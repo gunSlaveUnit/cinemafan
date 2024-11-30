@@ -466,8 +466,16 @@ async def calendar(
     async for episode in await db.stream_scalars(query):
         episodes.append(episode)
 
+    episodes_per_date = {}
+    for episode in episodes:
+        date = episode.release_date.strftime("%Y-%m-%d")
+        if date in episodes_per_date:
+            episodes_per_date[date].append(episode)
+        else:
+            episodes_per_date[date] = [episode]
+
     context = base_context.copy()
-    context["episodes"] = episodes
+    context["episodes_per_date"] = episodes_per_date
 
     return templates.TemplateResponse(
         request=request,
