@@ -38,7 +38,7 @@ ACTIVITIES_AMOUNT = 10
 PERSONS_AMOUNT = 50
 PLAYLISTS_AMOUNT = 10
 STUDIOS_AMOUNT = 50
-MAX_EPISODES_PER_SEASON_AMOUNT = 12
+MAX_EPISODES_PER_SEASON_AMOUNT = 50
 MAX_COUNTRIES_PER_MOVIE_AMOUNT = 2
 MAX_GENRES_PER_MOVIE_AMOUNT = 5
 MAX_RATINGS_PER_MOVIE_AMOUNT = 50
@@ -175,7 +175,7 @@ for seasons in MOVIE_SEASONS:
                 "number": i,
                 "parent_id": parent_id,
                 "released": random.choice([True, False]),
-                "release_date": datetime.datetime.now() - datetime.timedelta(days=random.randint(0, 365 * 50)),
+                "release_date": datetime.datetime.now() - datetime.timedelta(days=random.randint(0, 365 * 1)),
                 "season_id": season["id"],
                 "title": f"episode {i}",
             }

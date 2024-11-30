@@ -454,6 +454,49 @@ async def episode_page(
     )
 
 
+@router.get("/calendar")
+async def calendar(
+        request: Request,
+        db: AsyncSession = Depends(get_db),
+        base_context: dict = Depends(fill_base_context),
+):
+    episodes = []
+
+    query = select(Episode).where(~Episode.released).order_by(Episode.release_date)
+    async for episode in await db.stream_scalars(query):
+        episodes.append(episode)
+
+    episodes_per_date = {}
+    for episode in episodes:
+        date = episode.release_date.strftime("%Y-%m-%d")
+        season = await Season.by_id(episode.season_id, db)
+        movie = await Movie.by_id(season.movie_id, db)
+        if date in episodes_per_date:
+            episodes_per_date[date].append({
+                "episode": episode,
+                "season": season,
+                "movie": movie,
+            })
+        else:
+            episodes_per_date[date] = [{
+                "episode": episode,
+                "season": season,
+                "movie": movie,
+            }]
+
+    print(episodes_per_date)
+
+    context = base_context.copy()
+    context["episodes_per_date"] = episodes_per_date
+
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/calendar.html",
+        context=context,
+    )
+
+
+
 @router.patch("/api/movies-tags/{item_id}/bump")
 async def bump_tag(
         item_id: uuid.UUID,
