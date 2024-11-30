@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for date, episodes in episodes_per_date.items() %}
+  {% for date, items in episodes_per_date.items() %}
     {{ date }}
 
-    {% for episode in episodes %}
-      {{ episode.number }}. {{ episode.title }}
+    {% for item in items %}
+        {{ item["movie"].translated_title }} | {{ item["movie"].original_title }} {{ item["season"].title }} {{ item["episode"].number }}. {{ item["episode"].title }}
     {% endfor %}
   {% endfor %}
 {% endblock %}

@@ -469,10 +469,22 @@ async def calendar(
     episodes_per_date = {}
     for episode in episodes:
         date = episode.release_date.strftime("%Y-%m-%d")
+        season = await Season.by_id(episode.season_id, db)
+        movie = await Movie.by_id(season.movie_id, db)
         if date in episodes_per_date:
-            episodes_per_date[date].append(episode)
+            episodes_per_date[date].append({
+                "episode": episode,
+                "season": season,
+                "movie": movie,
+            })
         else:
-            episodes_per_date[date] = [episode]
+            episodes_per_date[date] = [{
+                "episode": episode,
+                "season": season,
+                "movie": movie,
+            }]
+
+    print(episodes_per_date)
 
     context = base_context.copy()
     context["episodes_per_date"] = episodes_per_date
