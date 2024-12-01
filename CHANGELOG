@@ -1,3 +1,6 @@
+0.37.0 - 2024.11.30:
+- map unreleased episodes to the calendar
+
 0.36.0 - 2024.11.28:
 - released field for Episode
 - previous and next links only if released
