@@ -1,0 +1,25 @@
+x-service: &service
+  logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "5"
+  networks:
+    - cinemafan
+  restart: unless-stopped
+
+networks:
+  cinemafan:
+    external: true
+
+services:
+  db:
+    <<: *service
+    container_name: db
+    environment:
+      POSTGRES_DB: cinemafan
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    image: postgres:17.2
+    ports:
+      - 5432:5432
