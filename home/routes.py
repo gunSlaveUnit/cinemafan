@@ -19,7 +19,7 @@ async def home(
 ):
     async with await psycopg.AsyncConnection.connect("postgresql://postgres:postgres@localhost:5432/cinemafan") as conn:
         async with conn.cursor() as cur:
-            await cur.execute("SELECT id, original_title, translated_title FROM movies ORDER BY created_at DESC")
+            await cur.execute("SELECT id, original_title, translated_title FROM movies ORDER BY created_at DESC LIMIT 5")
 
             new = await cur.fetchall()
 
