@@ -11,6 +11,6 @@
   <div>continue</div>
   <div>recommendations</div>
   <div>popular</div>
-  <div>new {% for m in new %}<a href="/movies/{{ m[0] }}">{{ m[1] }} | {{ m[2] }}</a>{% endfor %}</div>
+  <div>new {% for m in new %}<a href="/movies/{{ m.id }}">{{ m.original_title }} | {{ m.translated_title }}</a>{% endfor %}</div>
   <div>soon</div>
 {% endblock %}

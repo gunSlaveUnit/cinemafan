@@ -4,6 +4,7 @@ obtaining asynchronous sessions.
 
 from typing import AsyncGenerator
 
+import psycopg
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -45,3 +46,9 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             yield s
         finally:
             await s.close()
+
+
+async def get_cursor():
+    async with await psycopg.AsyncConnection.connect("postgresql://postgres:postgres@localhost:5432/cinemafan") as connection:
+        async with connection.cursor() as cursor:
+            yield cursor
