@@ -1,16 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <form action="/movies" method="GET">
-    <input name="search" placeholder="search however you like" required>
-    <button type="submit">search</button>
-  </form>
+  <article>
+    <h1><a href="/movies/random">random</a></h1>
 
-  <a href="/movies/random">random</a>
+    <h1>continue</h1>
+    <h1>recommendations</h1>
+    <h1>popular</h1>
 
-  <div>continue</div>
-  <div>recommendations</div>
-  <div>popular</div>
-  <div>new {% for m in new %}<a href="/movies/{{ m.id }}">{{ m.original_title }} | {{ m.translated_title }}</a>{% endfor %}</div>
-  <div>soon</div>
+    <h1>new</h1>
+    <div class="movies">
+      {% for m in new %}
+        <div>
+          <img class="poster" src="media/{{ m[1] }}" alt="{{ m[2] }} poster"/>
+        
+          <a class="title" href="/movies/{{ m[0] }}">{{ m[2] }}</a>
+        </div>
+      {% endfor %}
+    </div>
+    <h1>soon</h1>
+  </article>
 {% endblock %}

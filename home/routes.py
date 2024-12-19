@@ -19,7 +19,7 @@ async def home(
     await cursor.execute("""
         SELECT
             id,
-            original_title,
+            poster,
             translated_title
         FROM
             movies
@@ -27,14 +27,11 @@ async def home(
             created_at
         DESC
         LIMIT
-            5
+            7
         """
     )
 
-    Movie = namedtuple("Movie", 'id original_title translated_title')
-
     new = await cursor.fetchall()
-    new = [Movie(*movie) for movie in new]
 
     extended_context = {"new": new}
     context = base_context
